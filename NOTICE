@@ -1,0 +1,8 @@
+Habit Calendar 001b
+Copyright (C) 2026 harharhari
+SPDX-License-Identifier: GPL-3.0-only
+
+Repository: https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin
+This repository contains the corresponding source for its generated plugin releases.
+The plugin bundle contains only this project code; Obsidian supplies its own API at runtime.
+Development dependencies are not redistributed in the plugin bundle and retain their own licenses.

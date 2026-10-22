@@ -1,0 +1,10 @@
+{
+  "id": "habit-calendar-001b",
+  "name": "Habit Calendar 001b",
+  "version": "1.1.1",
+  "minAppVersion": "1.7.2",
+  "description": "Track habits with monthly calendars, manual completion marks, custom header colors, and retained monthly statistics.",
+  "author": "harharhari",
+  "isDesktopOnly": false,
+  "authorUrl": "https://github.com/harharhari"
+}

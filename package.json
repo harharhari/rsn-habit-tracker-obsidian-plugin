@@ -1,0 +1,33 @@
+{
+  "name": "rsn-habit-tracker-obsidian-plugin",
+  "version": "1.1.1",
+  "private": true,
+  "description": "Track habits with monthly calendars, manual completion marks, custom header colors, and retained monthly statistics.",
+  "author": "harharhari",
+  "license": "GPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin.git"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "lint": "eslint src package.json --max-warnings 0 && node scripts/lint-metadata.mjs",
+    "test": "node tests/core.test.js && node tests/plugin.test.js",
+    "test:helper": "python3 -m unittest discover -s tests -p \"test_*.py\" -v",
+    "check": "npm run lint && npm run build && npm test && node scripts/check-release.mjs && node scripts/package-release.mjs",
+    "format": "prettier --write src tests scripts/*.mjs eslint.config.mjs",
+    "release:assets": "npm run check"
+  },
+  "devDependencies": {
+    "eslint": "9.39.5",
+    "eslint-plugin-obsidianmd": "0.4.2",
+    "obsidian": "1.14.4",
+    "prettier": "3.9.10"
+  },
+  "overrides": {
+    "moment": "2.31.0"
+  }
+}
