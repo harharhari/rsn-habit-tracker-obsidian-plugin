@@ -1,6 +1,6 @@
-# Exact repository upload inventory — 1.1.3
+# Exact repository upload inventory — 1.1.4
 
-Upload all 57 files below, preserving relative paths, to the root of harharhari/rsn-habit-tracker-obsidian-plugin. Include hidden .github, .gitignore and .gitattributes. README.md, LICENSE and manifest.json belong at the root.
+Upload all 61 files below, preserving relative paths, to the root of harharhari/rsn-habit-tracker-obsidian-plugin. Include hidden .github, .gitignore and .gitattributes. README.md, LICENSE and manifest.json belong at the root.
 
 ```text
 .gitattributes
@@ -13,6 +13,7 @@ SHA256SUMS
 docs/ANDROID-TEST-REPORT.md
 docs/ANDROID-rsn-test-vault.md
 docs/CHECKSUMS.md
+docs/CI-TROUBLESHOOTING.md
 docs/DATA-MODEL.md
 docs/DESIGN-DECISIONS.md
 docs/FILES-TO-PUSH.md
@@ -25,6 +26,7 @@ docs/RELEASE-NOTES-1.1.0.md
 docs/RELEASE-NOTES-1.1.1.md
 docs/RELEASE-NOTES-1.1.2.md
 docs/RELEASE-NOTES-1.1.3.md
+docs/RELEASE-NOTES-1.1.4.md
 docs/SETUP-AND-USAGE.md
 docs/TEST-RESULTS-TEMPLATE.md
 docs/TESTING-CHECKLIST.md
@@ -42,6 +44,7 @@ manifest.json
 package-lock.json
 package.json
 scripts/build.mjs
+scripts/check-lockfile.mjs
 scripts/check-release.mjs
 scripts/install.py
 scripts/lint-metadata.mjs
@@ -54,6 +57,7 @@ src/core.js
 src/plugin-source.js
 styles.css
 tests/browser-smoke.cjs
+tests/build-metadata.test.mjs
 tests/core.test.js
 tests/plugin.test.js
 tests/test_helper.py
@@ -62,4 +66,4 @@ tsconfig.json
 versions.json
 ```
 
-The outer release-assets directory is separate: upload its six files individually as GitHub Release attachments for tag 1.1.3. Do not commit node_modules, generated main.js/release directories, personal lists, vaults or data.json. Keep older release tags intact. Source SHA256SUMS describes this snapshot; regenerate it deliberately after edits.
+The outer release-assets directory is separate: upload its six files individually as GitHub Release attachments for tag 1.1.4. Do not commit node_modules, generated main.js/release directories, personal lists, vaults or data.json. Keep older release tags intact. Source SHA256SUMS describes this snapshot; regenerate it deliberately after edits.

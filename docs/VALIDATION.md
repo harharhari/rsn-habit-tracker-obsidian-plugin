@@ -1,26 +1,26 @@
-# Validation — rsn habit calendar one b 1.1.3
+# Validation — rsn habit calendar one b 1.1.4
 
-Prepared 23 October 2026. No remote upload, release or submission performed.
+Prepared 24 October 2026. No remote upload, release or submission was performed.
 
-## Executed locally
+## Executed for this release
 
-- Official Obsidian ESLint recommended/API-aware rules and official manifest/license checks passed.
-- Added explicit current manifest-ID syntax checks: lowercase letters/hyphens only, no forbidden suffix or word. Release checks also require the exact requested ID and display name.
-- Production build and release consistency checks passed, including mobile manifest and runtime import restrictions.
-- 39 JavaScript tests passed (11 core and 28 mocked-vault integration).
-- 11 Python tests passed: six helper tests plus five installer/migration tests. Total: **50 tests**.
-- Four invalid-ID fixtures were checked: the old numeric ID, uppercase letters, a plugin suffix and an obsidian-containing ID all fail local validation.
-- Four Chromium scenarios passed for 1.1.3: wide desktop, narrow pane, phone and tablet. These use mocked Obsidian APIs.
-- Installer tests cover the new folder, opt-in settings migration, preservation of existing destination settings, invalid legacy JSON and unchanged history.
+- Clean public-registry npm ci --ignore-scripts succeeded using a fresh empty npm cache: 309 packages installed. Corrected which-typed-array version: 1.1.24. The unavailable 1.1.34 archive is not referenced by the lockfile.
+- npm run check passed: dependency preflight, official Obsidian ESLint recommended/API rules and manifest/license checks, production build, automated JavaScript tests, version/asset checks and release packaging.
+- **42 JavaScript tests passed**: 11 core, 28 mocked-vault integration and three new lockfile preflight regressions.
+- **11 Python tests passed**: six helper tests and five installer/migration tests. Total: **53 tests**.
+- Tests cover current-month confirmations/reset, historical calendar/report freezing after late sync, mobile UUID fallback, portable month selection, Windows CRLF/BOM/Unicode lists and preservation during settings migration.
+- The installation reported zero known vulnerabilities at that time; this is not a security certification. The ESLint 9.39.5 deprecation warning remains nonfatal.
 
-Commands underlying npm run check ran directly using the bundled Node runtime. The pinned official lint release did not catch digits in the old ID, so hosted-document rules are now enforced explicitly. Local checks cannot establish name/ID uniqueness or hosted acceptance.
+Linux verification used Node 24 (the successful unrestricted check reported 24.22.1), npm 11.19.0 and Python 3.12. The GitHub matrix selects Node 22 and Python 3.12. It must run on the new uploaded commit. Source preflight prints the actual environment and lockfile digest for comparison.
 
-## Compatibility boundary
+## Pending or historical evidence
 
-The UI/data engine is retained from 1.1.2, whose Chromium and Linux WebKit tests passed eight scenarios. Those are historical browser-engine results using mocked APIs, not native device certification. 1.1.3 native tests, real sync, minimum Obsidian 1.7.2 and hosted CI/review remain pending. Follow PLATFORM-TESTING.md and MIGRATION-1.1.3.md with actual downloaded release bytes. Record exact OS/app versions rather than “latest”.
+Native Windows and macOS CI jobs were not executed in this local Linux environment. Ubuntu/Windows/macOS hosted results remain pending after upload. Native Obsidian device tests on all target platforms, real synchronization, minimum Obsidian 1.7.2 and hosted Community review remain pending.
 
-Personal lists and vault records are excluded. The public package contains generic examples. No fresh dependency-security audit is claimed.
+The UI/data engine is unchanged from 1.1.3. Prior Chromium layout scenarios and earlier Linux WebKit results are historical mocked-API browser evidence, not new 1.1.4 native-device tests. The user reported 1.1.1 functioning on Ubuntu and Android; that does not certify this new release or the other platforms. The earlier Android emulator was unable to boot.
+
+Use PLATFORM-TESTING.md and TEST-RESULTS-TEMPLATE.md to record exact OS/app versions and downloaded-release outcomes. Local lint does not establish directory name/ID availability or acceptance. Generic examples only; no private habit data is included.
 
 ## Final package verification
 
-A clean copy of the prepared source rebuilt all six release files byte-for-byte. The public source includes generic examples only. The editable tutorial has 40 slides. Source and release checksums are separate and must be used in their respective directories.
+The prepared source was rebuilt and its six release files checked against the delivered attachments. The public source includes generic examples only. The editable tutorial has 40 slides. Source and release checksums are separate and must be used in their respective directories.

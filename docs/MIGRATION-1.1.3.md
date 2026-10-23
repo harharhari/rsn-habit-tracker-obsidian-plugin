@@ -1,3 +1,5 @@
+> This historical migration also applies when installing 1.1.4 directly from the old identity. Substitute version 1.1.4 in the installation steps. Users already on 1.1.3 do not repeat this migration; see INSTALL-DOWNLOAD.md.
+
 # Moving from Habit Calendar 001b to rsn habit calendar one b
 
 Version 1.1.3 changes the plugin identity, not your tracking data format.

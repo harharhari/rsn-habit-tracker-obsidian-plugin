@@ -1,28 +1,20 @@
-# 1.1.3 questions, answers and combined design
+# 1.1.4 design questions and final design
 
-## Confirmed requirements
+The following answers combine existing user decisions with explicit implementation defaults. None requires a destructive data migration.
 
-User-selected ID: rsn-habit-calendar-one-b. Exact name: rsn habit calendar one b. Version 1.1.3. Same repository, author harharhari and GPL-3.0-only. Preserve all-platform targets, one column on phones/tablets, optional Obsidian Sync first on iOS, Mac-assisted iCloud alternative, generic public examples and draw.io diagrams.
-
-## Additional questions resolved by existing requirements or safe defaults
-
-| Question | Answer / stated default | Design consequence |
+| Additional question | Answer/default | Result |
 |---|---|---|
-| Was the old ID published or only rejected? | Assume rejected, as reported | Retry initial submission; if already published, contact directory support |
-| Rename the Habit Tracker data folder too? | No | History and existing notes retain their paths |
-| Rewrite existing monthly code blocks? | No | Keep habit-calendar renderer registration |
-| Change saved workspace view type? | No | Retain internal view key for compatibility; this is not the manifest ID |
-| Transfer remembered decisions? | Yes, copy old data.json before activation | Explicit manual migration or opt-in installer flag |
-| Overwrite settings already created under the new ID? | No automatic overwrite | User chooses after backing up both files |
-| Run old and new identities together? | No | Disable old plugin on every device before activation |
-| Transfer hotkeys automatically? | No | Reassign shortcuts through Obsidian settings |
-| Rename Linux timer files? | Yes for new installs | Stop old timer before enabling replacement |
-| Reuse tag 1.1.2? | No | Publish new exact tag 1.1.3 with fresh checksums |
-| Is name/ID availability guaranteed? | No | Hosted directory remains authoritative |
-| Does latest OS mean device tested? | No | Record numerical versions and real test outcomes separately |
+| Does the npm error require calendar redesign? | No; all logs identify the same dependency | Repair build inputs, preserve runtime behavior |
+| Which dependency should be resolved? | Use registry-backed lockfile, currently which-typed-array 1.1.24 | Reproducible integrity-checked installation |
+| How can an old upload be detected? | Preflight prints commit and lockfile digest | Reject stale metadata before npm ci |
+| Which OS should run helper tests? | All three desktop CI runners | Windows gets timezone data |
+| Should lint jump to another major immediately? | No; keep tested compatible rules for this repair | Nonfatal deprecation disclosed |
+| Should existing plugin ID change again? | No | Same folder and settings for 1.1.3 upgrades |
+| Does the previous old-ID migration still matter? | Yes, for 1.1.1/1.1.2 users | Retain historical migration guide |
+| Should release publishing be automatic? | No; user tests downloaded files first | CI uploads artifacts only |
+| Include personal habit list? | User: generic examples only | Private list and vault data excluded |
+| Which iOS setup should be prioritized? | User: Sync first; manual/iCloud alternative | Existing platform tutorial retained |
+| How many tablet calendars per row? | User: one | Phone/tablet behavior unchanged |
+| Can latest OS versions count as tested? | No; record exact versions on actual devices | Pending results remain explicit |
 
-These defaults allow implementation without another blocking question. They can be revised if the prior ID was actually published or an installation uses a custom configuration folder.
-
-## Combined final design
-
-Use one portable plugin bundle under the new manifest identity. Preserve tracking formats and the internal view/code-block keys to keep existing data usable. Validate the current manifest restrictions explicitly. Install into a matching new folder, preserve settings through an explicit non-overwriting copy, and never activate both identities. Deliver six release assets, updated source checksums, all-platform installation/migration instructions, an editable tutorial and exact GitHub upload inventory. Device and hosted acceptance remain separate from automated tests.
+Final design: one portable plugin bundle for Windows, Ubuntu, macOS, Android, iPhone and iPad, with the existing vault data model, frozen historical calendars/reports and confirmed current-month resets. This patch changes build validation, version metadata and documentation. Deliver six installation/release assets, a source inventory and checksums, an editable tutorial and the existing draw.io architecture. Commit repaired sources together, obtain all three CI results, test downloaded assets in rsn-test-vault, then publish the matching release and complete hosted review. No new schedules or personal-data inclusion is introduced.

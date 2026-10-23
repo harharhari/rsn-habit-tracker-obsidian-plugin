@@ -1,6 +1,6 @@
 > Upgrading from Habit Calendar 001b 1.1.1/1.1.2: follow [MIGRATION-1.1.3.md](MIGRATION-1.1.3.md) first. The ID and installation folder change. Disable the old plugin on all devices and copy wanted settings before enabling the new one.
 
-# 1.1.3 platform acceptance and debugging
+# 1.1.4 platform acceptance and debugging
 
 Targets: Windows 11, Ubuntu 24.04.3, latest stable macOS, Android, iOS and iPadOS at testing time. Record actual version/build numbers and device models; "latest" is a target, not a reproducible result. The manifest retains an API compatibility floor of Obsidian 1.7.2, not a tested-device claim.
 
@@ -16,7 +16,7 @@ These tests use mocked Obsidian APIs. Playwright WebKit on Linux is useful engin
 
 ## Real-device checklist, each target
 
-Use a disposable rsn-test-vault, download release 1.1.3 and verify its checksums. Record exact OS version, Obsidian version, device and release hash.
+Use a disposable rsn-test-vault, download release 1.1.4 and verify its checksums. Record exact OS version, Obsidian version, device and release hash.
 
 1. Fresh install: enable, open current month, add the starter list and accept replacement in the empty month. Confirm two Y calendars and no N calendar.
 2. Layout: six columns in a wide desktop pane; one column in a narrow pane and on Android/iPhone/iPad. Check iPad landscape and Split View. Test scrolling through the 60-habit example.

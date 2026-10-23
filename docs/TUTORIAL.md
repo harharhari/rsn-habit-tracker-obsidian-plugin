@@ -2,7 +2,7 @@
 
 # rsn habit calendar one b — first-use tutorial
 
-Version 1.1.3 · harharhari · GPL-3.0-only
+Version 1.1.4 · harharhari · GPL-3.0-only
 
 This tutorial uses two habits in a separate test vault. Installation and migration are covered in [Setup and use](SETUP-AND-USAGE.md). The test checklist is [here](TESTING-CHECKLIST.md).
 

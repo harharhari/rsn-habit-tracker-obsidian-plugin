@@ -1,10 +1,10 @@
 > Upgrading from Habit Calendar 001b 1.1.1/1.1.2: follow [MIGRATION-1.1.3.md](MIGRATION-1.1.3.md) first. The ID and installation folder change. Disable the old plugin on all devices and copy wanted settings before enabling the new one.
 
-For complete 1.1.3 installation on Windows, Ubuntu, macOS, Android, iPhone and iPad, start with [INSTALL-DOWNLOAD.md](INSTALL-DOWNLOAD.md). The optional Linux helper below remains desktop-only.
+For complete 1.1.4 installation on Windows, Ubuntu, macOS, Android, iPhone and iPad, start with [INSTALL-DOWNLOAD.md](INSTALL-DOWNLOAD.md). The optional Linux helper below remains desktop-only.
 
 # rsn habit calendar one b — installation and use
 
-Version 1.1.3. Public author: harharhari. GPL-3.0-only.
+Version 1.1.4. Public author: harharhari. GPL-3.0-only.
 
 ## 1. Download and verify
 
@@ -14,7 +14,7 @@ Download these six **release assets** from GitHub, keeping their names unchanged
 2. manifest.json
 3. styles.css
 4. hex-color-list.md
-5. rsn-habit-calendar-one-b-1.1.3.zip
+5. rsn-habit-calendar-one-b-1.1.4.zip
 6. SHA256SUMS
 
 GitHub's automatically generated Source code ZIP is not the installation ZIP.

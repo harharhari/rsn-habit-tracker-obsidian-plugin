@@ -1,6 +1,6 @@
 # rsn habit calendar one b
 
-Monthly habit calendars for Obsidian by **harharhari**. Version **1.1.3**, licensed under **GPL-3.0-only**.
+Monthly habit calendars for Obsidian by **harharhari**. Version **1.1.4**, licensed under **GPL-3.0-only**.
 
 Track daily activities with a named calendar for each habit. Wide desktop views show six calendars per row; phones and tablets show one. Click or tap a date to cycle **unmarked → green → pink → unmarked**. Weeks start Monday. The monthly title follows `2026-10 October 2026`.
 
@@ -14,14 +14,14 @@ These browser-rendered examples use generic habits and mocked Obsidian APIs; the
 
 ## Download and install
 
-Download the assets from [GitHub Releases](https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/releases/tag/1.1.3). This link becomes available when the maintainer publishes the release and grants access. The repository may remain private during testing.
+Download the assets from [GitHub Releases](https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/releases/tag/1.1.4). This link becomes available when the maintainer publishes the release and grants access. The repository may remain private during testing.
 
 1. Back up your vault. Use `rsn-test-vault` for the first trial.
 2. Download the six release assets and verify their checksums using the [platform-specific instructions](docs/INSTALL-DOWNLOAD.md).
 
 The following file-copy steps apply to desktop and accessible Android vaults. For iPhone/iPad, follow the [Obsidian Sync or Mac-assisted iCloud setup](docs/INSTALL-DOWNLOAD.md) instead.
 
-3. Close Obsidian. Extract `rsn-habit-calendar-one-b-1.1.3.zip` and copy its `rsn-habit-calendar-one-b` folder into `<vault>/.obsidian/plugins/`. For an upgrade from 1.1.1/1.1.2, follow the [identity migration guide](docs/MIGRATION-1.1.3.md): disable the old plugin and copy wanted data.json into the new folder.
+3. Close Obsidian. Extract `rsn-habit-calendar-one-b-1.1.4.zip` and copy its `rsn-habit-calendar-one-b` folder into `<vault>/.obsidian/plugins/`. For an upgrade from 1.1.1/1.1.2, follow the [identity migration guide](docs/MIGRATION-1.1.3.md): disable the old plugin and copy wanted data.json into the new folder.
 4. Reopen Obsidian. Under Settings → Community plugins, allow community plugins and enable **rsn habit calendar one b**.
 5. Run **rsn habit calendar one b: Open current month** in the command palette. A new vault starts with an empty habit list. Follow the tutorial to add your own rows.
 
@@ -65,13 +65,13 @@ A new month appears while Obsidian is running, or on its next opening. The optio
 
 ## Compatibility and data
 
-Version 1.1.3 targets Windows 11, Ubuntu 24.04.3, current stable macOS, Android, iOS and iPadOS with the same plugin bundle. Phones and tablets show one calendar per row. Wide desktop panes show six; narrow panes show one. The month picker uses a Month dropdown and Year field on every platform.
+Version 1.1.4 targets Windows 11, Ubuntu 24.04.3, current stable macOS, Android, iOS and iPadOS with the same plugin bundle. Phones and tablets show one calendar per row. Wide desktop panes show six; narrow panes show one. The month picker uses a Month dropdown and Year field on every platform.
 
-The maintainer previously reported 1.1.1 working on Ubuntu/Android. Version 1.1.3 device acceptance is pending. Exact Apple OS, Android and Obsidian versions must be recorded during testing. The manifest minimum 1.7.2 is an API compatibility floor, not a completed minimum-device test.
+The maintainer previously reported 1.1.1 working on Ubuntu/Android. Version 1.1.4 device acceptance is pending. Exact Apple OS, Android and Obsidian versions must be recorded during testing. The manifest minimum 1.7.2 is an API compatibility floor, not a completed minimum-device test.
 
 No plugin network requests, telemetry or runtime Node/Electron imports. Sync is a separate service. Use optional Obsidian Sync across all platforms, or a separate Apple-only iCloud vault. Follow [MIGRATION-1.1.3.md](docs/MIGRATION-1.1.3.md) to preserve data.json and Habit Tracker across the ID change. Do not run old Habit Calendar 001 with the same records.
 
-See [all-platform installation](docs/INSTALL-DOWNLOAD.md), [platform testing](docs/PLATFORM-TESTING.md) and [release notes](docs/RELEASE-NOTES-1.1.3.md).
+See [all-platform installation](docs/INSTALL-DOWNLOAD.md), [platform testing](docs/PLATFORM-TESTING.md) and [release notes](docs/RELEASE-NOTES-1.1.4.md).
 
 ## Build
 
@@ -90,3 +90,7 @@ Repository-root `SHA256SUMS` verifies this prepared source snapshot. The separat
 ## Support and license
 
 Report reproducible problems through [GitHub Issues](https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/issues). Include plugin/app versions, OS, steps and error text, but remove personal vault content. [GPL-3.0-only](LICENSE). Copyright © 2026 harharhari. See [NOTICE](NOTICE).
+
+## Version 1.1.4 build repair
+
+For the npm 404 on Ubuntu, Windows or macOS, follow [CI troubleshooting](docs/CI-TROUBLESHOOTING.md). Upload the repaired root lockfile and run the new commit. See [release notes](docs/RELEASE-NOTES-1.1.4.md) and [validation](docs/VALIDATION.md). An upgrade from 1.1.3 keeps the same plugin folder, data.json and Habit Tracker records.
