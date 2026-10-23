@@ -1,4 +1,4 @@
-# User acceptance checklist — 001b 1.1.1
+# User acceptance checklist — 001b 1.1.2
 
 Use downloaded GitHub release assets in a separate test vault. Record Obsidian version, OS, device, plugin version, and pass/fail evidence. Automated tests do not replace these real-device checks.
 

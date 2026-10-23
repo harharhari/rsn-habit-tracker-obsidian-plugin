@@ -1,10 +1,9 @@
-# Exact repository upload inventory — 1.1.1
+# Exact repository upload inventory — 1.1.2
 
-Upload every path below to the same relative path at the root of harharhari/rsn-habit-tracker-obsidian-plugin. Include hidden files. README.md and manifest.json must appear at the root.
-
-51 files, including this inventory and the source checksum. Do not put these inside a nested repository/ directory on GitHub.
+Upload all 54 files below, preserving relative paths, to the root of harharhari/rsn-habit-tracker-obsidian-plugin. Include hidden .github, .gitignore and .gitattributes. README.md, LICENSE and manifest.json belong at the root.
 
 ```text
+.gitattributes
 .github/workflows/ci.yml
 .gitignore
 LICENSE
@@ -20,9 +19,11 @@ docs/FILES-TO-PUSH.md
 docs/GITHUB-AND-COMMUNITY-RELEASE.md
 docs/Habit-Calendar-001b-Tutorial.pptx
 docs/INSTALL-DOWNLOAD.md
+docs/PLATFORM-TESTING.md
 docs/RELEASE-NOTES-1.0.1.md
 docs/RELEASE-NOTES-1.1.0.md
 docs/RELEASE-NOTES-1.1.1.md
+docs/RELEASE-NOTES-1.1.2.md
 docs/SETUP-AND-USAGE.md
 docs/TEST-RESULTS-TEMPLATE.md
 docs/TESTING-CHECKLIST.md
@@ -58,4 +59,4 @@ tsconfig.json
 versions.json
 ```
 
-The separate release-assets folder contains six individually attached GitHub Release files. See GITHUB-AND-COMMUNITY-RELEASE.md. Do not commit personal vaults, data.json, node_modules or generated release output. Source SHA256SUMS verifies this prepared snapshot; regenerate deliberately after source edits.
+The outer release-assets directory is separate: upload its six files individually as GitHub Release attachments for tag 1.1.2. Do not commit node_modules, generated main.js/release directories, personal lists, vaults or data.json. Keep older release tags intact. Source SHA256SUMS describes this snapshot; regenerate it deliberately after edits.

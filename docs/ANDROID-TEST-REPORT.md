@@ -1,3 +1,5 @@
+> Historical Android investigation. For 1.1.2 evidence and pending device acceptance, see VALIDATION.md and PLATFORM-TESTING.md.
+
 # Android emulator test attempt — 20 October 2026
 
 **Result: BLOCKED. No Android plugin tests passed or failed; the app could not be reached.**

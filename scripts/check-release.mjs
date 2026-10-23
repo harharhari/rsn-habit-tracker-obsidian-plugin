@@ -47,3 +47,16 @@ assert.equal(colors.length, 147, "Expected all 147 CSS3 named colors");
 assert.ok(colors.some((line) => line.startsWith("| green | #008000 |")));
 assert.ok(colors.some((line) => line.startsWith("| gray | #808080 |")));
 assert.ok(!colors.some((line) => line.includes("rebeccapurple")));
+
+// Shipping code must remain portable: Obsidian is the only external runtime import.
+assert.equal(manifest.isDesktopOnly, false);
+const imports = [
+  ...(await read("main.js"))
+    .toString()
+    .matchAll(/require\(["']([^"']+)["']\)/g),
+].map((m) => m[1]);
+assert.deepEqual(
+  [...new Set(imports)],
+  ["obsidian"],
+  "Unexpected desktop-only or unbundled runtime dependency",
+);

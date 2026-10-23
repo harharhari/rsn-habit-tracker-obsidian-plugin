@@ -1,8 +1,8 @@
 # Habit Calendar 001b
 
-Monthly habit calendars for Obsidian by **harharhari**. Version **1.1.1**, licensed under **GPL-3.0-only**.
+Monthly habit calendars for Obsidian by **harharhari**. Version **1.1.2**, licensed under **GPL-3.0-only**.
 
-Track daily activities with a named calendar for each habit. Wide desktop views show six calendars per row; Android shows one. Click or tap a date to cycle **unmarked → green → pink → unmarked**. Weeks start Monday. The monthly title follows `2026-10 October 2026`.
+Track daily activities with a named calendar for each habit. Wide desktop views show six calendars per row; phones and tablets show one. Click or tap a date to cycle **unmarked → green → pink → unmarked**. Weeks start Monday. The monthly title follows `2026-10 October 2026`.
 
 ## Layout examples
 
@@ -14,11 +14,14 @@ These browser-rendered examples use generic habits and mocked Obsidian APIs; the
 
 ## Download and install
 
-Download the assets from [GitHub Releases](https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/releases/tag/1.1.1). This link becomes available when the maintainer publishes the release and grants access. The repository may remain private during testing.
+Download the assets from [GitHub Releases](https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/releases/tag/1.1.2). This link becomes available when the maintainer publishes the release and grants access. The repository may remain private during testing.
 
 1. Back up your vault. Use `rsn-test-vault` for the first trial.
-2. Download the six release assets and verify them on Linux with `sha256sum -c SHA256SUMS`.
-3. Close Obsidian. Extract `habit-calendar-001b-1.1.1.zip` and copy its `habit-calendar-001b` folder into `<vault>/.obsidian/plugins/`. For an upgrade, overwrite the four program/reference files inside the existing folder and preserve `data.json`.
+2. Download the six release assets and verify their checksums using the [platform-specific instructions](docs/INSTALL-DOWNLOAD.md).
+
+The following file-copy steps apply to desktop and accessible Android vaults. For iPhone/iPad, follow the [Obsidian Sync or Mac-assisted iCloud setup](docs/INSTALL-DOWNLOAD.md) instead.
+
+3. Close Obsidian. Extract `habit-calendar-001b-1.1.2.zip` and copy its `habit-calendar-001b` folder into `<vault>/.obsidian/plugins/`. For an upgrade, overwrite the four program/reference files inside the existing folder and preserve `data.json`.
 4. Reopen Obsidian. Under Settings → Community plugins, allow community plugins and enable **Habit Calendar 001b**.
 5. Run **Habit Calendar 001b: Open current month** in the command palette. A new vault starts with an empty habit list. Follow the tutorial to add your own rows.
 
@@ -50,7 +53,7 @@ A new month appears while Obsidian is running, or on its next opening. The optio
 
 ## Guides
 
-- [Ubuntu and Android tutorial (PowerPoint)](docs/Habit-Calendar-001b-Tutorial.pptx)
+- [Windows, Ubuntu, Mac, Android, iPhone and iPad tutorial (PowerPoint)](docs/Habit-Calendar-001b-Tutorial.pptx)
 - [First-use tutorial](docs/TUTORIAL.md)
 - [Install, upgrade and download guide](docs/INSTALL-DOWNLOAD.md)
 - [Android and optional Sync](docs/ANDROID-rsn-test-vault.md)
@@ -61,11 +64,13 @@ A new month appears while Obsidian is running, or on its next opening. The optio
 
 ## Compatibility and data
 
-The maintainer reports 1.1.1 working on Ubuntu laptop and Android phones on 21 October 2026. Exact device/app versions are not yet recorded. Windows, macOS and iOS are intended targets, not verified in this release record. `minAppVersion` is 1.7.2 based on API linting; device testing on that minimum is still required before claiming it as a tested floor.
+Version 1.1.2 targets Windows 11, Ubuntu 24.04.3, current stable macOS, Android, iOS and iPadOS with the same plugin bundle. Phones and tablets show one calendar per row. Wide desktop panes show six; narrow panes show one. The month picker uses a Month dropdown and Year field on every platform.
 
-No plugin network requests, telemetry, external accounts or runtime dependencies. Community plugins execute with Obsidian's privileges. Sync is a separate service, not supplied by this plugin. Obsidian Sync is optional and paid. Keep a backup, sync before rollover, and perform list resets on one device after syncing. Simultaneous resets can discard each other's revisions.
+The maintainer previously reported 1.1.1 working on Ubuntu/Android. Version 1.1.2 device acceptance is pending. Exact Apple OS, Android and Obsidian versions must be recorded during testing. The manifest minimum 1.7.2 is an API compatibility floor, not a completed minimum-device test.
 
-Preserve `Habit Tracker/` and plugin `data.json` when upgrading. Keep Statistics and System if deleting older pages or records. Disable Habit Calendar 001 on every device before using 001b with the same data; 001 does not understand reset records.
+No plugin network requests, telemetry or runtime Node/Electron imports. Sync is a separate service. Use optional Obsidian Sync across all platforms, or a separate Apple-only iCloud vault. Preserve data.json and Habit Tracker on upgrade. Do not run old Habit Calendar 001 with the same records.
+
+See [all-platform installation](docs/INSTALL-DOWNLOAD.md), [platform testing](docs/PLATFORM-TESTING.md) and [release notes](docs/RELEASE-NOTES-1.1.2.md).
 
 ## Build
 
@@ -84,5 +89,3 @@ Repository-root `SHA256SUMS` verifies this prepared source snapshot. The separat
 ## Support and license
 
 Report reproducible problems through [GitHub Issues](https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/issues). Include plugin/app versions, OS, steps and error text, but remove personal vault content. [GPL-3.0-only](LICENSE). Copyright © 2026 harharhari. See [NOTICE](NOTICE).
-
-Compatibility clarification: Ubuntu **24.04.3**. The user assumes the latest Obsidian version on each platform and latest Android; exact app/Android versions and phone models were not recorded. This is an assumption, not a verified numerical version.

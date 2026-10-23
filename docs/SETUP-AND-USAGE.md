@@ -1,6 +1,8 @@
+For complete 1.1.2 installation on Windows, Ubuntu, macOS, Android, iPhone and iPad, start with [INSTALL-DOWNLOAD.md](INSTALL-DOWNLOAD.md). The optional Linux helper below remains desktop-only.
+
 # Habit Calendar 001b — installation and use
 
-Version 1.1.1. Public author: harharhari. GPL-3.0-only.
+Version 1.1.2. Public author: harharhari. GPL-3.0-only.
 
 ## 1. Download and verify
 
@@ -10,7 +12,7 @@ Download these six **release assets** from GitHub, keeping their names unchanged
 2. manifest.json
 3. styles.css
 4. hex-color-list.md
-5. habit-calendar-001b-1.1.1.zip
+5. habit-calendar-001b-1.1.2.zip
 6. SHA256SUMS
 
 GitHub's automatically generated Source code ZIP is not the installation ZIP.

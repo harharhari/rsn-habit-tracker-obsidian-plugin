@@ -25,3 +25,16 @@
 @media(max-width:700px) { .hc-root .hc-grid { grid-template-columns:1fr; } .hc-root button.hc-day,.hc-root .hc-calendar td { height:44px; font-size:16px; } }
 
 .hc-color-shade { display: inline-block; width: 5em; height: 1.5em; border: 1px solid var(--text-muted); border-radius: 3px; vertical-align: middle; }
+
+/* 1.1.2: responsive to the Obsidian pane, including desktop split views. */
+.hc-root { box-sizing: border-box; min-width: 0; container-type: inline-size; }
+.hc-root .hc-toolbar > * { max-width: 100%; }
+.hc-root.hc-mobile .hc-toolbar button,
+.hc-root.hc-mobile .hc-search { min-height: 44px; font-size: 16px; }
+.hc-root.hc-mobile button.hc-day { touch-action: manipulation; -webkit-appearance: none; appearance: none; }
+.hc-month-picker label { display: block; margin: 12px 0; }
+.hc-month-picker input, .hc-month-picker select, .hc-month-picker button { min-height: 44px; font-size: 16px; max-width: 100%; }
+@container (max-width: 700px) {
+  .hc-root .hc-grid { grid-template-columns: 1fr; }
+  .hc-root button.hc-day, .hc-root .hc-calendar td { height: 44px; font-size: 16px; }
+}

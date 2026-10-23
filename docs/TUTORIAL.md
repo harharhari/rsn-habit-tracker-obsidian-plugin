@@ -1,6 +1,6 @@
 # Habit Calendar 001b — first-use tutorial
 
-Version 1.1.1 · harharhari · GPL-3.0-only
+Version 1.1.2 · harharhari · GPL-3.0-only
 
 This tutorial uses two habits in a separate test vault. Installation and migration are covered in [Setup and use](SETUP-AND-USAGE.md). The test checklist is [here](TESTING-CHECKLIST.md).
 
@@ -84,3 +84,7 @@ Generation while Obsidian is closed requires the optional Linux helper described
 Retain `Habit Tracker/Statistics/` and `Habit Tracker/System/`. Only purge older monthly pages or detail records after checking their frozen snapshots and backups. Disabling or uninstalling the plugin leaves your vault data in place.
 
 When migrating from 001, disable it on EVERY device before enabling 001b. Both variants use the same data directory, but 001 cannot interpret 001b reset records.
+
+## 11. Windows, Mac, iPhone and iPad
+
+Installation for all platforms is in INSTALL-DOWNLOAD.md. Desktop commands use Ctrl+P on Windows/Ubuntu and Command+P on Mac. Phone/tablet users open the command palette from the ribbon/menu. Choose month now offers a month dropdown and four-digit year; no browser-specific month input is required. iPad retains one column, including landscape. Narrow desktop split panes also switch to one column. See the updated PowerPoint for platform-specific walkthroughs.

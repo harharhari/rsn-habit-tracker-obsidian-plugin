@@ -1,32 +1,30 @@
-# Final release design and additional questions
+# Final 1.1.2 design and clarification record
 
-## Confirmed design
+## Confirmed answers
 
-One cross-platform community plugin, ID habit-calendar-001b, version 1.1.1, author harharhari, GPL-3.0-only. One monthly page with a named calendar for each enabled habit. Six columns on wide desktop views and one on mobile. Monday starts the week. Manual taps cycle blank, green, pink. No schedules. Earlier current-month dates remain editable; future dates and historical months are locked.
+- Distribution: same habit-calendar-001b ID, new version 1.1.2, harharhari, GPL-3.0-only and the same GitHub repository.
+- Platforms: Windows 11, Ubuntu 24.04.3 and latest stable macOS/Android/iOS/iPadOS/Obsidian at test time. Exact device/app versions are not yet provided.
+- iPhone/iPad setup: Obsidian Sync first, plus manual installation and Apple-only iCloud guidance.
+- Tablets: one calendar per row, including iPad landscape. This matches phones.
+- Public examples: generic only. Personal 71-habit list stays private.
 
-The editable habit table has Habit, Generate calendar and Header color. A separate editable reference has 147 CSS3 colors and rendered shades. Current list changes require Yes/No. Yes replaces the full current catalog and clears all its marks. No leaves active data unchanged and retains the edited list for later application/new months. Past calendars and statistics use frozen snapshots, including after late sync. Statistics and System must survive any manual historical cleanup.
+## Additional design questions and decisions
 
-Data lives in the vault. No plugin network service is required. Existing plugin data.json and Habit Tracker are preserved during upgrades. The release has four loose assets, a convenience ZIP and an installation checksum file. Source and documentation are committed separately. Repository-root checksums cover the prepared source snapshot. The runtime is unchanged from the working 1.1.1.
-
-## Questions and decisions
-
-These questions improve publication and future design. Pending answers do not change the working runtime. Defaults are explicit, not treated as user consent.
-
-| Question | Current answer or provisional choice | Effect |
+| Question | Answer / chosen default | Consequence |
 |---|---|---|
-| Include the personal 71-habit list publicly? | Confirmed: generic examples only; personal list private | Prevents publishing the user's private habit catalog |
-| Which sync method should tutorials teach? | Confirmed: manual installation plus optional Obsidian Sync | Both offline users and Sync subscribers can install |
-| Exact Ubuntu/Android/app versions that worked? | Ubuntu 24.04.3 confirmed; Obsidian/Android assumed latest by user, exact versions unrecorded | Needed for the compatibility matrix |
-| Keep public name Habit Calendar 001b? | Retain existing requested name and ID | Avoids migration and reinstall |
-| Which timezone should new users use? | Existing default Asia/Kolkata, editable in System/config.md | Day/month boundaries must agree on all devices |
-| Should a future list edit preserve marks for unchanged habits? | Current explicit requirement remains full reset on Yes | Any preservation change needs a new design/version |
-| Must calendars appear while the app is closed? | Existing app-open behaviour plus optional Linux helper | Android has no background scheduler |
-| What is the minimum supported app version? | Declared 1.7.2; real-device minimum test pending | Maintainer must validate or revise before claiming tested support |
-| Who will handle support and bug reports? | Public author harharhari; GitHub Issues proposed | No personal email is published |
-| Which additional platforms can be advertised as tested? | Ubuntu/Android user-reported only | Windows/macOS/iOS remain unverified |
-| Is the public tutorial based on real phone screenshots? | Browser-rendered examples only, explicitly labeled | No fabricated device evidence |
-| Automatic GitHub publishing or manual releases? | Manual releases with existing CI validation | Maintainer controls publication and visibility |
+| Rename plugin ID or only release version? | Only version changes | Existing installations and vault data remain compatible |
+| Separate OS-specific binaries? | One Web-API/Obsidian-API bundle | Same release files for all six target device types |
+| How should month selection work across browser engines? | Month dropdown plus numeric year text field | Avoids reliance on native input type month |
+| Tablet grid density? | User selected one column | No multi-column iPad mode in 1.1.2 |
+| How should narrow desktop panes behave? | One column at 700px content width or below | Split views remain usable without tiny six-column cards |
+| What happens to 1.1.1 records? | Preserve format and ID | No migration/reset on code upgrade |
+| Should list changes preserve current marks? | Existing full-reset-on-Yes requirement remains | Color/name/Y/N edits still require explicit replacement |
+| Which cloud service spans all platforms? | User chose Obsidian Sync first | Optional paid external service, not a plugin requirement |
+| Can iCloud and Sync run on one vault? | Separate alternatives | Avoid conflicting sync engines |
+| Which versions were actually tested? | Record exact numbers during acceptance | Latest stable targets do not become fabricated test results |
+| Add background generation on phones? | No, outside this release | Month appears while open or next launch; Linux helper remains optional |
+| Should the source build on every desktop OS? | Three-OS GitHub Actions matrix | CI tests Node builds, separate from native Obsidian tests |
 
-## Combined design
+## Combined final design
 
-The public distribution contains only program source, generic examples and documentation. Users obtain the same runtime through six GitHub release attachments or the three standard Community installer assets. The tutorial starts with a disposable rsn-test-vault, teaches manual Ubuntu/Android installation, then optional sync, daily marking, destructive list changes, history and upgrades. Documentation separates user-reported device success, automated tests and hosted acceptance. Only the maintainer publishes to GitHub and submits after reviewing test outcomes. Open questions are recorded above for refinement without delaying the usable release package.
+Keep the event/revision/frozen-report architecture. Refactor the month picker and touch sizing, make desktop layout respond to pane width, enforce portable runtime imports and deterministic text line endings, and add meaningful regressions. Deliver one six-asset release, a clean GitHub source tree, source/release checksums and an expanded editable tutorial. Preserve history and custom colors when upgrading. Document Windows/macOS file-manager and checksum differences, Android device storage, iOS Sync setup and the Mac-assisted iCloud route. Real-device and hosted acceptance remain explicit gates. All diagrams remain editable draw.io files.

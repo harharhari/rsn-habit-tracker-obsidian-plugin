@@ -48,6 +48,7 @@ class Element {
     this.tag = tag;
     this.children = [];
     this.handlers = {};
+    this.classList = { add() {} };
     this.ownerDocument = { createElement: (tag) => new Element(tag) };
   }
   appendChild(child) {
@@ -59,6 +60,9 @@ class Element {
   }
   addEventListener(event, callback) {
     this.handlers[event] = callback;
+  }
+  setAttribute(name, value) {
+    this[name] = value;
   }
   focus() {
     this.focused = true;
@@ -684,3 +688,53 @@ for (const mobile of [false, true]) {
     );
   });
 }
+
+test("portable month picker validates year and supports Enter without input type month", () => {
+  const p = plugin({ mobile: true });
+  const opened = [];
+  p.openMonth = async (value) => opened.push(value);
+  p.safe = (fn) => fn();
+  p.chooseMonth();
+  const modal = TestModal.current;
+  const labels = modal.contentEl.children.filter((e) => e.tag === "label");
+  const month = labels[0].children[0],
+    year = labels[1].children[0];
+  assert.equal(month.tag, "select");
+  assert.equal(month.children.length, 12);
+  assert.equal(year.type, "text");
+  const open = modal.contentEl.children.find((e) => e.tag === "button");
+  year.value = "1969";
+  open.handlers.click();
+  assert.equal(opened.length, 0);
+  year.value = "2028";
+  month.value = "02";
+  let prevented = false;
+  year.handlers.keydown({
+    key: "Enter",
+    preventDefault() {
+      prevented = true;
+    },
+  });
+  assert.ok(prevented);
+  assert.deepEqual(opened, ["2028-02"]);
+});
+
+test("Windows CRLF/BOM list with Unicode names persists using portable vault paths", async () => {
+  const p = plugin();
+  const f = p.app.vault.getAbstractFileByPath(
+    "Habit Tracker/habit-tracker-list.md",
+  );
+  f.text =
+    "\ufeff" + f.text.replace("Walking", "Café 日記").replace(/\n/g, "\r\n");
+  await p.reconcile();
+  const m = p.currentMonth(),
+    h = (await p.model(m)).state.habits[0];
+  assert.equal(h.name, "Café 日記");
+  await p.mark(m, h.id, m + "-01");
+  assert.equal((await p.previousReport(m)).habits[0].green, 1);
+  for (const file of p.app.vault.getFiles()) {
+    assert.ok(!file.path.includes("\\"));
+    for (const segment of file.path.split("/"))
+      assert.ok(!/[<>:"\\|?*]/.test(segment));
+  }
+});

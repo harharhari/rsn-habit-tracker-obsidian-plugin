@@ -88,19 +88,49 @@ class MonthModal extends Modal {
   }
   onOpen() {
     el(this.contentEl, "h2", "Open month");
-    const input = el(this.contentEl, "input");
-    input.type = "month";
-    input.value = this.callback.current;
+    this.contentEl.classList.add("hc-month-picker");
+    // Separate native controls avoid browser-dependent input[type=month] behaviour.
+    const monthLabel = el(this.contentEl, "label", "Month ");
+    const month = el(monthLabel, "select");
+    month.setAttribute("aria-label", "Month");
+    for (let index = 1; index <= 12; index++) {
+      const value = String(index).padStart(2, "0");
+      const option = el(
+        month,
+        "option",
+        C.title(`2000-${value}`).split(" ")[1],
+      );
+      option.value = value;
+    }
+    month.value = this.callback.current.slice(5);
+    const yearLabel = el(this.contentEl, "label", "Year ");
+    const year = el(yearLabel, "input");
+    year.type = "text";
+    year.inputMode = "numeric";
+    year.maxLength = 4;
+    year.autocomplete = "off";
+    year.setAttribute("aria-label", "Year");
+    year.value = this.callback.current.slice(0, 4);
     const error = el(this.contentEl, "p");
-    button(this.contentEl, "Open", () => {
-      if (!C.validMonth(input.value)) {
-        error.textContent = "Enter a month such as 2026-10.";
+    error.setAttribute("role", "alert");
+    const open = () => {
+      const value = `${year.value.trim()}-${month.value}`;
+      if (!C.validMonth(value)) {
+        error.textContent =
+          "Enter a four-digit year from 1970 to 9999 and choose a month.";
         return;
       }
-      this.callback.open(input.value);
+      this.callback.open(value);
       this.close();
+    };
+    button(this.contentEl, "Open", open);
+    year.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        open();
+      }
     });
-    input.focus();
+    month.focus();
   }
   onClose() {
     this.contentEl.replaceChildren();

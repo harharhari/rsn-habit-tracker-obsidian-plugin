@@ -1,6 +1,6 @@
 # Android setup — rsn-test-vault
 
-For Habit Calendar 001b 1.1.1. No Python, Node.js or terminal is needed on the phone.
+For Habit Calendar 001b 1.1.2. No Python, Node.js or terminal is needed on the phone.
 
 ## Recommended: existing Linux vault through Obsidian Sync
 
@@ -69,12 +69,12 @@ No Android background scheduler is included. Monthly creation occurs while Obsid
 - Plugin sync settings: https://help.obsidian.md/sync/settings
 - Android emulator acceleration: https://developer.android.com/studio/run/emulator-acceleration#vm-linux
 
-## Upgrade the blank-screen Android installation to 1.1.1
+## Upgrade the blank-screen Android installation to 1.1.2
 
 1. Back up rsn-test-vault and finish any pending sync. On Ubuntu verify the new download with `sha256sum -c SHA256SUMS` from its download folder.
-2. Force-stop Obsidian on Android. Replace main.js, manifest.json, styles.css and hex-color-list.md in the existing `rsn-test-vault/.obsidian/plugins/habit-calendar-001b/` directory with the matching 1.1.1 files. Preserve data.json and the entire Habit Tracker folder. Do not copy the source ZIP or a second nested plugin directory.
+2. Force-stop Obsidian on Android. Replace main.js, manifest.json, styles.css and hex-color-list.md in the existing `rsn-test-vault/.obsidian/plugins/habit-calendar-001b/` directory with the matching 1.1.2 files. Preserve data.json and the entire Habit Tracker folder. Do not copy the source ZIP or a second nested plugin directory.
 3. If using Sync instead, update the plugin on Ubuntu, sync installed plugins, wait for Android to receive the update, then restart Android Obsidian. Avoid editing the plugin files simultaneously on both devices.
-4. In Android Settings → Community plugins, verify Habit Calendar 001b reports version 1.1.1 and is enabled. Keep the old Habit Calendar 001 disabled.
+4. In Android Settings → Community plugins, verify Habit Calendar 001b reports version 1.1.2 and is enabled. Keep the old Habit Calendar 001 disabled.
 5. Run **Habit Calendar 001b: Open current month** from the command palette. This opens the interactive view directly. A monthly Markdown note must be in Reading view (or a rendered Live Preview block), not Source mode, to display its calendars.
 6. If the controls appear but no habits do, use the existing habit list with Y entries. Do not accept a replacement warning merely to troubleshoot: Yes clears current-month marks.
 7. Run the phone acceptance checklist above. If still blank, record the Obsidian version, Android version, plugin version, whether the command is listed, and any notice/error text. These distinguish installation, view rendering and storage failures.

@@ -1,4 +1,4 @@
-# GitHub testing and Community publication — Habit Calendar 001b 1.1.1
+# GitHub testing and Community publication — Habit Calendar 001b 1.1.2
 
 Public author: **harharhari**. Repository: **harharhari/rsn-habit-tracker-obsidian-plugin**.
 License: **GPL-3.0-only**. Plugin ID: **habit-calendar-001b**.
@@ -12,7 +12,7 @@ git clone https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin.git
 cd rsn-habit-tracker-obsidian-plugin
 ```
 
-Copy the prepared source folder CONTENTS into this clone. README.md and manifest.json must be at the repository root, not under another nested folder. Include hidden `.github/` and `.gitignore`.
+Copy the prepared source folder CONTENTS into this clone. README.md and manifest.json must be at the repository root, not under another nested folder. Include hidden `.github/`, `.gitignore` and `.gitattributes`.
 
 Commit these items (the precise generated inventory is in docs/FILES-TO-PUSH.md):
 
@@ -54,10 +54,10 @@ The official hosted directory review runs separately AFTER submission. Local ESL
 Push the reviewed source:
 
 ```bash
-git add .gitignore .github README.md LICENSE NOTICE manifest.json versions.json package.json package-lock.json eslint.config.mjs tsconfig.json styles.css hex-color-list.md src scripts tests examples docs SHA256SUMS
+git add .gitignore .gitattributes .github README.md LICENSE NOTICE manifest.json versions.json package.json package-lock.json eslint.config.mjs tsconfig.json styles.css hex-color-list.md src scripts tests examples docs SHA256SUMS
 git diff --cached --stat
 git status --short
-git commit -m "Prepare Habit Calendar 001b 1.1.1"
+git commit -m "Prepare Habit Calendar 001b 1.1.2"
 git push
 ```
 
@@ -66,8 +66,8 @@ On GitHub open Actions → Build and review. Check that the job succeeds. Downlo
 ## C. Create a private test release
 
 1. On the repository's GitHub page open Releases → Draft a new release.
-2. Create tag `1.1.1` against the tested commit; do not prefix it with `v`.
-3. Use title `Habit Calendar 001b 1.1.1` and copy docs/RELEASE-NOTES-1.1.1.md into its description.
+2. Create tag `1.1.2` against the tested commit; do not prefix it with `v`.
+3. Use title `Habit Calendar 001b 1.1.2` and copy docs/RELEASE-NOTES-1.1.2.md into its description.
 4. Attach these six files from release/ **individually**:
 
 ```text
@@ -75,7 +75,7 @@ main.js
 manifest.json
 styles.css
 hex-color-list.md
-habit-calendar-001b-1.1.1.zip
+habit-calendar-001b-1.1.2.zip
 SHA256SUMS
 ```
 
@@ -87,7 +87,7 @@ An unzipped FOLDER is not a release asset. main.js, manifest.json, and styles.cs
 
 SHA256SUMS covers the four loose files and installation ZIP, not itself. The installation ZIP contains the four files plus LICENSE and NOTICE. It deliberately does not contain its own checksum file. The source ZIP is separate and is not one of the six installation assets.
 
-## D. Official submission — current process checked 21 October 2026
+## D. Official submission — current process checked 22 October 2026
 
 Official reference: https://docs.obsidian.md/Plugins/Releasing/Submit%20your%20plugin
 
@@ -112,14 +112,14 @@ For Git: clone your repository into a separate folder. Copy the prepared reposit
 
 `package.json` has `private: true` to prevent accidental npm publication. This does not control GitHub repository visibility and does not block Obsidian use.
 
-Do not silently replace an already published 1.1.1 binary with different code. This preparation keeps the working runtime bytes. Documentation-only changes can be committed separately. If binary changes become necessary after testing, increment manifest/package/lockfile/versions metadata and create a new matching release.
+Do not silently replace an already published 1.1.2 binary with different code. Version 1.1.2 changes the month picker and responsive controls; retain release 1.1.1 for rollback. Documentation-only changes can be committed separately. If binary changes become necessary after testing, increment manifest/package/lockfile/versions metadata and create a new matching release.
 
 ## F. Official testing methods and our acceptance gate
 
 Obsidian recommends a separate development vault. Install the downloaded release into **rsn-test-vault**, enable it under Community plugins and restart after manifest changes. The app build/reload procedure is documented in [Build a plugin](https://docs.obsidian.md/Plugins/Getting%20started/Build%20a%20plugin). Our full checklist is TESTING-CHECKLIST.md and results form is TEST-RESULTS-TEMPLATE.md.
 
-1. Verify release checksums, then run the install/basic-use checklist on Ubuntu and Android. Confirm marks survive restart and the displayed plugin version is 1.1.1.
-2. Use the generic 60-habit example in a disposable vault to test scrolling, filtering, desktop six-column layout and Android one-column touch use. Check default light and dark themes, portrait/landscape and narrow desktop panes.
+1. Verify release checksums, then run the install/basic-use checklist on Windows, Ubuntu, macOS, Android, iPhone and iPad. Confirm marks survive restart and the displayed plugin version is 1.1.2.
+2. Use the generic 60-habit example in a disposable vault to test scrolling, filtering, desktop six-column layout and phone/tablet one-column touch use. Check default light and dark themes, portrait/landscape and narrow desktop panes.
 3. Exercise Yes and No on list edits. Confirm Yes clears ALL current marks and No preserves displayed data. Verify custom color rows survive restart and an upgrade.
 4. Execute the synthetic history fixture in the checklist. Confirm late marks cannot change either historical calendars or statistics. Test offline/current-month merge with your actual sync service.
 5. Check the app console for errors while loading, changing months, marking and disabling/re-enabling the plugin. A blank screen without an error report is not an acceptance result.
@@ -127,11 +127,11 @@ Obsidian recommends a separate development vault. Install the downloaded release
 7. Android debugging: enable USB debugging, connect by USB and inspect the Obsidian WebView using Chrome at `chrome://inspect/`. See [official mobile development instructions](https://docs.obsidian.md/Plugins/Getting%20started/Mobile%20development). Capture only the relevant error text.
 8. Record exact OS/app versions. Verify the declared minimum Obsidian 1.7.2 on a test environment, or revise the minimum to a verified supported version before a new release. API linting alone does not establish a tested compatibility floor.
 
-The maintainer reports Ubuntu/Android working, but minimum-version, all-checklist and real Sync evidence is still pending. Windows/macOS/iOS testing is optional unless you advertise them as tested. The earlier Android emulator could not boot, so its result remains blocked despite browser and user-phone evidence.
+The maintainer reports 1.1.1 working on Ubuntu/Android, but minimum-version, all-checklist and real Sync evidence is still pending. Windows/macOS/iOS/iPadOS acceptance is pending and is part of the 1.1.2 release checklist. The earlier Android emulator could not boot, so its result remains blocked despite browser and user-phone evidence.
 
 ## G. Hosted review and acceptance
 
-Current official sources checked 21 October 2026:
+Current official sources checked 22 October 2026:
 
 - [Submit your plugin](https://docs.obsidian.md/Plugins/Releasing/Submit%20your%20plugin): root README/LICENSE/manifest, exact version tag and separate release assets. After submission fix review errors through a new version/release. Publish does not bypass unresolved errors.
 - [Set up and claim](https://docs.obsidian.md/community-directory/set-up-and-claim): sign in, link GitHub, then Plugins → New plugin. Enter repository URL and owner, accept the developer policies and maintenance commitment, and submit.
@@ -147,3 +147,18 @@ On your entry page, review listing text, select the appropriate category/payment
 ## H. Future releases
 
 Run the checks, update version metadata consistently and publish an exact matching x.y.z tag with fresh assets. Initial submission is a one-time step; subsequent releases trigger directory checks. Monitor review feedback and GitHub issues. If unable to maintain the plugin, follow the directory's transfer/archive process. A signed build provenance attestation is a recommended future enhancement; this manual release package does not claim one. See [official GitHub Actions release guide](https://docs.obsidian.md/Plugins/Releasing/Release%20your%20plugin%20with%20GitHub%20Actions).
+
+## 1.1.2 publication update
+
+Upload the contents of upload-to-github-002/repository to the repository root, including .gitattributes. Do not nest the repository folder. The final file inventory is FILES-TO-PUSH.md. Attach all six files from the outer release-assets directory to tag 1.1.2. Do not overwrite release 1.1.1.
+
+The CI workflow has Ubuntu, Windows and macOS jobs. Each runs the official lint/build/JavaScript/release checks. Linux also runs the optional Python helper tests. Wait for all jobs and compare their generated SHA256SUMS files; then test downloaded assets in Obsidian on the actual target devices. Follow PLATFORM-TESTING.md and record results. CI itself does not run Obsidian or iOS.
+
+Before first Community submission: keep README.md, LICENSE and manifest.json on the default branch, publish a matching normal release with main.js/manifest.json/styles.css attached separately, then sign in at community.obsidian.md, connect GitHub, and use Plugins → New plugin. Review the current developer policies, submit the repository, resolve hosted review errors and publish the listing. If this plugin is already accepted, publish the new version/release instead of submitting a new plugin identity. The current official pages below were checked on 22 October 2026:
+
+- [Submission walkthrough](https://docs.obsidian.md/Plugins/Releasing/Submit%20your%20plugin)
+- [Review and build-command FAQ](https://docs.obsidian.md/community-directory/faq)
+- [Platform and manifest requirements](https://docs.obsidian.md/community-directory/submission-requirements-for-plugins)
+- [Mobile testing and debugging](https://docs.obsidian.md/Plugins/Getting%20started/Mobile%20development)
+
+Local ESLint is not hosted approval. macOS/iOS/iPadOS latest are testing targets, not verified version numbers. Confirm the minimum supported Obsidian version before making a tested compatibility claim. The reviewer may require further changes. After acceptance, verify installation through the actual Community browser on a fresh desktop and mobile vault.
