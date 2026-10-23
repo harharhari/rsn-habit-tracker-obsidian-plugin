@@ -10,7 +10,14 @@ const versions = JSON.parse(await read("versions.json"));
 assert.equal(manifest.version, pkg.version);
 assert.equal(versions[manifest.version], manifest.minAppVersion);
 assert.equal(manifest.author, "harharhari");
-assert.equal(manifest.id, "habit-calendar-001b");
+assert.equal(manifest.id, "rsn-habit-calendar-one-b");
+assert.equal(manifest.name, "rsn habit calendar one b");
+assert.match(
+  manifest.id,
+  /^[a-z-]+$/,
+  "Plugin ID permits only lowercase letters and hyphens",
+);
+assert.ok(!manifest.id.endsWith("plugin") && !manifest.id.includes("obsidian"));
 assert.equal(pkg.license, "GPL-3.0-only");
 assert.match(manifest.version, /^\d+\.\d+\.\d+$/);
 assert.ok(

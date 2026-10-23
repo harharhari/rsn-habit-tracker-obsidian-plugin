@@ -1,6 +1,6 @@
-# Habit Calendar 001b data model
+# rsn habit calendar one b data model
 
-Plugin ID `habit-calendar-001b`; version 1.1.2. Data root remains `Habit Tracker` for migration from 001. Do not run both variants against the same vault.
+Plugin ID `rsn-habit-calendar-one-b`; version 1.1.3. Data root remains `Habit Tracker` for migration from 001. Do not run both variants against the same vault.
 
 ## Vault layout
 

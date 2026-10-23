@@ -14,6 +14,7 @@ const COLOR_REFERENCE = ""; // Bundled from hex-color-list.md by scripts/build.m
 const ROOT = "Habit Tracker",
   LIST = ROOT + "/habit-tracker-list.md",
   CONFIG = ROOT + "/System/config.md",
+  // Keep the internal view type so saved workspace tabs can reopen after migration.
   VIEW = "habit-calendar-001b";
 const COLORS = ROOT + "/hex-color-list.md";
 const INITIAL =
@@ -594,7 +595,7 @@ module.exports = class HabitCalendarPlugin extends Plugin {
     return Promise.resolve()
       .then(fn)
       .catch((e) => {
-        console.error("Habit Calendar 001b:", e);
+        console.error("rsn habit calendar one b:", e);
         new Notice("Habit Calendar: " + e.message, 10000);
       });
   }

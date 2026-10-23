@@ -32,11 +32,11 @@ Description=Check for a new habit month each minute (tracker timezone)
 OnCalendar=*-*-* *:*:00
 Persistent=true
 AccuracySec=1s
-Unit=habit-calendar-001b.service
+Unit=rsn-habit-calendar-one-b.service
 
 [Install]
 WantedBy=timers.target
 '''
-(args.output / 'habit-calendar-001b.service').write_text(service)
-(args.output / 'habit-calendar-001b.timer').write_text(timer)
+(args.output / 'rsn-habit-calendar-one-b.service').write_text(service)
+(args.output / 'rsn-habit-calendar-one-b.timer').write_text(timer)
 print(f'Wrote units to {args.output}. Keep this package at its current location after enabling the timer.')

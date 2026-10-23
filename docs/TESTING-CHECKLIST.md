@@ -1,11 +1,13 @@
-# User acceptance checklist — 001b 1.1.2
+> Upgrading from Habit Calendar 001b 1.1.1/1.1.2: follow [MIGRATION-1.1.3.md](MIGRATION-1.1.3.md) first. The ID and installation folder change. Disable the old plugin on all devices and copy wanted settings before enabling the new one.
+
+# User acceptance checklist — 001b 1.1.3
 
 Use downloaded GitHub release assets in a separate test vault. Record Obsidian version, OS, device, plugin version, and pass/fail evidence. Automated tests do not replace these real-device checks.
 
 ## Installation and basic use
 
 - [ ] Download all six files and verify five checksum results.
-- [ ] Install under `.obsidian/plugins/habit-calendar-001b/`, enable 001b, and confirm 001 is disabled.
+- [ ] Install under `.obsidian/plugins/rsn-habit-calendar-one-b/`, enable 001b, and confirm 001 is disabled.
 - [ ] Open current month; title is YYYY-MM Month YYYY. Week starts Monday.
 - [ ] Desktop wide view has six columns; narrow/mobile layout has one.
 - [ ] Add two Y habits and one N habit. Save, read the exact warning, choose Yes. Only two calendars appear.
@@ -71,3 +73,13 @@ node scripts/test-vault.mjs late --test-vault "/absolute/path/to/empty-test-vaul
 - [ ] GitHub Actions is green.
 - [ ] README, GPL license, public author, ID/version, and release attachments match.
 - [ ] Source made public only after testing; submit via current Community directory instructions.
+
+## Identity migration from 1.1.2
+
+- [ ] Use a copied 1.1.2 vault with current marks and frozen history. Back up both plugin settings and Habit Tracker.
+- [ ] Disable Habit Calendar 001b on all devices before enabling rsn habit calendar one b.
+- [ ] Install in rsn-habit-calendar-one-b, copy wanted legacy data.json and verify manifest ID equals folder name.
+- [ ] Verify remembered No decisions, marks, custom colors and historical reports survive. No reset should be needed.
+- [ ] Reassign hotkeys, check existing notes and reopen the calendar view.
+- [ ] Complete Sync/iCloud transfer and repeat checks on each mobile device.
+- [ ] Install from the Community browser after approval and confirm the new display name and version.

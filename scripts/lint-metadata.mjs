@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 // Run the official metadata rules explicitly: the recommended JS config does
 // not select manifest.json or LICENSE in eslint-plugin-obsidianmd 0.4.2.
+import assert from "node:assert/strict";
 import { ESLint } from "eslint";
 import obsidianmd from "eslint-plugin-obsidianmd";
 import { PlainTextParser } from "eslint-plugin-obsidianmd/dist/lib/plainTextParser.js";
@@ -23,7 +24,17 @@ const checker = new ESLint({
 });
 // The official manifest rule expects an ESTree object-expression statement.
 const manifest = await readFile("manifest.json", "utf8");
-JSON.parse(manifest); // Enforce strict JSON before parsing as an expression.
+const metadata = JSON.parse(manifest);
+// Current hosted-directory rules are stricter than the pinned lint release.
+assert.match(
+  metadata.id,
+  /^[a-z-]+$/,
+  "ID: lowercase letters and hyphens only",
+);
+assert.ok(
+  !metadata.id.endsWith("plugin") && !metadata.id.includes("obsidian"),
+  "ID contains a forbidden word or suffix",
+);
 const results = [
   ...(await checker.lintText("(" + manifest + ")", {
     filePath: "manifest.json",

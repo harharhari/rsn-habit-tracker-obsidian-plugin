@@ -1,12 +1,14 @@
-# Habit Calendar 001b — first-use tutorial
+> Upgrading from Habit Calendar 001b 1.1.1/1.1.2: follow [MIGRATION-1.1.3.md](MIGRATION-1.1.3.md) first. The ID and installation folder change. Disable the old plugin on all devices and copy wanted settings before enabling the new one.
 
-Version 1.1.2 · harharhari · GPL-3.0-only
+# rsn habit calendar one b — first-use tutorial
+
+Version 1.1.3 · harharhari · GPL-3.0-only
 
 This tutorial uses two habits in a separate test vault. Installation and migration are covered in [Setup and use](SETUP-AND-USAGE.md). The test checklist is [here](TESTING-CHECKLIST.md).
 
 ## 1. Open your first month
 
-Enable Habit Calendar 001b. Press Ctrl+P on Linux/Windows or Command+P on macOS and run **Habit Calendar 001b: Open current month**. On mobile use the command palette. For October 2026 the title is **2026-10 October 2026**. A new empty vault initially has no habit calendars.
+Enable rsn habit calendar one b. Press Ctrl+P on Linux/Windows or Command+P on macOS and run **rsn habit calendar one b: Open current month**. On mobile use the command palette. For October 2026 the title is **2026-10 October 2026**. A new empty vault initially has no habit calendars.
 
 ## 2. Choose header colors
 

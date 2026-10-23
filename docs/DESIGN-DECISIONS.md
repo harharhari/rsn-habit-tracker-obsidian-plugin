@@ -1,30 +1,28 @@
-# Final 1.1.2 design and clarification record
+# 1.1.3 questions, answers and combined design
 
-## Confirmed answers
+## Confirmed requirements
 
-- Distribution: same habit-calendar-001b ID, new version 1.1.2, harharhari, GPL-3.0-only and the same GitHub repository.
-- Platforms: Windows 11, Ubuntu 24.04.3 and latest stable macOS/Android/iOS/iPadOS/Obsidian at test time. Exact device/app versions are not yet provided.
-- iPhone/iPad setup: Obsidian Sync first, plus manual installation and Apple-only iCloud guidance.
-- Tablets: one calendar per row, including iPad landscape. This matches phones.
-- Public examples: generic only. Personal 71-habit list stays private.
+User-selected ID: rsn-habit-calendar-one-b. Exact name: rsn habit calendar one b. Version 1.1.3. Same repository, author harharhari and GPL-3.0-only. Preserve all-platform targets, one column on phones/tablets, optional Obsidian Sync first on iOS, Mac-assisted iCloud alternative, generic public examples and draw.io diagrams.
 
-## Additional design questions and decisions
+## Additional questions resolved by existing requirements or safe defaults
 
-| Question | Answer / chosen default | Consequence |
+| Question | Answer / stated default | Design consequence |
 |---|---|---|
-| Rename plugin ID or only release version? | Only version changes | Existing installations and vault data remain compatible |
-| Separate OS-specific binaries? | One Web-API/Obsidian-API bundle | Same release files for all six target device types |
-| How should month selection work across browser engines? | Month dropdown plus numeric year text field | Avoids reliance on native input type month |
-| Tablet grid density? | User selected one column | No multi-column iPad mode in 1.1.2 |
-| How should narrow desktop panes behave? | One column at 700px content width or below | Split views remain usable without tiny six-column cards |
-| What happens to 1.1.1 records? | Preserve format and ID | No migration/reset on code upgrade |
-| Should list changes preserve current marks? | Existing full-reset-on-Yes requirement remains | Color/name/Y/N edits still require explicit replacement |
-| Which cloud service spans all platforms? | User chose Obsidian Sync first | Optional paid external service, not a plugin requirement |
-| Can iCloud and Sync run on one vault? | Separate alternatives | Avoid conflicting sync engines |
-| Which versions were actually tested? | Record exact numbers during acceptance | Latest stable targets do not become fabricated test results |
-| Add background generation on phones? | No, outside this release | Month appears while open or next launch; Linux helper remains optional |
-| Should the source build on every desktop OS? | Three-OS GitHub Actions matrix | CI tests Node builds, separate from native Obsidian tests |
+| Was the old ID published or only rejected? | Assume rejected, as reported | Retry initial submission; if already published, contact directory support |
+| Rename the Habit Tracker data folder too? | No | History and existing notes retain their paths |
+| Rewrite existing monthly code blocks? | No | Keep habit-calendar renderer registration |
+| Change saved workspace view type? | No | Retain internal view key for compatibility; this is not the manifest ID |
+| Transfer remembered decisions? | Yes, copy old data.json before activation | Explicit manual migration or opt-in installer flag |
+| Overwrite settings already created under the new ID? | No automatic overwrite | User chooses after backing up both files |
+| Run old and new identities together? | No | Disable old plugin on every device before activation |
+| Transfer hotkeys automatically? | No | Reassign shortcuts through Obsidian settings |
+| Rename Linux timer files? | Yes for new installs | Stop old timer before enabling replacement |
+| Reuse tag 1.1.2? | No | Publish new exact tag 1.1.3 with fresh checksums |
+| Is name/ID availability guaranteed? | No | Hosted directory remains authoritative |
+| Does latest OS mean device tested? | No | Record numerical versions and real test outcomes separately |
+
+These defaults allow implementation without another blocking question. They can be revised if the prior ID was actually published or an installation uses a custom configuration folder.
 
 ## Combined final design
 
-Keep the event/revision/frozen-report architecture. Refactor the month picker and touch sizing, make desktop layout respond to pane width, enforce portable runtime imports and deterministic text line endings, and add meaningful regressions. Deliver one six-asset release, a clean GitHub source tree, source/release checksums and an expanded editable tutorial. Preserve history and custom colors when upgrading. Document Windows/macOS file-manager and checksum differences, Android device storage, iOS Sync setup and the Mac-assisted iCloud route. Real-device and hosted acceptance remain explicit gates. All diagrams remain editable draw.io files.
+Use one portable plugin bundle under the new manifest identity. Preserve tracking formats and the internal view/code-block keys to keep existing data usable. Validate the current manifest restrictions explicitly. Install into a matching new folder, preserve settings through an explicit non-overwriting copy, and never activate both identities. Deliver six release assets, updated source checksums, all-platform installation/migration instructions, an editable tutorial and exact GitHub upload inventory. Device and hosted acceptance remain separate from automated tests.

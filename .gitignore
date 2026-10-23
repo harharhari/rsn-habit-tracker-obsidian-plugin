@@ -1,0 +1,9 @@
+node_modules/
+main.js
+release/
+__pycache__/
+*.pyc
+*.log
+.DS_Store
+.vscode/
+.idea/

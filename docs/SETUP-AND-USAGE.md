@@ -1,8 +1,10 @@
-For complete 1.1.2 installation on Windows, Ubuntu, macOS, Android, iPhone and iPad, start with [INSTALL-DOWNLOAD.md](INSTALL-DOWNLOAD.md). The optional Linux helper below remains desktop-only.
+> Upgrading from Habit Calendar 001b 1.1.1/1.1.2: follow [MIGRATION-1.1.3.md](MIGRATION-1.1.3.md) first. The ID and installation folder change. Disable the old plugin on all devices and copy wanted settings before enabling the new one.
 
-# Habit Calendar 001b — installation and use
+For complete 1.1.3 installation on Windows, Ubuntu, macOS, Android, iPhone and iPad, start with [INSTALL-DOWNLOAD.md](INSTALL-DOWNLOAD.md). The optional Linux helper below remains desktop-only.
 
-Version 1.1.2. Public author: harharhari. GPL-3.0-only.
+# rsn habit calendar one b — installation and use
+
+Version 1.1.3. Public author: harharhari. GPL-3.0-only.
 
 ## 1. Download and verify
 
@@ -12,7 +14,7 @@ Download these six **release assets** from GitHub, keeping their names unchanged
 2. manifest.json
 3. styles.css
 4. hex-color-list.md
-5. habit-calendar-001b-1.1.2.zip
+5. rsn-habit-calendar-one-b-1.1.3.zip
 6. SHA256SUMS
 
 GitHub's automatically generated Source code ZIP is not the installation ZIP.
@@ -42,10 +44,10 @@ A checksum detects changed/corrupt downloads; it is not an independent signature
 1. Create an empty vault named `Habit Tracker 001b Test` and open it once in Obsidian 1.7.2+.
 2. Close Obsidian.
 3. Locate that vault's `.obsidian` folder. Linux: Ctrl+H shows hidden folders. macOS: Command+Shift+period. Use your configured alternative vault configuration folder instead of `.obsidian` if applicable.
-4. Create `plugins/habit-calendar-001b` inside it.
+4. Create `plugins/rsn-habit-calendar-one-b` inside it.
 5. Copy `main.js`, `manifest.json`, `styles.css`, and `hex-color-list.md` into that folder.
-6. Reopen the vault. Settings → Community plugins → allow community plugins → enable **Habit Calendar 001b**.
-7. Open the command palette (Ctrl+P, or Command+P on macOS). Run **Habit Calendar 001b: Open current month**.
+6. Reopen the vault. Settings → Community plugins → allow community plugins → enable **rsn habit calendar one b**.
+7. Open the command palette (Ctrl+P, or Command+P on macOS). Run **rsn habit calendar one b: Open current month**.
 
 Correct layout:
 
@@ -53,14 +55,14 @@ Correct layout:
 Habit Tracker 001b Test/
   .obsidian/
     plugins/
-      habit-calendar-001b/
+      rsn-habit-calendar-one-b/
         main.js
         manifest.json
         styles.css
         hex-color-list.md
 ```
 
-Alternatively extract the installation ZIP and copy its enclosed `habit-calendar-001b` folder into `plugins/`. Do not nest that folder twice. LICENSE and NOTICE in the ZIP may remain there. Do not copy the ZIP or SHA256SUMS into the plugin folder. No npm, Node.js, Python, or compilation is required to install ready-built files.
+Alternatively extract the installation ZIP and copy its enclosed `rsn-habit-calendar-one-b` folder into `plugins/`. Do not nest that folder twice. LICENSE and NOTICE in the ZIP may remain there. Do not copy the ZIP or SHA256SUMS into the plugin folder. No npm, Node.js, Python, or compilation is required to install ready-built files.
 
 The optional Python installer in the source repository also works:
 
@@ -68,19 +70,19 @@ The optional Python installer in the source repository also works:
 python3 scripts/install.py --vault "/absolute/path/to/test-vault"
 ```
 
-It backs up an existing 001b installation first. It does not disable 001 for you.
+It backs up an existing destination under the NEW ID. Use --migrate-from-001b to copy old settings only when the new destination has none. It does not disable any plugin; disable the old identities first.
 
 If the plugin is missing, restart Obsidian and inspect the exact folder/name/extensions. Download the actual release assets, not saved GitHub HTML pages.
 
 ## 3. Mobile testing
 
-Use Obsidian Sync with installed community plugins, active plugins, and plugin settings configured as appropriate. Let the desktop-installed test vault finish syncing, connect the mobile device, allow community plugins, and enable 001b. Verify that the mobile plugin ID is `habit-calendar-001b`, not the old ID. Restart if the plugin list has not refreshed. Android permits manual copying with a suitable file manager; iOS/iPadOS access to hidden configuration folders is more restricted, so use the desktop-to-mobile sync workflow. A private GitHub repository does not prevent manual installation of downloaded files.
+Use Obsidian Sync with installed community plugins, active plugins, and plugin settings configured as appropriate. Let the desktop-installed test vault finish syncing, connect the mobile device, allow community plugins, and enable rsn habit calendar one b. Verify that the mobile plugin ID is `rsn-habit-calendar-one-b`, not the old ID. Restart if the plugin list has not refreshed. Android permits manual copying with a suitable file manager; iOS/iPadOS access to hidden configuration folders is more restricted, so use the desktop-to-mobile sync workflow. A private GitHub repository does not prevent manual installation of downloaded files.
 
 ## 4. Migrate an existing 001 vault
 
 1. Finish sync on all devices; make an independent full vault backup, including `.obsidian` and `Habit Tracker/System`.
 2. Disable **Habit Calendar 001** on every device. Do not let an offline device continue using it.
-3. Install and enable **Habit Calendar 001b** as above.
+3. Install and enable **rsn habit calendar one b** as above.
 4. The existing `Habit Tracker` folder is reused. Existing IDs and monthly notes remain readable.
 5. Previous reports freeze as saved. A legacy report whose original events are unavailable may display only saved totals.
 6. If current list and current calendar differ, respond to the replacement warning deliberately.
@@ -159,11 +161,11 @@ From a permanent source directory:
 python3 scripts/monthly_helper.py --vault "/absolute/path/to/vault"
 python3 scripts/systemd_units.py --vault "/absolute/path/to/vault" --output "/absolute/path/to/generated-units"
 mkdir -p "$HOME/.config/systemd/user"
-cp /absolute/path/to/generated-units/habit-calendar-001b.service "$HOME/.config/systemd/user/"
-cp /absolute/path/to/generated-units/habit-calendar-001b.timer "$HOME/.config/systemd/user/"
+cp /absolute/path/to/generated-units/rsn-habit-calendar-one-b.service "$HOME/.config/systemd/user/"
+cp /absolute/path/to/generated-units/rsn-habit-calendar-one-b.timer "$HOME/.config/systemd/user/"
 systemctl --user daemon-reload
-systemctl --user enable --now habit-calendar-001b.timer
-systemctl --user list-timers habit-calendar-001b.timer
+systemctl --user enable --now rsn-habit-calendar-one-b.timer
+systemctl --user list-timers rsn-habit-calendar-one-b.timer
 ```
 
-Replace the example paths and review the generated units before copying. If the old timer is installed, stop it first with `systemctl --user disable --now habit-calendar-001.timer`. To stop the new helper use `systemctl --user disable --now habit-calendar-001b.timer`. Do not run old and new timer installations together. The computer must be running for any local timer to execute. Use `Habit Tracker/System/config.md` to set a valid IANA timeZone; keep it identical on every device. Default is `Asia/Kolkata`.
+Replace the example paths and review the generated units before copying. If the old timer is installed, stop it first with `systemctl --user disable --now habit-calendar-001.timer`. To stop the new helper use `systemctl --user disable --now rsn-habit-calendar-one-b.timer`. Do not run old and new timer installations together. The computer must be running for any local timer to execute. Use `Habit Tracker/System/config.md` to set a valid IANA timeZone; keep it identical on every device. Default is `Asia/Kolkata`.

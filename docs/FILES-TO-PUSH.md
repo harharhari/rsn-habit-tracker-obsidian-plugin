@@ -1,6 +1,6 @@
-# Exact repository upload inventory — 1.1.2
+# Exact repository upload inventory — 1.1.3
 
-Upload all 54 files below, preserving relative paths, to the root of harharhari/rsn-habit-tracker-obsidian-plugin. Include hidden .github, .gitignore and .gitattributes. README.md, LICENSE and manifest.json belong at the root.
+Upload all 57 files below, preserving relative paths, to the root of harharhari/rsn-habit-tracker-obsidian-plugin. Include hidden .github, .gitignore and .gitattributes. README.md, LICENSE and manifest.json belong at the root.
 
 ```text
 .gitattributes
@@ -17,13 +17,14 @@ docs/DATA-MODEL.md
 docs/DESIGN-DECISIONS.md
 docs/FILES-TO-PUSH.md
 docs/GITHUB-AND-COMMUNITY-RELEASE.md
-docs/Habit-Calendar-001b-Tutorial.pptx
 docs/INSTALL-DOWNLOAD.md
+docs/MIGRATION-1.1.3.md
 docs/PLATFORM-TESTING.md
 docs/RELEASE-NOTES-1.0.1.md
 docs/RELEASE-NOTES-1.1.0.md
 docs/RELEASE-NOTES-1.1.1.md
 docs/RELEASE-NOTES-1.1.2.md
+docs/RELEASE-NOTES-1.1.3.md
 docs/SETUP-AND-USAGE.md
 docs/TEST-RESULTS-TEMPLATE.md
 docs/TESTING-CHECKLIST.md
@@ -32,6 +33,7 @@ docs/VALIDATION.md
 docs/architecture.drawio
 docs/images/browser-desktop.png
 docs/images/browser-mobile.png
+docs/rsn-habit-calendar-one-b-tutorial.pptx
 eslint.config.mjs
 examples/habit-tracker-list-60.md
 examples/habit-tracker-list.md
@@ -55,8 +57,9 @@ tests/browser-smoke.cjs
 tests/core.test.js
 tests/plugin.test.js
 tests/test_helper.py
+tests/test_install.py
 tsconfig.json
 versions.json
 ```
 
-The outer release-assets directory is separate: upload its six files individually as GitHub Release attachments for tag 1.1.2. Do not commit node_modules, generated main.js/release directories, personal lists, vaults or data.json. Keep older release tags intact. Source SHA256SUMS describes this snapshot; regenerate it deliberately after edits.
+The outer release-assets directory is separate: upload its six files individually as GitHub Release attachments for tag 1.1.3. Do not commit node_modules, generated main.js/release directories, personal lists, vaults or data.json. Keep older release tags intact. Source SHA256SUMS describes this snapshot; regenerate it deliberately after edits.

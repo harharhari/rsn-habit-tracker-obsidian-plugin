@@ -1,10 +1,12 @@
-# 1.1.2 platform acceptance and debugging
+> Upgrading from Habit Calendar 001b 1.1.1/1.1.2: follow [MIGRATION-1.1.3.md](MIGRATION-1.1.3.md) first. The ID and installation folder change. Disable the old plugin on all devices and copy wanted settings before enabling the new one.
+
+# 1.1.3 platform acceptance and debugging
 
 Targets: Windows 11, Ubuntu 24.04.3, latest stable macOS, Android, iOS and iPadOS at testing time. Record actual version/build numbers and device models; "latest" is a target, not a reproducible result. The manifest retains an API compatibility floor of Obsidian 1.7.2, not a tested-device claim.
 
 ## Automated checks on a development computer
 
-Install Node.js 22+ with npm. From the repository run npm ci --ignore-scripts, then npm run check. This runs official Obsidian lint and metadata checks, builds the runtime, runs 39 JavaScript tests, checks portable imports and generates the release/checksums. On Linux with Python run npm run test:helper for six helper tests.
+Install Node.js 22+ with npm. From the repository run npm ci --ignore-scripts, then npm run check. This runs official Obsidian lint and metadata checks, builds the runtime, runs 39 JavaScript tests, checks portable imports and generates the release/checksums. On Linux with Python run npm run test:helper for 11 helper/installer tests.
 
 GitHub Actions now defines ubuntu-latest, windows-latest and macos-latest jobs for npm run check. Their uploaded artifacts are named by OS. These jobs are pending until you upload and run them; they do not launch Obsidian or test iOS. Linux alone runs the optional Python helper tests. Compare the release asset checksums across all three jobs before choosing attachments. .gitattributes keeps text line endings reproducible.
 
@@ -14,7 +16,7 @@ These tests use mocked Obsidian APIs. Playwright WebKit on Linux is useful engin
 
 ## Real-device checklist, each target
 
-Use a disposable rsn-test-vault, download release 1.1.2 and verify its checksums. Record exact OS version, Obsidian version, device and release hash.
+Use a disposable rsn-test-vault, download release 1.1.3 and verify its checksums. Record exact OS version, Obsidian version, device and release hash.
 
 1. Fresh install: enable, open current month, add the starter list and accept replacement in the empty month. Confirm two Y calendars and no N calendar.
 2. Layout: six columns in a wide desktop pane; one column in a narrow pane and on Android/iPhone/iPad. Check iPad landscape and Split View. Test scrolling through the 60-habit example.

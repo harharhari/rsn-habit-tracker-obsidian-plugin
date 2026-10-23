@@ -1,7 +1,7 @@
-# GitHub testing and Community publication — Habit Calendar 001b 1.1.2
+# GitHub testing and Community publication — rsn habit calendar one b 1.1.3
 
 Public author: **harharhari**. Repository: **harharhari/rsn-habit-tracker-obsidian-plugin**.
-License: **GPL-3.0-only**. Plugin ID: **habit-calendar-001b**.
+License: **GPL-3.0-only**. Plugin ID: **rsn-habit-calendar-one-b**.
 
 ## A. Put the source in your private repository
 
@@ -57,7 +57,7 @@ Push the reviewed source:
 git add .gitignore .gitattributes .github README.md LICENSE NOTICE manifest.json versions.json package.json package-lock.json eslint.config.mjs tsconfig.json styles.css hex-color-list.md src scripts tests examples docs SHA256SUMS
 git diff --cached --stat
 git status --short
-git commit -m "Prepare Habit Calendar 001b 1.1.2"
+git commit -m "Prepare rsn habit calendar one b 1.1.3"
 git push
 ```
 
@@ -66,8 +66,8 @@ On GitHub open Actions → Build and review. Check that the job succeeds. Downlo
 ## C. Create a private test release
 
 1. On the repository's GitHub page open Releases → Draft a new release.
-2. Create tag `1.1.2` against the tested commit; do not prefix it with `v`.
-3. Use title `Habit Calendar 001b 1.1.2` and copy docs/RELEASE-NOTES-1.1.2.md into its description.
+2. Create tag `1.1.3` against the tested commit; do not prefix it with `v`.
+3. Use title `rsn habit calendar one b 1.1.3` and copy docs/RELEASE-NOTES-1.1.3.md into its description.
 4. Attach these six files from release/ **individually**:
 
 ```text
@@ -75,7 +75,7 @@ main.js
 manifest.json
 styles.css
 hex-color-list.md
-habit-calendar-001b-1.1.2.zip
+rsn-habit-calendar-one-b-1.1.3.zip
 SHA256SUMS
 ```
 
@@ -96,7 +96,7 @@ After successful testing:
 1. Make the source repository public. Ensure README.md, LICENSE, and manifest.json are committed on its default branch.
 2. Publish a normal GitHub release whose tag exactly matches the manifest version. Attach main.js, manifest.json, and styles.css separately.
 3. Sign in at https://community.obsidian.md with your Obsidian account and link your GitHub account.
-4. Go to Plugins → New plugin, enter the repository URL, select the owner and submit the form. It reads the default-branch manifest and verifies repository ownership. The ID must be unique and must not contain `obsidian`.
+4. Go to Plugins → New plugin, enter the repository URL, select the owner and submit the form. It reads the default-branch manifest and verifies repository ownership. The ID must be unique, contain only lowercase letters and hyphens, not end in `plugin`, and not contain `obsidian`.
 5. Review the automated feedback. Fix issues, increment the version, commit, and publish another matching release as needed.
 6. Complete Publish in the directory. Installability depends on resolving review errors and directory approval.
 
@@ -112,13 +112,13 @@ For Git: clone your repository into a separate folder. Copy the prepared reposit
 
 `package.json` has `private: true` to prevent accidental npm publication. This does not control GitHub repository visibility and does not block Obsidian use.
 
-Do not silently replace an already published 1.1.2 binary with different code. Version 1.1.2 changes the month picker and responsive controls; retain release 1.1.1 for rollback. Documentation-only changes can be committed separately. If binary changes become necessary after testing, increment manifest/package/lockfile/versions metadata and create a new matching release.
+Do not silently replace an already published 1.1.3 binary with different code. Version 1.1.3 changes the manifest identity and installer; retain earlier releases and follow the migration guide. Documentation-only changes can be committed separately. If binary changes become necessary after testing, increment manifest/package/lockfile/versions metadata and create a new matching release.
 
 ## F. Official testing methods and our acceptance gate
 
 Obsidian recommends a separate development vault. Install the downloaded release into **rsn-test-vault**, enable it under Community plugins and restart after manifest changes. The app build/reload procedure is documented in [Build a plugin](https://docs.obsidian.md/Plugins/Getting%20started/Build%20a%20plugin). Our full checklist is TESTING-CHECKLIST.md and results form is TEST-RESULTS-TEMPLATE.md.
 
-1. Verify release checksums, then run the install/basic-use checklist on Windows, Ubuntu, macOS, Android, iPhone and iPad. Confirm marks survive restart and the displayed plugin version is 1.1.2.
+1. Verify release checksums, then run the install/basic-use checklist on Windows, Ubuntu, macOS, Android, iPhone and iPad. Confirm marks survive restart and the displayed plugin version is 1.1.3.
 2. Use the generic 60-habit example in a disposable vault to test scrolling, filtering, desktop six-column layout and phone/tablet one-column touch use. Check default light and dark themes, portrait/landscape and narrow desktop panes.
 3. Exercise Yes and No on list edits. Confirm Yes clears ALL current marks and No preserves displayed data. Verify custom color rows survive restart and an upgrade.
 4. Execute the synthetic history fixture in the checklist. Confirm late marks cannot change either historical calendars or statistics. Test offline/current-month merge with your actual sync service.
@@ -127,7 +127,7 @@ Obsidian recommends a separate development vault. Install the downloaded release
 7. Android debugging: enable USB debugging, connect by USB and inspect the Obsidian WebView using Chrome at `chrome://inspect/`. See [official mobile development instructions](https://docs.obsidian.md/Plugins/Getting%20started/Mobile%20development). Capture only the relevant error text.
 8. Record exact OS/app versions. Verify the declared minimum Obsidian 1.7.2 on a test environment, or revise the minimum to a verified supported version before a new release. API linting alone does not establish a tested compatibility floor.
 
-The maintainer reports 1.1.1 working on Ubuntu/Android, but minimum-version, all-checklist and real Sync evidence is still pending. Windows/macOS/iOS/iPadOS acceptance is pending and is part of the 1.1.2 release checklist. The earlier Android emulator could not boot, so its result remains blocked despite browser and user-phone evidence.
+The maintainer reports 1.1.1 working on Ubuntu/Android, but minimum-version, all-checklist and real Sync evidence is still pending. Windows/macOS/iOS/iPadOS acceptance is pending and is part of the 1.1.3 release checklist. The earlier Android emulator could not boot, so its result remains blocked despite browser and user-phone evidence.
 
 ## G. Hosted review and acceptance
 
@@ -148,13 +148,13 @@ On your entry page, review listing text, select the appropriate category/payment
 
 Run the checks, update version metadata consistently and publish an exact matching x.y.z tag with fresh assets. Initial submission is a one-time step; subsequent releases trigger directory checks. Monitor review feedback and GitHub issues. If unable to maintain the plugin, follow the directory's transfer/archive process. A signed build provenance attestation is a recommended future enhancement; this manual release package does not claim one. See [official GitHub Actions release guide](https://docs.obsidian.md/Plugins/Releasing/Release%20your%20plugin%20with%20GitHub%20Actions).
 
-## 1.1.2 publication update
+## 1.1.3 publication update
 
-Upload the contents of upload-to-github-002/repository to the repository root, including .gitattributes. Do not nest the repository folder. The final file inventory is FILES-TO-PUSH.md. Attach all six files from the outer release-assets directory to tag 1.1.2. Do not overwrite release 1.1.1.
+Upload the contents of upload-to-github-003/repository to the repository root, including .gitattributes. Do not nest the repository folder. The final file inventory is FILES-TO-PUSH.md. Attach all six files from the outer release-assets directory to tag 1.1.3. Do not overwrite release 1.1.1.
 
-The CI workflow has Ubuntu, Windows and macOS jobs. Each runs the official lint/build/JavaScript/release checks. Linux also runs the optional Python helper tests. Wait for all jobs and compare their generated SHA256SUMS files; then test downloaded assets in Obsidian on the actual target devices. Follow PLATFORM-TESTING.md and record results. CI itself does not run Obsidian or iOS.
+The CI workflow has Ubuntu, Windows and macOS jobs. Each runs the official lint/build/JavaScript/release checks. Linux also runs Python helper and installer migration tests. Wait for all jobs and compare their generated SHA256SUMS files; then test downloaded assets in Obsidian on the actual target devices. Follow PLATFORM-TESTING.md and record results. CI itself does not run Obsidian or iOS.
 
-Before first Community submission: keep README.md, LICENSE and manifest.json on the default branch, publish a matching normal release with main.js/manifest.json/styles.css attached separately, then sign in at community.obsidian.md, connect GitHub, and use Plugins → New plugin. Review the current developer policies, submit the repository, resolve hosted review errors and publish the listing. If this plugin is already accepted, publish the new version/release instead of submitting a new plugin identity. The current official pages below were checked on 22 October 2026:
+Before first Community submission: keep README.md, LICENSE and manifest.json on the default branch, publish a matching normal release with main.js/manifest.json/styles.css attached separately, then sign in at community.obsidian.md, connect GitHub, and use Plugins → New plugin. Review the current developer policies, submit the repository, resolve hosted review errors and publish the listing. This package assumes the previous ID was rejected before acceptance. Retry the initial submission using the new manifest. If an old identity was actually published, contact directory support before attempting an identity change; changing IDs is not a normal update. The current official pages below were checked on 22 October 2026:
 
 - [Submission walkthrough](https://docs.obsidian.md/Plugins/Releasing/Submit%20your%20plugin)
 - [Review and build-command FAQ](https://docs.obsidian.md/community-directory/faq)
@@ -162,3 +162,13 @@ Before first Community submission: keep README.md, LICENSE and manifest.json on 
 - [Mobile testing and debugging](https://docs.obsidian.md/Plugins/Getting%20started/Mobile%20development)
 
 Local ESLint is not hosted approval. macOS/iOS/iPadOS latest are testing targets, not verified version numbers. Confirm the minimum supported Obsidian version before making a tested compatibility claim. The reviewer may require further changes. After acceptance, verify installation through the actual Community browser on a fresh desktop and mobile vault.
+
+## Correcting the rejected ID for 1.1.3
+
+Commit the new manifest on the default branch with id rsn-habit-calendar-one-b, name rsn habit calendar one b and version 1.1.3. Run npm run check and npm run test:helper. Verify the downloadable manifest and ZIP folder use that same ID. Preserve the previous release tags, and publish a NEW 1.1.3 release with all six loose attachments from this delivery.
+
+Retry the failed initial submission with the same repository after the new manifest/release are visible. If a draft entry retains stale identity or offers no way to retry, use directory support rather than creating several competing entries. Resolve the displayed review findings. Do not assume local syntax validation proves that the ID/name is available.
+
+Current manifest restrictions were verified on 23 October 2026 at [Manifest](https://docs.obsidian.md/Reference/Manifest). The [official submission walkthrough](https://docs.obsidian.md/plugins/releasing/submit-plugin) requires the default-branch manifest and a matching tagged release. The previous local lint release did not reject digits; explicit checks now run in lint and release verification.
+
+Before uploading: run the migration exercise from MIGRATION-1.1.3.md against a copy of a 1.1.2 vault. Confirm only the new plugin is enabled, existing history remains identical and no data reset is required. Install from the Community browser after acceptance to verify the actual three-asset installation route.
