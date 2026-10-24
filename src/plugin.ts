@@ -22,6 +22,8 @@ const ROOT = "Habit Tracker",
   CONFIG = ROOT + "/System/config.md",
   // Keep the internal view type so saved workspace tabs can reopen after migration.
   VIEW = "habit-calendar-001b";
+const DETAILS_VIEW = "rsn-habit-details",
+  EDITOR_VIEW = "rsn-habit-editor";
 const COLORS = ROOT + "/hex-color-list.md";
 const INITIAL =
   "# Habits\n\nAdd one row per habit. Keep the habit-id comments after the plugin assigns them.\n\n| Habit | Generate calendar | Header color |\n|---|---|---|\n";
@@ -194,6 +196,298 @@ class ArchiveModal extends Modal {
     this.contentEl.replaceChildren();
   }
 }
+class DetailsView extends ItemView {
+  constructor(
+    leaf: WorkspaceLeaf,
+    private plugin: HabitCalendarPlugin,
+  ) {
+    super(leaf);
+  }
+  getViewType() {
+    return DETAILS_VIEW;
+  }
+  getDisplayText() {
+    return "Habit tracker details";
+  }
+  getIcon() {
+    return "folder-tree";
+  }
+  async onOpen() {
+    this.contentEl.replaceChildren();
+    this.contentEl.classList.add("hc-root");
+    el(this.contentEl, "h1", "Details");
+    const bar = el(this.contentEl, "div", undefined, "hc-toolbar");
+    button(bar, "Back to calendars", () =>
+      this.plugin.safe(() => this.plugin.openMonth(this.plugin.currentMonth())),
+    );
+    button(bar, "Refresh details", () => this.plugin.safe(() => this.onOpen()));
+    button(bar, "Habit list", () =>
+      this.plugin.safe(() => this.plugin.openAux(EDITOR_VIEW)),
+    );
+    el(
+      this.contentEl,
+      "p",
+      "Tracker files stay in your vault. Open a folder below to inspect its files. System and Records contain saved tracker data.",
+    );
+    for (const name of ["Months", "Records", "Statistics", "System"]) {
+      const group = el(this.contentEl, "details");
+      el(group, "summary", name);
+      const list = el(group, "ul");
+      const files = this.plugin
+        .trackerFiles(`${ROOT}/${name}`)
+        .sort((a, b) => a.path.localeCompare(b.path));
+      for (const file of files) {
+        const li = el(list, "li");
+        button(li, file.path.slice(ROOT.length + name.length + 2), () =>
+          this.plugin.safe(() => this.plugin.openFile(file.path)),
+        );
+      }
+      if (!files.length) el(list, "li", "No files yet.");
+    }
+    for (const path of [LIST, COLORS])
+      button(this.contentEl, path.slice(ROOT.length + 1), () =>
+        this.plugin.safe(() => this.plugin.openFile(path)),
+      );
+    await Promise.resolve();
+  }
+}
+class ColorPicker extends Modal {
+  constructor(
+    app: App,
+    private colors: { name: string; hex: string }[],
+    private choose: (hex: string) => void,
+  ) {
+    super(app);
+  }
+  onOpen() {
+    this.contentEl.classList.add("hc-color-picker");
+    el(this.contentEl, "h2", "Choose header color");
+    const search = el(this.contentEl, "input");
+    search.type = "search";
+    search.placeholder = "Search color name or hex code";
+    search.setAttribute("aria-label", "Search colors");
+    el(this.contentEl, "p", "Color name / Hex code / Color shade");
+    const list = el(this.contentEl, "div", undefined, "hc-color-options");
+    const render = () => {
+      list.replaceChildren();
+      const query = search.value.toLowerCase();
+      for (const color of this.colors.filter((c) =>
+        `${c.name} ${c.hex}`.toLowerCase().includes(query),
+      )) {
+        const option = button(list, "", () => {
+          this.choose(color.hex);
+          this.close();
+        });
+        option.className = "hc-color-option";
+        el(option, "span", color.name);
+        el(option, "span", color.hex);
+        const swatch = el(option, "span", "", "hc-color-shade");
+        swatch.style.backgroundColor = color.hex;
+        swatch.setAttribute("aria-label", color.hex);
+        option.setAttribute("aria-label", `${color.name} ${color.hex}`);
+      }
+      if (!list.children.length)
+        el(
+          list,
+          "p",
+          "No matching colors. You can enter your own six-digit hex code in the editor.",
+        );
+    };
+    search.addEventListener("input", render);
+    render();
+    search.focus();
+  }
+  onClose() {
+    this.contentEl.replaceChildren();
+  }
+}
+type EditorRow = { id: string; name: string; enabled: boolean; color: string };
+class HabitEditorView extends ItemView {
+  original = "";
+  rows: EditorRow[] = [];
+  colors: { name: string; hex: string }[] = [];
+  constructor(
+    leaf: WorkspaceLeaf,
+    private plugin: HabitCalendarPlugin,
+  ) {
+    super(leaf);
+  }
+  getViewType() {
+    return EDITOR_VIEW;
+  }
+  getDisplayText() {
+    return "Habit list";
+  }
+  getIcon() {
+    return "list-checks";
+  }
+  async onOpen() {
+    try {
+      await this.plugin.serial(() => this.plugin.list());
+      this.original = (await this.plugin.read(LIST)) ?? "";
+      this.rows = C.parseList(this.original).habits.map((h) => ({ ...h }));
+      const reference = (await this.plugin.read(COLORS)) ?? COLOR_REFERENCE;
+      this.colors = reference.split(/\r?\n/).flatMap((line) => {
+        const cells = line.split("|").map((c) => c.trim());
+        return cells.length >= 4 && /^#[0-9a-f]{6}$/i.test(cells[2])
+          ? [{ name: cells[1], hex: cells[2].toUpperCase() }]
+          : [];
+      });
+      this.renderEditor();
+    } catch (error) {
+      this.contentEl.replaceChildren();
+      this.contentEl.classList.add("hc-root");
+      el(this.contentEl, "h1", "Habit list needs correction");
+      el(this.contentEl, "p", C.errorMessage(error));
+      button(this.contentEl, "Open Markdown file", () =>
+        this.plugin.safe(() => this.plugin.openFile(LIST)),
+      );
+      button(this.contentEl, "Reload editor", () =>
+        this.plugin.safe(() => this.onOpen()),
+      );
+    }
+  }
+  serialize() {
+    const names = new Set<string>();
+    const lines = this.rows.map((row, i) => {
+      const name = row.name.trim().normalize("NFC");
+      if (
+        !name ||
+        name.length > 180 ||
+        /[|\r\n]/.test(name) ||
+        name.includes("<!--")
+      )
+        throw Error(
+          `Habit ${i + 1}: enter a name of 1–180 characters without pipes, newlines or HTML comments.`,
+        );
+      if (names.has(name)) throw Error(`Duplicate habit name: ${name}`);
+      names.add(name);
+      const color = row.color.trim().toUpperCase();
+      if (!/^#[0-9A-F]{6}$/.test(color))
+        throw Error(`Habit ${i + 1}: enter a hex code such as #F8CBAD.`);
+      return `| ${name} <!-- habit-id: ${row.id} --> | ${row.enabled ? "Y" : "N"} | ${color} |`;
+    });
+    const source = this.original.split(/\r?\n/);
+    const start = source.findIndex((line) =>
+      /^\s*\|\s*Habit\s*\|\s*Generate calendar\s*\|/i.test(line),
+    );
+    if (start < 0) throw Error("Habit table is missing.");
+    let end = start + 1;
+    while (end < source.length && source[end].trim().startsWith("|")) end++;
+    return [
+      ...source.slice(0, start),
+      "| Habit | Generate calendar | Header color |",
+      "|---|---|---|",
+      ...lines,
+      ...source.slice(end),
+    ].join("\n");
+  }
+  renderEditor() {
+    const host = this.contentEl;
+    host.replaceChildren();
+    host.classList.add("hc-root", "hc-editor");
+    if (Platform.isMobile) host.classList.add("hc-mobile");
+    el(host, "h1", "Habit list");
+    el(
+      host,
+      "p",
+      "Choose Y or N. Choose a reference color or enter # followed by six hexadecimal digits. Save writes habit-tracker-list.md. Applying changes to this month requires the existing Yes/No confirmation.",
+    );
+    const bar = el(host, "div", undefined, "hc-toolbar");
+    button(bar, "Back to calendars", () =>
+      this.plugin.safe(() => this.plugin.openMonth(this.plugin.currentMonth())),
+    );
+    button(bar, "Open Markdown file", () =>
+      this.plugin.safe(() => this.plugin.openFile(LIST)),
+    );
+    const message = el(host, "p");
+    message.setAttribute("role", "status");
+    const save = button(bar, "Save habit list", async () => {
+      save.disabled = true;
+      try {
+        const updated = this.serialize();
+        await this.plugin.saveHabitEditor(this.original, updated);
+        this.original = updated;
+        await this.plugin.serial(() => this.plugin.reconcile(false, true));
+        message.textContent =
+          "Habit list saved. Return to calendars to review the current month.";
+      } catch (error) {
+        message.textContent = C.errorMessage(error);
+      } finally {
+        save.disabled = false;
+      }
+    });
+    button(bar, "Add habit", () => {
+      this.rows.push({
+        id: `h-${recordId()}`,
+        name: "",
+        enabled: true,
+        color: "#F8CBAD",
+      });
+      this.renderEditor();
+    });
+    const rows = el(host, "div", undefined, "hc-editor-rows");
+    this.rows.forEach((row, index) => {
+      const line = el(rows, "div", undefined, "hc-editor-row");
+      const nameLabel = el(line, "label", "Habit");
+      const name = el(nameLabel, "input");
+      name.type = "text";
+      name.value = row.name;
+      name.maxLength = 180;
+      name.setAttribute("aria-label", `Habit ${index + 1} name`);
+      name.addEventListener("input", () => {
+        row.name = name.value;
+      });
+      const flagLabel = el(line, "label", "Generate calendar");
+      const flag = el(flagLabel, "select");
+      flag.setAttribute("aria-label", `Habit ${index + 1} generate calendar`);
+      for (const value of ["Y", "N"]) {
+        const option = el(flag, "option", value);
+        option.value = value;
+      }
+      flag.value = row.enabled ? "Y" : "N";
+      flag.addEventListener("change", () => {
+        row.enabled = flag.value === "Y";
+      });
+      const colorLabel = el(line, "label", "Header color");
+      const color = el(colorLabel, "input");
+      color.type = "text";
+      color.value = row.color;
+      color.placeholder = C.DEFAULT_COLOR;
+      color.maxLength = 7;
+      color.setAttribute("aria-label", `Habit ${index + 1} header color`);
+      color.pattern = "#[0-9a-fA-F]{6}";
+      const swatch = el(colorLabel, "span", "", "hc-color-shade");
+      const preview = () => {
+        const valid = /^#[0-9a-f]{6}$/i.test(color.value.trim());
+        color.setAttribute("aria-invalid", String(!valid));
+        swatch.style.backgroundColor = valid
+          ? color.value.trim()
+          : "transparent";
+        swatch.title = valid ? color.value : "Invalid hex code";
+      };
+      color.addEventListener("input", () => {
+        row.color = color.value;
+        preview();
+      });
+      preview();
+      const picker = button(line, "Choose color ▾", () =>
+        new ColorPicker(this.app, this.colors, (hex) => {
+          row.color = hex;
+          color.value = hex;
+          preview();
+        }).open(),
+      );
+      picker.setAttribute("aria-haspopup", "dialog");
+      picker.setAttribute("aria-label", `Choose color for habit ${index + 1}`);
+      button(line, "Remove habit", () => {
+        this.rows.splice(index, 1);
+        this.renderEditor();
+      });
+    });
+  }
+}
+
 class TrackerView extends ItemView {
   plugin: HabitCalendarPlugin;
   month: string;
@@ -300,7 +594,7 @@ class Panel {
         ),
       );
       button(bar, "Habit list", () =>
-        this.plugin.safe(() => this.plugin.openFile(LIST)),
+        this.plugin.safe(() => this.plugin.openAux(EDITOR_VIEW)),
       );
       button(bar, "Color reference", () =>
         this.plugin.safe(() => this.plugin.openFile(COLORS)),
@@ -312,6 +606,9 @@ class Panel {
       );
       button(bar, "Statistics", () =>
         this.plugin.safe(() => this.plugin.openStats(this.month)),
+      );
+      button(bar, "Details", () =>
+        this.plugin.safe(() => this.plugin.openAux(DETAILS_VIEW)),
       );
       const search = el(bar, "input", undefined, "hc-search");
       search.type = "search";
@@ -552,6 +849,8 @@ export default class HabitCalendarPlugin extends Plugin {
         }
       }
     });
+    this.registerView(DETAILS_VIEW, (leaf) => new DetailsView(leaf, this));
+    this.registerView(EDITOR_VIEW, (leaf) => new HabitEditorView(leaf, this));
     this.registerView(VIEW, (leaf) => new TrackerView(leaf, this));
     this.registerMarkdownCodeBlockProcessor(
       "habit-calendar",
@@ -590,7 +889,7 @@ export default class HabitCalendarPlugin extends Plugin {
     this.addCommand({
       id: "edit-habits",
       name: "Edit habit list",
-      callback: () => this.safe(() => this.openFile(LIST)),
+      callback: () => this.safe(() => this.openAux(EDITOR_VIEW)),
     });
     this.addCommand({
       id: "color-reference",
@@ -1166,6 +1465,29 @@ export default class HabitCalendarPlugin extends Plugin {
       this.app.workspace.getLeaf("tab");
     await leaf.setViewState({ type: VIEW, active: true, state: { month: m } });
     await this.app.workspace.revealLeaf(leaf);
+  }
+  async openAux(type: string) {
+    const leaf =
+      this.app.workspace.getLeavesOfType(type)[0] ||
+      this.app.workspace.getLeaf("tab");
+    await leaf.setViewState({ type, active: true });
+    await this.app.workspace.revealLeaf(leaf);
+  }
+  async saveHabitEditor(original: string, updated: string) {
+    C.parseList(updated);
+    await this.serial(async () => {
+      const file = this.app.vault.getAbstractFileByPath(LIST);
+      if (!(file instanceof TFile))
+        throw Error("Habit list is missing. Restore it before saving.");
+      this.assertActive();
+      await this.app.vault.process(file, (current) => {
+        if (current !== original)
+          throw Error(
+            "The habit list changed on disk or through sync. Copy your edits, then reload the editor before saving.",
+          );
+        return updated;
+      });
+    });
   }
   async openFile(path: string) {
     const f = this.app.vault.getAbstractFileByPath(path);

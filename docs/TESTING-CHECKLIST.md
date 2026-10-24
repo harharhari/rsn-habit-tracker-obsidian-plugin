@@ -1,6 +1,6 @@
 > Upgrading from Habit Calendar 001b 1.1.1/1.1.2: follow [MIGRATION-1.1.3.md](MIGRATION-1.1.3.md) first. The ID and installation folder change. Disable the old plugin on all devices and copy wanted settings before enabling the new one.
 
-# User acceptance checklist — 001b 1.1.5
+# User acceptance checklist — 001b 1.1.6
 
 Use downloaded GitHub release assets in a separate test vault. Record Obsidian version, OS, device, plugin version, and pass/fail evidence. Automated tests do not replace these real-device checks.
 
@@ -83,3 +83,15 @@ node scripts/test-vault.mjs late --test-vault "/absolute/path/to/empty-test-vaul
 - [ ] Reassign hotkeys, check existing notes and reopen the calendar view.
 - [ ] Complete Sync/iCloud transfer and repeat checks on each mobile device.
 - [ ] Install from the Community browser after approval and confirm the new display name and version.
+
+## Required 1.1.6 interface checks on every target platform
+
+- Open current month without a Welcome page. Confirm all eight toolbar buttons and Search habits.
+- Open Details. Expand Months, Records, Statistics and System; open both reference notes. Confirm no global explorer setting changed.
+- Open Habit list. Add, rename and remove a habit. Verify Generate calendar offers only Y/N.
+- Choose a named color by searching. Confirm its hex code and actual shade. Type a custom #123ABC value. Reject blank, named, malformed and shorthand colors without writing the list.
+- Save a meaningful change and choose No: saved list changes, current marks/headers do not. Apply again and choose Yes: all current marks reset and Y/N/name/color changes apply. Past months/statistics remain unchanged.
+- Edit the Markdown file while the editor is open, then attempt Save. Verify conflict rejection preserves the external edit.
+- Add a custom color reference row and reopen the editor. Verify the new name/code/swatch appear.
+- Check keyboard Tab/Enter, touch controls, scrolling and no horizontal overflow. Save, restart and verify persistence.
+- Upgrade a populated 1.1.5 vault. Preserve data.json and all tracker files. Record exact OS/Obsidian versions rather than assuming latest.

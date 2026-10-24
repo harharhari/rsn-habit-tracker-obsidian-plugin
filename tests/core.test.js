@@ -31,13 +31,18 @@ test("month title, leap years, Monday offsets and timezone boundary", () => {
 });
 test("three-column parsing assigns stable IDs, preserves rename identity, validates flags and colors", () => {
   const raw =
-    "| Habit | Generate calendar | Header color |\n|---|---|---|\n| Walking | Y | #ffe699 |\n| Yoga | N | invalid |";
+    "| Habit | Generate calendar | Header color |\n|---|---|---|\n| Walking | Y | #ffe699 |\n| Yoga | N | #FFFFFF |";
   const a = C.parseList(raw),
     b = C.parseList(a.text.replace("Walking", "Daily walking"));
   assert.equal(a.habits.length, 2);
   assert.equal(a.habits[0].color, "#FFE699");
   assert.equal(a.habits[1].enabled, false);
-  assert.equal(a.warnings.length, 1);
+  assert.equal(a.warnings.length, 0);
+  assert.throws(
+    () => C.parseList(raw.replace("#FFFFFF", "red")),
+    /six-digit hex/,
+  );
+  assert.throws(() => C.parseList(raw.replace("#FFFFFF", "")), /six-digit hex/);
   assert.equal(b.habits[0].id, a.habits[0].id);
   assert.equal(C.parseList(a.text).text, a.text);
   assert.throws(() => C.parseList(raw.replace("| N |", "| maybe |")));
@@ -287,4 +292,11 @@ test("legacy and modern archive markers require validated snapshots", () => {
     { schema: "3", month: "2026-10" },
   ])
     assert.throws(() => C.parseArchive(C.encode(marker), "2026-10"));
+});
+
+test("header colors accept exactly six hex digits, including custom colors", () => {
+  const row = color => `| Habit | Generate calendar | Header color |\n|---|---|---|\n| Custom | Y | ${color} |`;
+  for (const value of ["", "red", "#abc", "#12345678", "123ABC", "#12G456"])
+    assert.throws(() => C.parseList(row(value)), /six-digit hex/);
+  assert.equal(C.parseList(row("#12abEf")).habits[0].color, "#12ABEF");
 });

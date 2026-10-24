@@ -4,7 +4,7 @@ For repository cleanup, manual-kit distribution and existing-release handling, f
 
 # rsn habit calendar one b — first-use tutorial
 
-Version 1.1.5 · harharhari · GPL-3.0-only
+Version 1.1.6 · harharhari · GPL-3.0-only
 
 This tutorial uses two habits in a separate test vault. Installation and migration are covered in [Setup and use](SETUP-AND-USAGE.md). The test checklist is [here](TESTING-CHECKLIST.md).
 
@@ -12,23 +12,21 @@ This tutorial uses two habits in a separate test vault. Installation and migrati
 
 Enable rsn habit calendar one b. Press Ctrl+P on Linux/Windows or Command+P on macOS and run **rsn habit calendar one b: Open current month**. On mobile use the command palette. For October 2026 the title is **2026-10 October 2026**. A new empty vault initially has no habit calendars.
 
-## 2. Choose header colors
+## 2. Open the habit editor
 
-Click **Color reference**. The note is `Habit Tracker/hex-color-list.md`. Switch to Reading view to see the Color Shade column. Find lightgreen (#90EE90) and lightblue (#ADD8E6). Copy the hex codes yourself.
+Click **Habit list** on the calendar toolbar. This opens the plugin editor. Click **Add habit** three times and enter these examples:
 
-The reference contains 147 CSS3 named colors. Its names are labels, not values you can substitute for hex codes in the habit list. Changes here never change your habit calendars automatically.
-
-## 3. Add your habits
-
-Click **Habit list**, switch to Source mode, and put these rows below the existing table header:
-
-```markdown
+| Habit | Generate calendar | Header color |
+|---|---|---|
 | Walking | Y | #90EE90 |
 | Reading | Y | #ADD8E6 |
 | Yoga | N | #FFDAB9 |
-```
 
-Save the note. The plugin adds hidden stable habit-ID comments. Preserve these comments on subsequent edits, especially renames.
+Choose Y or N using each row's dropdown. Enter a six-digit hex code directly, or click **Choose color ▾**, search a color name or hex code, and select the row showing its name, code and swatch. The color chooser works on desktop and mobile. Invalid values show an error and cannot be saved. Color names alone, shorthand #RGB, alpha colors and blank colors are not accepted.
+
+## 3. Save and apply
+
+Click **Save habit list**. The editor saves habit-tracker-list.md and preserves existing stable IDs. A meaningful change immediately offers the current-month replacement confirmation. Save before closing the editor. **Open Markdown file** remains available for advanced editing and reordering whole rows.
 
 The warning says:
 
@@ -60,7 +58,7 @@ In Source mode, append this row to the existing color-reference table:
 | My lavender | #B8A9E8 | |
 ```
 
-Return to Reading view. The plugin paints the blank third cell using the Hex Code column. Copy #B8A9E8 into the habit list if desired. Applying that habit-list change requires the same destructive Yes/No confirmation. Your custom color row itself survives refresh and upgrades.
+Return to Reading view. The plugin paints the blank third cell using the Hex Code column. Reopen the habit editor to load the new reference row. Choose My lavender from the color chooser, or type #B8A9E8 directly. Applying that habit-list change requires the same destructive Yes/No confirmation. Your custom color row itself survives refresh and upgrades.
 
 ## 7. Add, hide, delete, reorder, or rename habits
 
@@ -92,3 +90,21 @@ When migrating from 001, disable it on EVERY device before enabling 001b. Both v
 ## 11. Windows, Mac, iPhone and iPad
 
 Installation for all platforms is in INSTALL-DOWNLOAD.md. Desktop commands use Ctrl+P on Windows/Ubuntu and Command+P on Mac. Phone/tablet users open the command palette from the ribbon/menu. Choose month now offers a month dropdown and four-digit year; no browser-specific month input is required. iPad retains one column, including landscape. Narrow desktop split panes also switch to one column. See the updated PowerPoint for platform-specific walkthroughs.
+
+## Details and direct calendar access
+
+Click **Details** to open the separate tracker page. Expand Months, Records, Statistics or System, then click a filename to open it. The habit-tracker-list.md and hex-color-list.md buttons open their raw notes. Back to calendars opens the current month. This page does not move files and does not hide Obsidian's global explorer. There is no plugin Welcome page.
+
+## Save conflicts and invalid older lists
+
+If the list changes on disk or through sync while the editor is open, Save reports a conflict and preserves the newer file. Copy your unsaved edits before closing and reopening the editor. If an older list has invalid hex values, use Open Markdown file to correct them, then Reload editor. Names must be unique, 1–180 characters, without pipes, newlines or HTML comments. Removed rows remain a draft until Save; all current marks reset only after Yes.
+
+## Editor examples
+
+These screenshots come from the Chromium test harness with mocked Obsidian APIs. Your Obsidian theme changes their appearance.
+
+![Desktop habit editor](images/editor-desktop.png)
+
+![Phone habit editor](images/editor-mobile.png)
+
+The editable navigation diagram is navigation.drawio.

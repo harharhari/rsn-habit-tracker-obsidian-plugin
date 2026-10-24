@@ -1,4 +1,4 @@
-# Checksums and provenance — 1.1.5
+# Checksums and provenance — 1.1.6
 
 ## Source snapshot
 
@@ -27,4 +27,4 @@ Get-Content .\SHA256SUMS | ForEach-Object {
 }
 ```
 
-The adjacent upload-to-github-005.zip.sha256 verifies the complete handoff ZIP. Hashes detect corruption or mismatched files; they are not digital signatures or proof of safety. No checksum includes itself. Real provenance is produced by GitHub, not by the local package generator.
+The adjacent upload-to-github-006.zip.sha256 verifies the complete handoff ZIP. Hashes detect corruption or mismatched files; they are not digital signatures or proof of safety. No checksum includes itself. Real provenance is produced by GitHub, not by the local package generator.

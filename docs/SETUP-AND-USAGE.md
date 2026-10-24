@@ -2,11 +2,11 @@
 
 For repository cleanup, manual-kit distribution and existing-release handling, follow [the deployment update guide](DEPLOYMENT-UPDATE-GUIDE.md). Do not delete the whole repository or upload the outer handoff directories as source.
 
-For complete 1.1.5 installation on Windows, Ubuntu, macOS, Android, iPhone and iPad, start with [INSTALL-DOWNLOAD.md](INSTALL-DOWNLOAD.md). The optional Linux helper below remains desktop-only.
+For complete 1.1.6 installation on Windows, Ubuntu, macOS, Android, iPhone and iPad, start with [INSTALL-DOWNLOAD.md](INSTALL-DOWNLOAD.md). The optional Linux helper below remains desktop-only.
 
 # rsn habit calendar one b — installation and use
 
-Version 1.1.5. Public author: harharhari. GPL-3.0-only.
+Version 1.1.6. Public author: harharhari. GPL-3.0-only.
 
 ## 1. Download and verify
 
@@ -78,11 +78,11 @@ Append custom rows to the table or change an existing Hex Code. Leave Color Shad
 
 The root release file is a starter/reference. Edit the copy in `Habit Tracker/` for everyday use. The plugin embeds the same starter in main.js, because Community installation does not fetch extra Markdown assets. The vault copy is created only if missing; user customizations survive refresh and plugin updates. You can copy your customized reference into `Habit Tracker/hex-color-list.md` before first launch instead.
 
-Copy the correct `#RRGGBB` code into the habit list yourself. There is no automatic color-name lookup or automatic update of habit headers from this reference.
+Use Choose color in the habit editor to select a name, hex code and swatch, or enter #RRGGBB directly. Reopen the editor after changing the reference. Changing the reference alone does not update existing headers.
 
 ## 6. Habits and current-month replacement
 
-Edit `Habit Tracker/habit-tracker-list.md`:
+Open **Habit list** for the validated editor. Its **Open Markdown file** button also lets you edit `Habit Tracker/habit-tracker-list.md` directly:
 
 ```markdown
 | Habit | Generate calendar | Header color |
@@ -92,7 +92,7 @@ Edit `Habit Tracker/habit-tracker-list.md`:
 | Yoga | N | #FFDAB9 |
 ```
 
-Keep automatically assigned `<!-- habit-id: ... -->` comments when renaming. Names must be unique and must not contain `|`. Y/N is case-insensitive. Colors must be six-digit hex; invalid values fall back to peach with a warning. Blank rows of data are not supported. The order of rows becomes calendar order.
+Keep automatically assigned `<!-- habit-id: ... -->` comments when renaming. Names must be unique and must not contain `|`. Y/N is case-insensitive. Colors must be six-digit hex; blank or invalid values block saving and processing until corrected. Blank rows of data are not supported. The order of rows becomes calendar order.
 
 Meaningful changes to names, colors, order, Y/N, addition, or deletion show this exact dialog:
 
@@ -141,3 +141,9 @@ systemctl --user list-timers rsn-habit-calendar-one-b.timer
 ```
 
 Replace the example paths and review the generated units before copying. If the old timer is installed, stop it first with `systemctl --user disable --now habit-calendar-001.timer`. To stop the new helper use `systemctl --user disable --now rsn-habit-calendar-one-b.timer`. Do not run old and new timer installations together. The computer must be running for any local timer to execute. Use `Habit Tracker/System/config.md` to set a valid IANA timeZone; keep it identical on every device. Default is `Asia/Kolkata`.
+
+## Version 1.1.6 interface and upgrade
+
+From 1.1.5, keep the same plugin folder and replace only main.js, manifest.json and styles.css with matching 1.1.6 files while Obsidian is closed. Preserve data.json and the complete Habit Tracker folder. Reopen, enable the plugin and run Open current month. No Welcome page is needed. Habit list now opens the editor described in TUTORIAL.md. Details opens tracker files separately. The global explorer stays unchanged.
+
+Use Add habit, enter its name, choose Y/N, and choose a color or type #RRGGBB. Save the list and answer the month-replacement confirmation. No preserves this month's marks; Yes clears all current-month marks. On mobile/tablets, editor controls stack vertically. Save before closing the editor. Correct old invalid/blank colors in the Markdown note if the editor asks for correction.

@@ -546,7 +546,10 @@ test("editing the list during confirmation invalidates Yes", async () => {
   };
   await p.reconcile();
   assert.equal((await p.model(m)).state.habits[0].name, "Walking");
-  assert.equal(p.scheduled, true);
+  assert.equal(
+    (await p.model(p.currentMonth())).state.habits[0].color,
+    "#F8CBAD",
+  );
 });
 test("disabled plugin cannot apply a confirmed reset", async () => {
   const p = plugin();
@@ -814,4 +817,37 @@ test("malformed retained data fails without overwriting the file", async () => {
   await p.write(path, broken);
   await assert.rejects(() => p.model(m), /Invalid statistics/);
   assert.equal(await p.read(path), broken);
+});
+
+test("editor save rejects a synced change without replacing it", async () => {
+  const p = plugin();
+  await p.reconcile();
+  const original = await p.read("Habit Tracker/habit-tracker-list.md");
+  const file = p.app.vault.getAbstractFileByPath(
+    "Habit Tracker/habit-tracker-list.md",
+  );
+  const synced = original.replace("Walking", "Synced walking");
+  await p.app.vault.modify(file, synced);
+  await assert.rejects(
+    p.saveHabitEditor(original, original.replace("Reading", "Books")),
+    /changed on disk/,
+  );
+  assert.equal(await p.read(file.path), synced);
+});
+test("editor saves valid hex and flags but rejects invalid colors without writes", async () => {
+  const p = plugin();
+  await p.reconcile();
+  const original = await p.read("Habit Tracker/habit-tracker-list.md");
+  await assert.rejects(
+    p.saveHabitEditor(original, original.replace("#F8CBAD", "blue")),
+    /six-digit hex/,
+  );
+  assert.equal(await p.read("Habit Tracker/habit-tracker-list.md"), original);
+  const updated = original.replace("#F8CBAD", "#123ABC");
+  await p.saveHabitEditor(original, updated);
+  assert.equal(await p.read("Habit Tracker/habit-tracker-list.md"), updated);
+  assert.equal(
+    (await p.model(p.currentMonth())).state.habits[0].color,
+    "#F8CBAD",
+  );
 });

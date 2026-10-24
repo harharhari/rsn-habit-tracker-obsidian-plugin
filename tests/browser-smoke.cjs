@@ -73,7 +73,12 @@ const root = path.resolve(__dirname, "..");
           TFile: window.MockFile,
           TFolder: window.MockFolder,
           Plugin: class {},
-          ItemView: class {},
+          ItemView: class {
+            constructor(leaf) {
+              this.app = leaf.app;
+              this.contentEl = leaf.host;
+            }
+          },
           MarkdownRenderChild: class {},
           Modal: class {
             constructor() {
@@ -105,7 +110,7 @@ const root = path.resolve(__dirname, "..");
           .readFileSync(path.join(root, "main.js"), "utf8")
           .replace(
             "module.exports = exports.default;",
-            "window.TestPanel = Panel; module.exports = exports.default;",
+            "window.TestPanel = Panel; window.TestEditor = HabitEditorView; window.TestDetails = DetailsView; module.exports = exports.default;",
           ),
       });
       await page.evaluate(async () => {
@@ -271,6 +276,95 @@ const root = path.resolve(__dirname, "..");
           path: path.join(screenshot, engine + "-" + scenario.name + ".png"),
         });
       }
+      await page.evaluate(async () => {
+        panel.dispose();
+        window.editor = new TestEditor(
+          { app: plugin.app, host: document.querySelector("#host") },
+          plugin,
+        );
+        await editor.onOpen();
+      });
+      assert.equal(
+        await page
+          .getByLabel("Habit 1 generate calendar", { exact: true })
+          .locator("option")
+          .allTextContents()
+          .then((a) => a.join(",")),
+        "Y,N",
+      );
+      await page
+        .getByLabel("Habit 1 header color", { exact: true })
+        .fill("invalid");
+      await page
+        .getByRole("button", { name: "Save habit list", exact: true })
+        .click();
+      assert.match(await page.getByRole("status").textContent(), /hex code/);
+      await page
+        .getByRole("button", { name: "Choose color for habit 1", exact: true })
+        .click();
+      await page.getByLabel("Search colors", { exact: true }).fill("aliceblue");
+      await page
+        .getByRole("button", { name: "aliceblue #F0F8FF", exact: true })
+        .click();
+      assert.equal(
+        await page
+          .getByLabel("Habit 1 header color", { exact: true })
+          .inputValue(),
+        "#F0F8FF",
+      );
+      await page
+        .getByLabel("Habit 1 header color", { exact: true })
+        .fill("#123abc");
+      await page
+        .getByLabel("Habit 1 generate calendar", { exact: true })
+        .selectOption("N");
+      await page
+        .getByRole("button", { name: "Save habit list", exact: true })
+        .click();
+      await page.waitForFunction(() =>
+        document.querySelector('[role="status"]').textContent.includes("saved"),
+      );
+      assert.ok(
+        await page.evaluate(async () =>
+          (await plugin.read("Habit Tracker/habit-tracker-list.md")).includes(
+            "| N | #123ABC |",
+          ),
+        ),
+      );
+      assert.equal(
+        await page.evaluate(
+          () =>
+            document.querySelector("#host").scrollWidth >
+            document.querySelector("#host").clientWidth,
+        ),
+        false,
+      );
+      if (screenshot)
+        await page.screenshot({
+          path: path.join(
+            screenshot,
+            engine + "-" + scenario.name + "-editor.png",
+          ),
+        });
+      await page.evaluate(async () => {
+        const d = new TestDetails(
+          { app: plugin.app, host: document.querySelector("#host") },
+          plugin,
+        );
+        await d.onOpen();
+      });
+      assert.deepEqual(await page.locator("summary").allTextContents(), [
+        "Months",
+        "Records",
+        "Statistics",
+        "System",
+      ]);
+      assert.equal(
+        await page
+          .getByRole("button", { name: "habit-tracker-list.md", exact: true })
+          .count(),
+        1,
+      );
       console.log(
         `PASS ${engine} ${scenario.name} browser: 60 calendars, grid, no horizontal overflow, mark cycle, search, rerender persistence, portable month picker; randomUUID absent`,
       );

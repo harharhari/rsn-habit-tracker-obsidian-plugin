@@ -179,11 +179,11 @@ function parseList(text: string) {
       throw Error(`Line ${i + 1}: duplicate habit name or ID.`);
     if (!/^[YN]$/i.test(cells[1]))
       throw Error(`Line ${i + 1}: Generate calendar must be Y or N.`);
-    let color = cells[2] || DEFAULT_COLOR;
-    if (!/^#[0-9a-f]{6}$/i.test(color)) {
-      warnings.push(`Line ${i + 1}: invalid color; using ${DEFAULT_COLOR}.`);
-      color = DEFAULT_COLOR;
-    }
+    const color = cells[2];
+    if (!/^#[0-9a-f]{6}$/i.test(color))
+      throw Error(
+        `Line ${i + 1}: Header color must be a six-digit hex code such as #F8CBAD.`,
+      );
     ids.add(id);
     names.add(name);
     habits.push({

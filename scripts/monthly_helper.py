@@ -54,10 +54,9 @@ def parse_list(text):
         habit_id = matches[0]
         if not name or len(name) > 180 or habit_id in ids or name in names or cells[1].upper() not in ('Y', 'N'):
             raise ValueError(f'Line {number}: invalid name, flag or duplicate habit')
-        color = cells[2] or '#F8CBAD'
+        color = cells[2]
         if not re.fullmatch(r'#[a-fA-F0-9]{6}', color):
-            print(f'Line {number}: invalid header color; using #F8CBAD')
-            color = '#F8CBAD'
+            raise ValueError(f'Line {number}: Header color must be a six-digit hex code.')
         habits.append(dict(id=habit_id, name=name, enabled=cells[1].upper() == 'Y', color=color.upper(), order=len(habits)))
         ids.add(habit_id)
         names.add(name)

@@ -1,8 +1,8 @@
-# Exact repository upload inventory — 1.1.5
+# Exact repository upload inventory: 1.1.6
 
-Upload these 67 files at the repository root, preserving relative paths and hidden files.
+Upload these 71 files to the repository root, preserving relative paths and hidden files. Upload repository/ CONTENTS, not the enclosing folder.
 
-DELETE obsolete src/core.js and src/plugin-source.js from the existing GitHub branch; their replacements are src/core.ts and src/plugin.ts. Do not delete unrelated work or vault data. Do not commit generated outputs or optional handoff kit folders.
+Keep Git history, old tags/releases and unrelated files. Delete obsolete src/core.js and src/plugin-source.js if still present. Do not upload generated main.js, node_modules, release-assets or manual-downloads as source folders.
 
 ```text
 .gitattributes
@@ -33,6 +33,7 @@ docs/RELEASE-NOTES-1.1.2.md
 docs/RELEASE-NOTES-1.1.3.md
 docs/RELEASE-NOTES-1.1.4.md
 docs/RELEASE-NOTES-1.1.5.md
+docs/RELEASE-NOTES-1.1.6.md
 docs/REVIEW-RESPONSE-1.1.5.md
 docs/SETUP-AND-USAGE.md
 docs/TEST-RESULTS-TEMPLATE.md
@@ -42,6 +43,9 @@ docs/VALIDATION.md
 docs/architecture.drawio
 docs/images/browser-desktop.png
 docs/images/browser-mobile.png
+docs/images/editor-desktop.png
+docs/images/editor-mobile.png
+docs/navigation.drawio
 docs/rsn-habit-calendar-one-b-tutorial.pptx
 eslint.config.mjs
 examples/habit-tracker-list-60.md
@@ -74,6 +78,4 @@ tsconfig.json
 versions.json
 ```
 
-Community releases now attach only main.js, manifest.json and styles.css, built and attested by the supplied workflow. The local release-assets folder is a preview; use the workflow-produced draft bytes for publication. manual-downloads is an optional local/CI installation kit, not a Community release.
-
-For in-place source updates, Git/web cleanup steps, CI kit downloads and optional separate permanent downloads, see DEPLOYMENT-UPDATE-GUIDE.md. Existing release history is retained.
+For release 1.1.6, use the provided attestation workflow to attach only main.js, manifest.json and styles.css. The local release-assets directory contains matching preview files. The optional manual kit stays separate. See DEPLOYMENT-UPDATE-GUIDE.md.

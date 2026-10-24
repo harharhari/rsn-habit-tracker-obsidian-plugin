@@ -1,4 +1,4 @@
-> For 1.1.5 download the three supported program files and follow INSTALL-DOWNLOAD.md. This historical guide describes the original identity change; its optional ZIP/color attachment instructions are historical. Users on 1.1.3/1.1.4 do not repeat identity migration.
+> For 1.1.6 download the three supported program files and follow INSTALL-DOWNLOAD.md. This historical guide describes the original identity change; its optional ZIP/color attachment instructions are historical. Users on 1.1.3/1.1.4 do not repeat identity migration.
 
 > This historical migration also applies when installing 1.1.4 directly from the old identity. Substitute version 1.1.4 in the installation steps. Users already on 1.1.3 do not repeat this migration; see INSTALL-DOWNLOAD.md.
 

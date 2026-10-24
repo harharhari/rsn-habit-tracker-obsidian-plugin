@@ -38,3 +38,17 @@
   .hc-root .hc-grid { grid-template-columns: 1fr; }
   .hc-root button.hc-day, .hc-root .hc-calendar td { height: 44px; font-size: 16px; }
 }
+
+/* 1.1.6 habit editor and secondary details page */
+.hc-editor-row { display: grid; grid-template-columns: minmax(160px,2fr) minmax(100px,1fr) minmax(150px,1fr) auto auto; gap:12px; align-items:end; padding:16px 0; border-bottom:1px solid var(--background-modifier-border,#aaa); }
+.hc-editor-row label { display:flex; flex-direction:column; gap:6px; min-width:0; }
+.hc-editor-row input, .hc-editor-row select { width:100%; box-sizing:border-box; }
+.hc-editor button, .hc-editor input, .hc-editor select, .hc-color-picker button, .hc-color-picker input { min-height:44px; font-size:16px; max-width:100%; }
+.hc-editor-row [aria-invalid="true"] { outline:2px solid var(--color-red,#c33); }
+.hc-color-options { max-height:50vh; overflow-y:auto; }
+.hc-color-options .hc-color-option { display:grid; grid-template-columns:minmax(0,1fr) 90px 60px; width:100%; height:auto; gap:8px; text-align:left; margin:4px 0; white-space:normal; }
+.hc-color-option .hc-color-shade { width:48px; }
+.hc-root summary { cursor:pointer; padding:12px 0; }
+.hc-root li button { max-width:100%; white-space:normal; overflow-wrap:anywhere; height:auto; min-height:36px; }
+.hc-editor.hc-mobile .hc-editor-row { grid-template-columns:1fr; }
+@container (max-width:900px) { .hc-editor-row { grid-template-columns:1fr; } }

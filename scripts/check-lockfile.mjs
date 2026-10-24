@@ -57,5 +57,5 @@ console.log(
 for (const obsolete of ["src/core.js", "src/plugin-source.js"])
   assert.ok(
     !existsSync(obsolete),
-    `Remove obsolete ${obsolete}; 1.1.5 uses typed source replacements.`,
+    `Remove obsolete ${obsolete}; 1.1.6 uses typed source replacements.`,
   );
