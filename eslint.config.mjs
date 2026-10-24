@@ -12,17 +12,20 @@ export default [
   },
   ...obsidianmd.configs.recommended,
   {
-    files: ["src/**/*.js"],
+    files: ["src/**/*.ts"],
     languageOptions: {
       sourceType: "module",
-      globals: { module: "readonly", require: "readonly" },
       parserOptions: { projectService: true },
     },
     rules: {
       ...obsidianmd.ruleConfigs.recommendedTypeChecked,
-      // Runtime source deliberately uses CommonJS, the module format loaded by Obsidian.
-      // All Obsidian-specific recommended rules remain enabled at their default severities.
-      "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-unsafe-argument": "error",
+      "@typescript-eslint/no-unsafe-call": "error",
+      "@typescript-eslint/no-unsafe-member-access": "error",
+      "@typescript-eslint/no-unsafe-assignment": "error",
+      "@typescript-eslint/no-unsafe-return": "error",
+      "@typescript-eslint/no-require-imports": "error",
+      "@typescript-eslint/no-explicit-any": "error",
     },
   },
 ];

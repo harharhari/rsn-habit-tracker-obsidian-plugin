@@ -1,7 +1,7 @@
 "use strict";
 const test = require("node:test"),
   assert = require("node:assert/strict");
-const C = require("../src/core");
+const C = require("../build/core.cjs");
 const h = {
   id: "h-walk",
   name: "Walking",
@@ -243,4 +243,48 @@ test("deleting a row or changing an N row is a catalog change; formatting alone 
     C.catalogChanged(state, [h, { ...list[1], color: "#000000" }]),
     true,
   );
+});
+
+test("untrusted JSON is rejected before calendar metadata is used", () => {
+  for (const bad of [
+    null,
+    [],
+    { id: 7 },
+    { ...h, color: 3 },
+    { ...h, order: "0" },
+  ])
+    assert.throws(() => C.validateHabit(bad), /Invalid habit/);
+  for (const bad of [
+    null,
+    {},
+    { schema: 1, month: "2026-10", id: "e", at: 12 },
+  ])
+    assert.throws(() => C.validateEvent(bad, "2026-10"), /Invalid event/);
+});
+test("retained summary validation checks nested totals and calendar state", () => {
+  const state = C.reduce([event("create", { habits: [h] })], "2026-10");
+  const summary = {
+    ...C.statistics(state, "2026-10-02"),
+    calendarState: state,
+  };
+  assert.deepEqual(C.parseSummary(C.encode(summary), "2026-10"), summary);
+  for (const bad of [
+    { ...summary, totals: { green: "2" } },
+    { ...summary, calendarState: { month: "2026-10" } },
+    { ...summary, habits: [{ ...summary.habits[0], completion: "bad" }] },
+  ])
+    assert.throws(() => C.parseSummary(C.encode(bad), "2026-10"));
+});
+test("legacy and modern archive markers require validated snapshots", () => {
+  assert.equal(
+    C.parseArchive(C.encode({ schema: 1, month: "2026-10" }), "2026-10").schema,
+    1,
+  );
+  for (const marker of [
+    null,
+    { schema: 2, month: "2026-10", snapshot: {} },
+    { schema: 3, month: "2026-10", snapshot: null },
+    { schema: "3", month: "2026-10" },
+  ])
+    assert.throws(() => C.parseArchive(C.encode(marker), "2026-10"));
 });

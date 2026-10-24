@@ -70,5 +70,5 @@ for (const name of [...assets, zipName]) {
 }
 await writeFile(new URL("release/SHA256SUMS", root), sums.join("\n") + "\n");
 console.log(
-  `Prepared six release attachments, including ${zipName} and SHA256SUMS.`,
+  `Prepared six optional installation-kit files; Community releases use only community-release/, including ${zipName} and SHA256SUMS.`,
 );

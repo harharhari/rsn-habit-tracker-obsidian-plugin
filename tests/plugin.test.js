@@ -4,7 +4,23 @@ const test = require("node:test"),
   fs = require("node:fs"),
   vm = require("node:vm"),
   crypto = require("node:crypto");
-const C = require("../src/core");
+const C = require("../build/core.cjs");
+class TFile {
+  constructor(props) {
+    Object.assign(this, props);
+  }
+}
+class TFolder {
+  constructor(path, vault) {
+    this.path = path;
+    this.vault = vault;
+  }
+  get children() {
+    return [...this.vault.files.values()].filter(
+      (f) => f.path.slice(0, f.path.lastIndexOf("/")) === this.path,
+    );
+  }
+}
 class Vault {
   constructor() {
     this.files = new Map();
@@ -18,16 +34,24 @@ class Vault {
   }
   async createFolder(p) {
     if (this.files.has(p)) throw Error("exists");
-    this.files.set(p, { path: p });
+    this.files.set(p, new TFolder(p, this));
   }
   async create(p, text) {
     if (this.files.has(p)) throw Error("exists");
-    const f = {
+    const parts = p.split("/");
+    parts.pop();
+    let parent = "";
+    for (const part of parts) {
+      parent = parent ? parent + "/" + part : part;
+      if (!this.files.has(parent))
+        this.files.set(parent, new TFolder(parent, this));
+    }
+    const f = new TFile({
       path: p,
       basename: p.split("/").pop().replace(/\.md$/, ""),
       extension: p.split(".").pop(),
       text,
-    };
+    });
     this.files.set(p, f);
     return f;
   }
@@ -50,6 +74,9 @@ class Element {
     this.handlers = {};
     this.classList = { add() {} };
     this.ownerDocument = { createElement: (tag) => new Element(tag) };
+  }
+  createEl(tag) {
+    return this.appendChild(new Element(tag));
   }
   appendChild(child) {
     this.children.push(child);
@@ -87,6 +114,8 @@ function plugin({ mobile = false, legacyCrypto = false } = {}) {
       name === "obsidian"
         ? {
             Plugin: class {},
+            TFile,
+            TFolder,
             ItemView: class {},
             MarkdownRenderChild: class {},
             Modal: TestModal,
@@ -737,4 +766,52 @@ test("Windows CRLF/BOM list with Unicode names persists using portable vault pat
     for (const segment of file.path.split("/"))
       assert.ok(!/[<>:"\\|?*]/.test(segment));
   }
+});
+
+test("tracker discovery does not enumerate or read unrelated vault files", async () => {
+  const p = plugin(),
+    vault = p.app.vault;
+  await vault.create("Private/unrelated.md", "private text");
+  vault.getFiles = () => {
+    throw Error("Whole vault enumeration forbidden");
+  };
+  const read = vault.read.bind(vault);
+  vault.read = async (f) => {
+    assert.ok(f.path.startsWith("Habit Tracker/"));
+    return read(f);
+  };
+  await p.reconcile();
+  const m = p.currentMonth(),
+    state = (await p.model(m)).state;
+  await p.mark(m, state.habits[0].id, m + "-01");
+  assert.equal((await p.previousReport(m)).totals.green, 1);
+  assert.throws(() => p.trackerFiles("Private"), /Tracker path required/);
+});
+test("nested tracker records remain discoverable without vault enumeration", async () => {
+  const p = plugin();
+  await p.reconcile();
+  const m = p.currentMonth();
+  const e = p.event(m, "mark", {
+    habit: (await p.model(m)).state.habits[0].id,
+    date: m + "-01",
+    status: "green",
+  });
+  await p.write(`Habit Tracker/Records/${m}/nested/${e.id}.md`, C.encode(e));
+  assert.ok((await p.events(m)).some((record) => record.id === e.id));
+});
+test("malformed retained data fails without overwriting the file", async () => {
+  const p = plugin();
+  await p.reconcile();
+  const m = p.currentMonth();
+  const path = `Habit Tracker/Statistics/${m}-statistics.md`;
+  const broken = C.encode({
+    schema: 1,
+    month: m,
+    habits: [],
+    sourceIds: [],
+    totals: { green: "invalid" },
+  });
+  await p.write(path, broken);
+  await assert.rejects(() => p.model(m), /Invalid statistics/);
+  assert.equal(await p.read(path), broken);
 });

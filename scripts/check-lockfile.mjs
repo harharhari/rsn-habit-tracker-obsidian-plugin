@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 // Dependency-free pre-install check: run before npm ci on every OS.
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 const read = (name) => JSON.parse(readFileSync(name, "utf8"));
 const pkg = read("package.json"),
@@ -53,3 +53,9 @@ console.log(
     2,
   ),
 );
+
+for (const obsolete of ["src/core.js", "src/plugin-source.js"])
+  assert.ok(
+    !existsSync(obsolete),
+    `Remove obsolete ${obsolete}; 1.1.5 uses typed source replacements.`,
+  );

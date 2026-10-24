@@ -1,15 +1,21 @@
 // SPDX-License-Identifier: GPL-3.0-only
 // Copyright (C) 2026 harharhari
 "use strict";
-const {
+import {
   Plugin,
   ItemView,
   MarkdownRenderChild,
   Modal,
   Notice,
   Platform,
-} = require("obsidian");
-const C = require("./core");
+  TFile,
+  TFolder,
+  type App,
+  type WorkspaceLeaf,
+  type ViewStateResult,
+  type TAbstractFile,
+} from "obsidian";
+import * as C from "./core";
 const COLOR_REFERENCE = ""; // Bundled from hex-color-list.md by scripts/build.mjs.
 const ROOT = "Habit Tracker",
   LIST = ROOT + "/habit-tracker-list.md",
@@ -19,7 +25,7 @@ const ROOT = "Habit Tracker",
 const COLORS = ROOT + "/hex-color-list.md";
 const INITIAL =
   "# Habits\n\nAdd one row per habit. Keep the habit-id comments after the plugin assigns them.\n\n| Habit | Generate calendar | Header color |\n|---|---|---|\n";
-const pathFor = (kind, m) => `${ROOT}/${kind}/${m}.md`;
+const pathFor = (kind: string, m: string) => `${ROOT}/${kind}/${m}.md`;
 // Android WebViews may expose getRandomValues without secure-context randomUUID.
 // Preserve UUID v4 IDs and collision resistance across offline syncing devices.
 function recordId() {
@@ -38,21 +44,34 @@ function recordId() {
     .map((part) => part.join(""))
     .join("-");
 }
-function el(parent, tag, text, cls) {
-  const x = parent.ownerDocument.createElement(tag);
+function el<K extends keyof HTMLElementTagNameMap>(
+  parent: HTMLElement,
+  tag: K,
+  text?: string,
+  cls?: string,
+): HTMLElementTagNameMap[K] {
+  const x = parent.createEl(tag);
   if (text !== undefined) x.textContent = text;
   if (cls) x.className = cls;
-  parent.appendChild(x);
   return x;
 }
-function button(parent, label, action) {
+function button(parent: HTMLElement, label: string, action: () => unknown) {
   const b = el(parent, "button", label);
   b.type = "button";
   b.addEventListener("click", action);
   return b;
 }
 class ReplaceMonthModal extends Modal {
-  constructor(plugin, month, count, resolve) {
+  month: string;
+  count: number;
+  resolve: (accepted: boolean) => void;
+  accepted = false;
+  constructor(
+    plugin: HabitCalendarPlugin,
+    month: string,
+    count: number,
+    resolve: (accepted: boolean) => void,
+  ) {
     super(plugin.app);
     this.month = month;
     this.count = count;
@@ -83,7 +102,11 @@ class ReplaceMonthModal extends Modal {
   }
 }
 class MonthModal extends Modal {
-  constructor(app, callback) {
+  callback: { current: string; open: (month: string) => void };
+  constructor(
+    app: App,
+    callback: { current: string; open: (month: string) => void },
+  ) {
     super(app);
     this.callback = callback;
   }
@@ -138,7 +161,9 @@ class MonthModal extends Modal {
   }
 }
 class ArchiveModal extends Modal {
-  constructor(plugin, m) {
+  plugin: HabitCalendarPlugin;
+  month: string;
+  constructor(plugin: HabitCalendarPlugin, m: string) {
     super(plugin.app);
     this.plugin = plugin;
     this.month = m;
@@ -160,7 +185,7 @@ class ArchiveModal extends Modal {
           "Month archived. Statistics are preserved; daily records can now be removed.",
         );
       } catch (e) {
-        message.textContent = e.message;
+        message.textContent = C.errorMessage(e);
         b.disabled = false;
       }
     });
@@ -170,7 +195,10 @@ class ArchiveModal extends Modal {
   }
 }
 class TrackerView extends ItemView {
-  constructor(leaf, p) {
+  plugin: HabitCalendarPlugin;
+  month: string;
+  panel?: Panel;
+  constructor(leaf: WorkspaceLeaf, p: HabitCalendarPlugin) {
     super(leaf);
     this.plugin = p;
     this.month = p.currentMonth();
@@ -184,15 +212,17 @@ class TrackerView extends ItemView {
   getIcon() {
     return "calendar-check";
   }
-  async setState(state, result) {
-    this.month = C.validMonth(state.month)
-      ? state.month
+  async setState(state: unknown, result: ViewStateResult) {
+    if (!C.isObject(state)) state = {};
+    const saved = C.isObject(state) ? state : {};
+    this.month = C.validMonth(saved.month)
+      ? saved.month
       : this.plugin.currentMonth();
     if (this.panel) {
       this.panel.month = this.month;
       await this.panel.render();
     }
-    await super.setState(state, result);
+    await super.setState(saved, result);
   }
   getState() {
     return { month: this.month };
@@ -207,7 +237,19 @@ class TrackerView extends ItemView {
   }
 }
 class Panel {
-  constructor(plugin, host, month, heading = false) {
+  plugin: HabitCalendarPlugin;
+  host: HTMLElement;
+  month: string;
+  heading: boolean;
+  search: string;
+  sequence: number;
+  alive: boolean;
+  constructor(
+    plugin: HabitCalendarPlugin,
+    host: HTMLElement,
+    month: string,
+    heading = false,
+  ) {
     this.plugin = plugin;
     this.host = host;
     this.month = month;
@@ -232,9 +274,16 @@ class Panel {
       const active = this.host.ownerDocument.activeElement,
         focusSearch =
           active?.classList.contains("hc-search") && this.host.contains(active),
-        cursor = focusSearch ? active.selectionStart : null;
-      const scrolls = [];
-      for (let parent = this.host; parent; parent = parent.parentElement)
+        cursor =
+          focusSearch && active instanceof HTMLInputElement
+            ? active.selectionStart
+            : null;
+      const scrolls: [HTMLElement, number][] = [];
+      for (
+        let parent: HTMLElement | null = this.host;
+        parent;
+        parent = parent.parentElement
+      )
         if (parent.scrollTop) scrolls.push([parent, parent.scrollTop]);
       this.host.replaceChildren();
       if (this.heading) el(this.host, "h1", C.title(this.month));
@@ -326,6 +375,7 @@ class Panel {
       const state = model.state,
         asOf = C.today(this.plugin.zone),
         stats = model.archived ? model.summary : C.statistics(state, asOf);
+      if (!stats) throw Error("Saved statistics unavailable.");
       el(
         this.host,
         "p",
@@ -372,7 +422,7 @@ class Panel {
               try {
                 await this.plugin.mark(this.month, h.id, date);
               } catch (e) {
-                new Notice(e.message);
+                new Notice(C.errorMessage(e));
               } finally {
                 if (b.isConnected) b.disabled = false;
               }
@@ -388,6 +438,7 @@ class Panel {
           }
         }
         const s = stats.habits.find((x) => x.id === h.id);
+        if (!s) throw Error("Saved habit statistics unavailable.");
         el(
           card,
           "div",
@@ -414,17 +465,17 @@ class Panel {
     } catch (e) {
       if (this.alive && seq === this.sequence) {
         this.host.replaceChildren();
-        el(this.host, "p", e.message, "hc-warning");
+        el(this.host, "p", C.errorMessage(e), "hc-warning");
       }
     }
   }
   filter() {
-    for (const card of this.host.querySelectorAll(".hc-card"))
-      card.hidden = !card.dataset.habit.includes(
+    for (const card of this.host.querySelectorAll<HTMLElement>(".hc-card"))
+      card.hidden = !(card.dataset.habit ?? "").includes(
         this.search.toLocaleLowerCase(),
       );
   }
-  summary(s) {
+  summary(s: C.Summary) {
     el(
       this.host,
       "p",
@@ -432,10 +483,42 @@ class Panel {
     );
   }
 }
-module.exports = class HabitCalendarPlugin extends Plugin {
+interface Model {
+  state: C.CalendarState | null;
+  summary: C.Summary | null;
+  archived: boolean;
+  missing: boolean;
+  incomplete: boolean;
+  lateCount: number;
+}
+export default class HabitCalendarPlugin extends Plugin {
+  zone = "Asia/Kolkata";
+  decisions: { rejectedMonth?: string; rejectedList?: string } = {};
+  panels = new Set<Panel>();
+  cache = new Map<string, C.TrackerEvent>();
+  queue: Promise<unknown> = Promise.resolve();
+  dirty = new Set<string>();
+  warning = "";
+  stopped = false;
+  timer?: number;
+  lastEventTime = 0;
+  replaceModal?: ReplaceMonthModal;
+
   async onload() {
     this.zone = "Asia/Kolkata";
-    this.decisions = (await this.loadData()) || {};
+    const saved: unknown = await this.loadData();
+    this.decisions = C.isObject(saved)
+      ? {
+          rejectedMonth:
+            typeof saved.rejectedMonth === "string"
+              ? saved.rejectedMonth
+              : undefined,
+          rejectedList:
+            typeof saved.rejectedList === "string"
+              ? saved.rejectedList
+              : undefined,
+        }
+      : {};
     this.panels = new Set();
     this.cache = new Map();
     this.queue = Promise.resolve();
@@ -446,13 +529,13 @@ module.exports = class HabitCalendarPlugin extends Plugin {
       if (ctx.sourcePath !== COLORS) return;
       for (const table of host.querySelectorAll("table")) {
         const headers = [...table.querySelectorAll("thead th")].map((x) =>
-          x.textContent.trim(),
+          (x.textContent ?? "").trim(),
         );
         if (headers.join("|") !== "Color Name|Hex Code|Color Shade") continue;
         for (const row of table.querySelectorAll("tbody tr")) {
           const cells = row.querySelectorAll("td");
           if (cells.length !== 3) continue;
-          const hex = cells[1].textContent.trim();
+          const hex = (cells[1].textContent ?? "").trim();
           cells[2].replaceChildren();
           if (!/^#[0-9a-f]{6}$/i.test(hex)) {
             cells[2].textContent = "Invalid hex code";
@@ -462,7 +545,7 @@ module.exports = class HabitCalendarPlugin extends Plugin {
           shade.style.backgroundColor = hex;
           shade.setAttribute(
             "aria-label",
-            `${cells[0].textContent.trim()}: ${hex}`,
+            `${(cells[0].textContent ?? "").trim()}: ${hex}`,
           );
           shade.setAttribute("role", "img");
           shade.title = hex;
@@ -479,6 +562,7 @@ module.exports = class HabitCalendarPlugin extends Plugin {
           return;
         }
         class Child extends MarkdownRenderChild {
+          panel?: Panel;
           onunload() {
             this.panel?.dispose();
           }
@@ -541,7 +625,7 @@ module.exports = class HabitCalendarPlugin extends Plugin {
           new Notice("Open a monthly calendar first.");
           return;
         }
-        new ArchiveModal(this, m).open();
+        new ArchiveModal(this, m || "").open();
       },
     });
     this.addRibbonIcon("calendar-check", "Open habit calendars", () =>
@@ -550,7 +634,7 @@ module.exports = class HabitCalendarPlugin extends Plugin {
         await this.openMonth(this.currentMonth());
       }),
     );
-    const changed = (file, deleted = false) => {
+    const changed = (file: TAbstractFile) => {
       if (!file.path.startsWith(ROOT + "/")) return;
       this.cache.delete(file.path);
       const m = file.path.match(/\/Records\/(\d{4}-\d{2})\//)?.[1];
@@ -566,7 +650,7 @@ module.exports = class HabitCalendarPlugin extends Plugin {
     };
     this.registerEvent(this.app.vault.on("create", (f) => changed(f)));
     this.registerEvent(this.app.vault.on("modify", (f) => changed(f)));
-    this.registerEvent(this.app.vault.on("delete", (f) => changed(f, true)));
+    this.registerEvent(this.app.vault.on("delete", (f) => changed(f)));
     this.registerEvent(
       this.app.vault.on("rename", (f, old) => {
         this.cache.delete(old);
@@ -582,7 +666,7 @@ module.exports = class HabitCalendarPlugin extends Plugin {
     this.registerInterval(window.setInterval(() => this.schedule(), 60000));
     this.app.workspace.onLayoutReady(() => {
       if (!this.stopped)
-        this.safe(() => this.serial(() => this.reconcile(true)));
+        void this.safe(() => this.serial(() => this.reconcile(true)));
     });
   }
   onunload() {
@@ -591,15 +675,15 @@ module.exports = class HabitCalendarPlugin extends Plugin {
     window.clearTimeout(this.timer);
     for (const panel of [...this.panels]) panel.dispose();
   }
-  safe(fn) {
+  safe(fn: () => unknown) {
     return Promise.resolve()
       .then(fn)
       .catch((e) => {
         console.error("rsn habit calendar one b:", e);
-        new Notice("Habit Calendar: " + e.message, 10000);
+        new Notice("Habit Calendar: " + C.errorMessage(e), 10000);
       });
   }
-  serial(fn) {
+  serial<T>(fn: () => Promise<T>): Promise<T | undefined> {
     const result = this.queue.then(() => {
       if (this.stopped) return;
       return fn();
@@ -609,10 +693,9 @@ module.exports = class HabitCalendarPlugin extends Plugin {
   }
   schedule() {
     window.clearTimeout(this.timer);
-    this.timer = window.setTimeout(
-      () => this.safe(() => this.serial(() => this.reconcile())),
-      700,
-    );
+    this.timer = window.setTimeout(() => {
+      void this.safe(() => this.serial(() => this.reconcile()));
+    }, 700);
   }
   currentMonth() {
     return C.today(this.zone).slice(0, 7);
@@ -623,7 +706,7 @@ module.exports = class HabitCalendarPlugin extends Plugin {
         "Habit Calendar is disabled. Re-enable it before making changes.",
       );
   }
-  async mkdir(path) {
+  async mkdir(path: string) {
     this.assertActive();
     const parts = path.split("/");
     let at = "";
@@ -639,15 +722,16 @@ module.exports = class HabitCalendarPlugin extends Plugin {
       }
     }
   }
-  async read(path) {
+  async read(path: string) {
     const f = this.app.vault.getAbstractFileByPath(path);
-    return f && "extension" in f ? this.app.vault.read(f) : null;
+    return f instanceof TFile ? this.app.vault.read(f) : null;
   }
-  async write(path, text, onlyNew = false) {
+  async write(path: string, text: string, onlyNew = false) {
     this.assertActive();
     await this.mkdir(path.slice(0, path.lastIndexOf("/")));
     const f = this.app.vault.getAbstractFileByPath(path);
     if (f) {
+      if (!(f instanceof TFile)) throw Error("Expected a file: " + path);
       if (onlyNew) return;
       if ((await this.app.vault.read(f)) !== text) {
         this.assertActive();
@@ -674,17 +758,19 @@ module.exports = class HabitCalendarPlugin extends Plugin {
       return;
     }
     const config = C.decode(raw);
-    C.today(config.timeZone);
-    if (config.schema !== 1 || typeof config.timeZone !== "string")
+    if (
+      !C.isObject(config) ||
+      config.schema !== 1 ||
+      typeof config.timeZone !== "string"
+    )
       throw Error("Invalid tracker configuration.");
+    C.today(config.timeZone);
     this.zone = config.timeZone;
   }
   async list() {
     let raw = await this.read(LIST);
     if (raw === null) {
-      const initialized = this.app.vault
-        .getFiles()
-        .some((f) => f.path.startsWith(ROOT + "/System/Months/"));
+      const initialized = this.trackerFiles(ROOT + "/System/Months").length > 0;
       if (initialized)
         throw Error(
           "Habit list is missing. Restore it; existing records are preserved.",
@@ -692,8 +778,10 @@ module.exports = class HabitCalendarPlugin extends Plugin {
       await this.write(LIST, INITIAL, true);
       raw = await this.read(LIST);
     }
+    if (raw === null) throw Error("Habit list is unavailable.");
     let parsed = C.parseList(raw);
     const f = this.app.vault.getAbstractFileByPath(LIST);
+    if (!(f instanceof TFile)) throw Error("Habit list is unavailable.");
     if (parsed.text !== raw) {
       this.assertActive();
       await this.app.vault.process(f, (current) => {
@@ -705,9 +793,20 @@ module.exports = class HabitCalendarPlugin extends Plugin {
     this.warning = parsed.warnings.join(" ");
     return parsed.habits;
   }
-  event(m, type, extra) {
+  event(
+    m: string,
+    type: C.TrackerEvent["type"],
+    extra:
+      | { habits: C.Habit[] }
+      | {
+          habit: string;
+          date: string;
+          status: C.Status;
+          generation: string | null;
+        },
+  ): C.TrackerEvent {
     this.lastEventTime = Math.max(Date.now(), (this.lastEventTime || 0) + 1);
-    return {
+    const event = {
       schema: 1,
       id: recordId(),
       month: m,
@@ -715,32 +814,48 @@ module.exports = class HabitCalendarPlugin extends Plugin {
       type,
       ...extra,
     };
+    C.validateEvent(event, m);
+    return event;
   }
-  async append(e) {
+  async append(e: C.TrackerEvent) {
     C.validateEvent(e, e.month);
     const path = `${ROOT}/Records/${e.month}/${e.id}.md`;
     await this.write(path, C.encode(e), true);
     this.cache.set(path, e);
   }
-  async events(m) {
-    const files = this.app.vault
-      .getFiles()
-      .filter(
-        (f) =>
-          f.path.startsWith(`${ROOT}/Records/${m}/`) && f.extension === "md",
-      );
-    const events = [];
+  trackerFiles(folder: string): TFile[] {
+    if (!folder.startsWith(ROOT + "/")) throw Error("Tracker path required.");
+    const start = this.app.vault.getAbstractFileByPath(folder);
+    if (!(start instanceof TFolder)) return [];
+    const files: TFile[] = [];
+    const pending: TFolder[] = [start];
+    while (pending.length) {
+      const current = pending.pop();
+      if (!current) break;
+      for (const child of current.children) {
+        if (child instanceof TFolder) pending.push(child);
+        else if (child instanceof TFile) files.push(child);
+      }
+    }
+    return files;
+  }
+  async events(m: string) {
+    const files = this.trackerFiles(`${ROOT}/Records/${m}`).filter(
+      (f) => f.extension === "md",
+    );
+    const events: C.TrackerEvent[] = [];
     // Limit concurrent reads on mobile; immutable records are cached until a vault event invalidates them.
     for (let i = 0; i < files.length; i += 32) {
       const chunk = await Promise.all(
         files.slice(i, i + 32).map(async (f) => {
-          if (this.cache.has(f.path)) return this.cache.get(f.path);
-          let e;
+          const cached = this.cache.get(f.path);
+          if (cached) return cached;
+          let e: unknown;
           try {
             e = C.decode(await this.app.vault.read(f));
             C.validateEvent(e, m);
           } catch (err) {
-            throw Error(`${f.path}: ${err.message}`);
+            throw Error(`${f.path}: ${C.errorMessage(err)}`);
           }
           this.cache.set(f.path, e);
           return e;
@@ -752,26 +867,17 @@ module.exports = class HabitCalendarPlugin extends Plugin {
       this.lastEventTime = Math.max(this.lastEventTime || 0, Date.parse(e.at));
     return events;
   }
-  async archived(m) {
+  async archived(m: string) {
     return !!this.app.vault.getAbstractFileByPath(
       `${ROOT}/System/Archived/${m}.md`,
     );
   }
-  async previousReport(m) {
+  async previousReport(m: string) {
     const raw = await this.read(`${ROOT}/Statistics/${m}-statistics.md`);
     if (raw === null) return null;
-    const s = C.decode(raw);
-    if (
-      s.schema !== 1 ||
-      s.month !== m ||
-      !Array.isArray(s.sourceIds) ||
-      !Array.isArray(s.habits) ||
-      !s.totals
-    )
-      throw Error("Invalid statistics file. Restore its calculation metadata.");
-    return s;
+    return C.parseSummary(raw, m);
   }
-  async ensureMonth(m, habits) {
+  async ensureMonth(m: string, habits: C.Habit[]) {
     if (m !== this.currentMonth()) return;
     if (await this.archived(m)) return;
     const marker = pathFor("System/Months", m),
@@ -784,7 +890,7 @@ module.exports = class HabitCalendarPlugin extends Plugin {
     await this.write(marker, C.encode({ schema: 1, month: m }), true);
     await this.write(pathFor("Months", m), C.page(m), true);
   }
-  async updateReport(m) {
+  async updateReport(m: string) {
     if (m !== this.currentMonth() || (await this.archived(m))) return;
     const events = await this.events(m);
     if (!events.length) return;
@@ -803,16 +909,20 @@ module.exports = class HabitCalendarPlugin extends Plugin {
       text = C.report(s);
     await this.write(path, text, true);
     const file = this.app.vault.getAbstractFileByPath(path);
+    if (!(file instanceof TFile))
+      throw Error("Statistics file is unavailable.");
     if ((await this.app.vault.read(file)) !== text) {
       this.assertActive();
       await this.app.vault.process(file, (current) => {
         this.assertActive();
-        return C.canReplaceReport(C.decode(current), state) ? text : current;
+        return C.canReplaceReport(C.parseSummary(current, m), state)
+          ? text
+          : current;
       });
     }
   }
-  async confirmReplacement(m, habits) {
-    return new Promise((resolve) => {
+  async confirmReplacement(m: string, habits: C.Habit[]) {
+    return new Promise<boolean>((resolve) => {
       this.replaceModal = new ReplaceMonthModal(
         this,
         m,
@@ -822,7 +932,7 @@ module.exports = class HabitCalendarPlugin extends Plugin {
       this.replaceModal.open();
     });
   }
-  async applyCatalog(m, habits, retry) {
+  async applyCatalog(m: string, habits: C.Habit[], retry: boolean) {
     const events = await this.events(m);
     if (!events.some((e) => e.type === "create")) return;
     const state = C.reduce(events, m);
@@ -880,14 +990,14 @@ module.exports = class HabitCalendarPlugin extends Plugin {
     this.decisions = {};
     await this.saveData(this.decisions);
   }
-  async freezeMonth(m) {
+  async freezeMonth(m: string) {
     if (m >= this.currentMonth() || (await this.archived(m))) return;
     let summary = await this.previousReport(m);
     let state = summary?.calendarState || null;
     if (!state) {
       const events = await this.events(m);
       const included = summary
-        ? events.filter((e) => summary.sourceIds.includes(e.id))
+        ? events.filter((e) => summary?.sourceIds.includes(e.id))
         : events;
       if (included.some((e) => e.type === "create")) {
         const candidate = C.reduce(included, m);
@@ -927,7 +1037,9 @@ module.exports = class HabitCalendarPlugin extends Plugin {
     const months = new Set([...this.dirty]);
     this.dirty.clear();
     // Freeze history before parsing the editable list: a broken list must not unlock history.
-    for (const f of this.app.vault.getFiles()) {
+    for (const f of ["System/Months", "Statistics", "Records"].flatMap(
+      (folder) => this.trackerFiles(`${ROOT}/${folder}`),
+    )) {
       const match = f.path.match(
         /^Habit Tracker\/(?:System\/Months|Statistics|Records)\/(\d{4}-\d{2})(?:[/. -])/,
       );
@@ -940,14 +1052,14 @@ module.exports = class HabitCalendarPlugin extends Plugin {
     await this.updateReport(m);
     this.renderAll();
   }
-  async model(m) {
+  async model(m: string): Promise<Model> {
     await this.freezeMonth(m);
     const archived = await this.archived(m);
     const summary = await this.previousReport(m);
     if (archived) {
-      const marker = C.decode(
-        await this.read(`${ROOT}/System/Archived/${m}.md`),
-      );
+      const raw = await this.read(`${ROOT}/System/Archived/${m}.md`);
+      if (raw === null) throw Error("Archive marker unavailable.");
+      const marker = C.parseArchive(raw, m);
       // Schema-2 markers freeze the verified report as well as its event set.
       // Older markers use the retained report as their snapshot, without rewriting it.
       const frozen = marker.schema >= 2 ? marker.snapshot : summary;
@@ -958,13 +1070,9 @@ module.exports = class HabitCalendarPlugin extends Plugin {
       const ids = new Set(frozen.sourceIds);
       if (marker.schema === 3 && marker.calendarState) {
         // A frozen snapshot does not depend on deleted or malformed late records.
-        const files = this.app.vault
-          .getFiles()
-          .filter(
-            (f) =>
-              f.path.startsWith(`${ROOT}/Records/${m}/`) &&
-              f.extension === "md",
-          );
+        const files = this.trackerFiles(`${ROOT}/Records/${m}`).filter(
+          (f) => f.extension === "md",
+        );
         return {
           state: marker.calendarState,
           summary: frozen,
@@ -1006,7 +1114,7 @@ module.exports = class HabitCalendarPlugin extends Plugin {
       lateCount: 0,
     };
   }
-  async mark(m, habit, date) {
+  async mark(m: string, habit: string, date: string) {
     return this.serial(async () => {
       if (m !== this.currentMonth()) throw Error("Previous months are locked.");
       if (date > C.today(this.zone))
@@ -1017,7 +1125,9 @@ module.exports = class HabitCalendarPlugin extends Plugin {
       if (!model.state.habits.some((h) => h.id === habit))
         throw Error("Habit no longer available.");
       const current = model.state.marks[habit + "|" + date]?.status || "none",
-        next = { none: "green", green: "pink", pink: "none" }[current];
+        next = ({ none: "green", green: "pink", pink: "none" } as const)[
+          current
+        ];
       await this.append(
         this.event(m, "mark", {
           habit,
@@ -1030,7 +1140,7 @@ module.exports = class HabitCalendarPlugin extends Plugin {
       this.renderAll();
     });
   }
-  async archive(m) {
+  async archive(m: string) {
     if (m >= this.currentMonth())
       throw Error("Only completed months can be archived.");
     await this.freezeMonth(m);
@@ -1039,25 +1149,27 @@ module.exports = class HabitCalendarPlugin extends Plugin {
     this.renderAll();
   }
   renderAll() {
-    for (const panel of this.panels) panel.render();
+    for (const panel of this.panels) void panel.render();
   }
   chooseMonth() {
     new MonthModal(this.app, {
       current: this.currentMonth(),
-      open: (m) => this.safe(() => this.openMonth(m)),
+      open: (m) => {
+        void this.safe(() => this.openMonth(m));
+      },
     }).open();
   }
-  async openMonth(m) {
+  async openMonth(m: string) {
     if (!C.validMonth(m)) throw Error("Invalid month.");
     const leaf =
       this.app.workspace.getLeavesOfType(VIEW)[0] ||
       this.app.workspace.getLeaf("tab");
     await leaf.setViewState({ type: VIEW, active: true, state: { month: m } });
-    this.app.workspace.revealLeaf(leaf);
+    await this.app.workspace.revealLeaf(leaf);
   }
-  async openFile(path) {
+  async openFile(path: string) {
     const f = this.app.vault.getAbstractFileByPath(path);
-    if (!f) {
+    if (!(f instanceof TFile)) {
       new Notice(
         "File is not available yet. Run refresh calendars and statistics.",
       );
@@ -1065,11 +1177,11 @@ module.exports = class HabitCalendarPlugin extends Plugin {
     }
     await this.app.workspace.getLeaf(false).openFile(f);
   }
-  async openStats(m) {
+  async openStats(m: string) {
     await this.serial(async () => {
       if (m < this.currentMonth()) await this.freezeMonth(m);
       else await this.updateReport(m);
     });
     await this.openFile(`${ROOT}/Statistics/${m}-statistics.md`);
   }
-};
+}

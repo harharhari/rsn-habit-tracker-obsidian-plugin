@@ -1,26 +1,33 @@
-# Validation — rsn habit calendar one b 1.1.4
+# Validation — rsn habit calendar one b 1.1.5
 
-Prepared 24 October 2026. No remote upload, release or submission was performed.
+Prepared 24 October 2026. No remote upload, release, attestation or Community submission was performed here.
 
-## Executed for this release
+## Executed locally
 
-- Clean public-registry npm ci --ignore-scripts succeeded using a fresh empty npm cache: 309 packages installed. Corrected which-typed-array version: 1.1.24. The unavailable 1.1.34 archive is not referenced by the lockfile.
-- npm run check passed: dependency preflight, official Obsidian ESLint recommended/API rules and manifest/license checks, production build, automated JavaScript tests, version/asset checks and release packaging.
-- **42 JavaScript tests passed**: 11 core, 28 mocked-vault integration and three new lockfile preflight regressions.
-- **11 Python tests passed**: six helper tests and five installer/migration tests. Total: **53 tests**.
-- Tests cover current-month confirmations/reset, historical calendar/report freezing after late sync, mobile UUID fallback, portable month selection, Windows CRLF/BOM/Unicode lists and preservation during settings migration.
-- The installation reported zero known vulnerabilities at that time; this is not a security certification. The ESLint 9.39.5 deprecation warning remains nonfatal.
+- Fresh public npm registry installation with an empty cache succeeded: 309 packages, which-typed-array 1.1.24. TypeScript 5.4.5 is now an explicit pinned dependency. npm reported zero known vulnerabilities at installation time; that is not a security certification. The nonfatal ESLint 9 deprecation warning remains.
+- Strict TypeScript checking passed. Official Obsidian recommended/type-aware ESLint rules plus the five reported no-unsafe rules, no-require-imports and no-explicit-any passed with zero warnings. The reported rules were enabled, not suppressed.
+- Production build, exact ID/name/mobile/license checks, three-file Community output checks and optional kit packaging passed.
+- **48 JavaScript tests passed**: 14 core, 31 mocked-vault integration and three build preflight tests.
+- **11 Python helper/installer tests passed**. Total: **59 automated tests**.
+- Four Chromium browser scenarios passed: wide desktop, narrow pane, phone and tablet. Each used 60 calendars and checked layout, horizontal overflow, marking, search, rerender persistence and month picker with randomUUID absent. These use mocked Obsidian APIs.
+- New tests cover invalid habit/event metadata, nested retained statistics/calendar validation, legacy and modern archive markers, forbidden whole-vault enumeration, unrelated-note read isolation, nested tracker records and preservation of malformed report bytes.
 
-Linux verification used Node 24 (the successful unrestricted check reported 24.22.1), npm 11.19.0 and Python 3.12. The GitHub matrix selects Node 22 and Python 3.12. It must run on the new uploaded commit. Source preflight prints the actual environment and lockfile digest for comparison.
+Checks used Linux, Node 24.22.1 for the successful npm check, npm 11.19.0 and Python 3.12. GitHub selects Node 22/Python 3.12 on its three OS runners. Release checks confirm the only external runtime require is obsidian; Node is a build dependency, not a mobile runtime dependency.
 
-## Pending or historical evidence
+## Pending and unavailable checks
 
-Native Windows and macOS CI jobs were not executed in this local Linux environment. Ubuntu/Windows/macOS hosted results remain pending after upload. Native Obsidian device tests on all target platforms, real synchronization, minimum Obsidian 1.7.2 and hosted Community review remain pending.
+Native Ubuntu/Windows/macOS GitHub jobs and the attestation/release workflow have not been dispatched for this prepared source. Native Obsidian on Windows, Ubuntu, macOS, Android, iPhone and iPad, real sync, and minimum Obsidian 1.7.2 acceptance remain pending. Record actual versions and outcomes in TEST-RESULTS-TEMPLATE.md.
 
-The UI/data engine is unchanged from 1.1.3. Prior Chromium layout scenarios and earlier Linux WebKit results are historical mocked-API browser evidence, not new 1.1.4 native-device tests. The user reported 1.1.1 functioning on Ubuntu and Android; that does not certify this new release or the other platforms. The earlier Android emulator was unable to boot.
+An additional Linux WebKit run was attempted but could not launch because the matching Playwright WebKit executable is not installed in this environment. No 1.1.5 WebKit/Safari pass is claimed. Historical browser and user-reported Ubuntu/Android results for older releases remain historical, not certification of this version.
 
-Use PLATFORM-TESTING.md and TEST-RESULTS-TEMPLATE.md to record exact OS/app versions and downloaded-release outcomes. Local lint does not establish directory name/ID availability or acceptance. Generic examples only; no private habit data is included.
+GitHub attestations cannot be generated by local checks: run Prepare attested release after upload. It tests all three OSs, signs the three assets and creates a draft. The hosted Obsidian review must run again on 1.1.5. Local success does not guarantee acceptance or directory name/ID availability.
 
-## Final package verification
+The 43-slide editable tutorial covers all requested platforms and the revised release process. Only generic habit examples are distributed. Source and binary checksums have separate documented scopes.
 
-The prepared source was rebuilt and its six release files checked against the delivered attachments. The public source includes generic examples only. The editable tutorial has 40 slides. Source and release checksums are separate and must be used in their respective directories.
+## Final handoff verification
+
+A clean copy of the packaged source, with its own npm ci installation, passed npm run check. All three Community assets and all six optional installation-kit files rebuilt byte-for-byte. Workflow YAML and the three-OS matrix parsed successfully. The release-tag guard accepted 1.1.5 and rejected v1.1.5 and a mismatched version. No GitHub execution or signed provenance is implied by these local checks.
+
+## Deployment documentation clarification
+
+Added a detailed source-cleanup/manual-kit distribution guide and updated the tutorial. Plugin source, workflows, manifest and release bytes are unchanged; the earlier code-test evidence still applies to those bytes. This documentation revision does not create GitHub repositories, dispatch workflows or modify release tags/assets.

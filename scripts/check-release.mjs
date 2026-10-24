@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 import assert from "node:assert/strict";
-import { readFile, writeFile } from "node:fs/promises";
+import { readFile, writeFile, readdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 const root = new URL("../", import.meta.url);
 const read = (name) => readFile(new URL(name, root));
@@ -67,3 +67,25 @@ assert.deepEqual(
   ["obsidian"],
   "Unexpected desktop-only or unbundled runtime dependency",
 );
+
+assert.deepEqual((await readdir(new URL("community-release/", root))).sort(), [
+  "main.js",
+  "manifest.json",
+  "styles.css",
+]);
+for (const name of ["main.js", "manifest.json", "styles.css"])
+  assert.deepEqual(
+    await read("community-release/" + name),
+    await read("release/" + name),
+  );
+for (const name of ["src/core.ts", "src/plugin.ts"]) {
+  const source = (await read(name)).toString();
+  assert.ok(
+    !/\b(?:getFiles|getMarkdownFiles|getAllLoadedFiles)\s*\(/.test(source),
+    "Whole-vault enumeration returned",
+  );
+  assert.ok(
+    !/\brequire\s*\(/.test(source),
+    "Authored source must use ESM imports",
+  );
+}

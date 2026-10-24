@@ -2,7 +2,7 @@
 
 # Android setup — rsn-test-vault
 
-For rsn habit calendar one b 1.1.4. No Python, Node.js or terminal is needed on the phone.
+For rsn habit calendar one b 1.1.5. No Python, Node.js or terminal is needed on the phone.
 
 ## Recommended: existing Linux vault through Obsidian Sync
 
@@ -22,9 +22,9 @@ Sync requires an Obsidian Sync subscription. Neither this plugin nor GitHub auto
 1. Install Obsidian from Google Play (or the APK linked on https://obsidian.md/download).
 2. Open the existing **rsn-test-vault**, or create it using **device storage**. A possible location is `Internal storage/Documents/Obsidian/rsn-test-vault`; use the location you actually chose. Device storage makes the vault accessible to file managers. Do not choose app-private storage for this manual copying workflow.
 3. Open the vault once, then close Obsidian. In Android Settings → Apps → Obsidian you can use Force stop before replacing plugin files.
-4. Download the six release attachments. For verification, the simplest option is to verify them on Linux using `sha256sum -c SHA256SUMS`, then transfer the verified files over USB.
+4. Download main.js, manifest.json and styles.css. Verify them on a computer using the provenance/checksum instructions in INSTALL-DOWNLOAD.md, then transfer over USB.
 5. In a file manager enable Show hidden files. Inside the vault create `.obsidian/plugins/rsn-habit-calendar-one-b/` (or use the vault's alternative configuration directory if configured).
-6. Copy **main.js**, **manifest.json**, **styles.css**, and **hex-color-list.md** directly into this directory. Alternatively extract the installation ZIP and copy the enclosed rsn-habit-calendar-one-b folder into `.obsidian/plugins/`. Do not nest it twice. The ZIP and SHA256SUMS need not be in the plugin folder.
+6. Copy **main.js**, **manifest.json**, and **styles.css** directly into this directory. If using the optional manual kit, extract its installation ZIP and copy the enclosed rsn-habit-calendar-one-b folder into `.obsidian/plugins/`. Do not nest it twice. The ZIP and SHA256SUMS need not be in the plugin folder.
 7. Reopen Obsidian, select rsn-test-vault, allow community plugins, and enable rsn habit calendar one b. If it is missing, check the filenames have not acquired .txt or (1) suffixes and restart.
 8. Run **Open current month** from the command palette. The plugin creates its editable data under `rsn-test-vault/Habit Tracker/`.
 
@@ -71,6 +71,6 @@ No Android background scheduler is included. Monthly creation occurs while Obsid
 - Plugin sync settings: https://help.obsidian.md/sync/settings
 - Android emulator acceleration: https://developer.android.com/studio/run/emulator-acceleration#vm-linux
 
-## Upgrade an existing installation to 1.1.4
+## Upgrade an existing installation to 1.1.5
 
 Follow [MIGRATION-1.1.3.md](MIGRATION-1.1.3.md). The old plugin folder is habit-calendar-001b and the new one is rsn-habit-calendar-one-b. Disable the old plugin first, force-stop Obsidian, install matching files in the new folder and copy wanted data.json before activation. Preserve Habit Tracker. Restart and verify the new name/version. Do not run both identities.

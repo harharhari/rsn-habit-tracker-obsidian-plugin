@@ -47,8 +47,31 @@ const root = path.resolve(__dirname, "..");
           );
       await page.addStyleTag({ path: path.join(root, "styles.css") });
       await page.evaluate((mobile) => {
+        HTMLElement.prototype.createEl = function (tag) {
+          const child = this.ownerDocument.createElement(tag);
+          this.appendChild(child);
+          return child;
+        };
         window.module = { exports: {} };
+        window.MockFile = class {
+          constructor(props) {
+            Object.assign(this, props);
+          }
+        };
+        window.MockFolder = class {
+          constructor(path, vault) {
+            this.path = path;
+            this.vault = vault;
+          }
+          get children() {
+            return [...this.vault.files.values()].filter(
+              (f) => f.path.slice(0, f.path.lastIndexOf("/")) === this.path,
+            );
+          }
+        };
         window.require = () => ({
+          TFile: window.MockFile,
+          TFolder: window.MockFolder,
           Plugin: class {},
           ItemView: class {},
           MarkdownRenderChild: class {},
@@ -78,9 +101,12 @@ const root = path.resolve(__dirname, "..");
         });
       }, mobile);
       await page.addScriptTag({
-        content:
-          fs.readFileSync(path.join(root, "main.js"), "utf8") +
-          "\nwindow.TestPanel = Panel;",
+        content: fs
+          .readFileSync(path.join(root, "main.js"), "utf8")
+          .replace(
+            "module.exports = exports.default;",
+            "window.TestPanel = Panel; module.exports = exports.default;",
+          ),
       });
       await page.evaluate(async () => {
         class Vault {
@@ -94,11 +120,24 @@ const root = path.resolve(__dirname, "..");
             return this.files.get(p) || null;
           }
           async createFolder(p) {
-            this.files.set(p, { path: p });
+            this.files.set(p, new window.MockFolder(p, this));
           }
           async create(p, text) {
             if (this.files.has(p)) throw Error("exists");
-            const f = { path: p, extension: p.split(".").pop(), text };
+            const parts = p.split("/");
+            parts.pop();
+            let parent = "";
+            for (const part of parts) {
+              parent = parent ? parent + "/" + part : part;
+              if (!this.files.has(parent))
+                this.files.set(parent, new window.MockFolder(parent, this));
+            }
+            const f = new window.MockFile({
+              path: p,
+              basename: p.split("/").pop().replace(/\.md$/, ""),
+              extension: p.split(".").pop(),
+              text,
+            });
             this.files.set(p, f);
             return f;
           }

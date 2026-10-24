@@ -1,0 +1,52 @@
+name: Prepare attested release
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing version tag (for example 1.1.5)
+        required: true
+        type: string
+permissions:
+  contents: read
+jobs:
+  verify:
+    uses: ./.github/workflows/ci.yml
+    with:
+      ref: ${{ inputs.tag }}
+  release:
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    env:
+      RELEASE_TAG: ${{ inputs.tag }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag }}
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - name: Verify version and tag
+        run: |
+          node scripts/check-release-tag.mjs
+          test "$(git rev-parse HEAD)" = "$(git rev-parse --verify "refs/tags/$RELEASE_TAG^{commit}")"
+      - run: node scripts/check-lockfile.mjs
+      - run: npm ci --ignore-scripts --registry=https://registry.npmjs.org
+      - run: npm run check
+      - name: Attest the exact Obsidian assets
+        uses: actions/attest@v4
+        with:
+          subject-path: |
+            community-release/main.js
+            community-release/manifest.json
+            community-release/styles.css
+      - name: Create draft release with only supported assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$RELEASE_TAG" community-release/main.js community-release/manifest.json community-release/styles.css --verify-tag --draft --title "rsn habit calendar one b $RELEASE_TAG" --notes-file "docs/RELEASE-NOTES-$RELEASE_TAG.md"

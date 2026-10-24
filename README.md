@@ -1,6 +1,6 @@
 # rsn habit calendar one b
 
-Monthly habit calendars for Obsidian by **harharhari**. Version **1.1.4**, licensed under **GPL-3.0-only**.
+Monthly habit calendars for Obsidian by **harharhari**. Version **1.1.5**, licensed under **GPL-3.0-only**.
 
 Track daily activities with a named calendar for each habit. Wide desktop views show six calendars per row; phones and tablets show one. Click or tap a date to cycle **unmarked → green → pink → unmarked**. Weeks start Monday. The monthly title follows `2026-10 October 2026`.
 
@@ -14,18 +14,18 @@ These browser-rendered examples use generic habits and mocked Obsidian APIs; the
 
 ## Download and install
 
-Download the assets from [GitHub Releases](https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/releases/tag/1.1.4). This link becomes available when the maintainer publishes the release and grants access. The repository may remain private during testing.
+Download the assets from [GitHub Releases](https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/releases/tag/1.1.5). This link becomes available when the maintainer publishes the release and grants access. The repository may remain private during testing.
 
 1. Back up your vault. Use `rsn-test-vault` for the first trial.
-2. Download the six release assets and verify their checksums using the [platform-specific instructions](docs/INSTALL-DOWNLOAD.md).
+2. Download main.js, manifest.json and styles.css and verify their provenance/checksums using the [platform-specific instructions](docs/INSTALL-DOWNLOAD.md).
 
 The following file-copy steps apply to desktop and accessible Android vaults. For iPhone/iPad, follow the [Obsidian Sync or Mac-assisted iCloud setup](docs/INSTALL-DOWNLOAD.md) instead.
 
-3. Close Obsidian. Extract `rsn-habit-calendar-one-b-1.1.4.zip` and copy its `rsn-habit-calendar-one-b` folder into `<vault>/.obsidian/plugins/`. For an upgrade from 1.1.1/1.1.2, follow the [identity migration guide](docs/MIGRATION-1.1.3.md): disable the old plugin and copy wanted data.json into the new folder.
+3. Close Obsidian. Create `<vault>/.obsidian/plugins/rsn-habit-calendar-one-b/` and copy the three files directly into it. For an upgrade from 1.1.1/1.1.2, follow the [identity migration guide](docs/MIGRATION-1.1.3.md): disable the old plugin and copy wanted data.json into the new folder.
 4. Reopen Obsidian. Under Settings → Community plugins, allow community plugins and enable **rsn habit calendar one b**.
 5. Run **rsn habit calendar one b: Open current month** in the command palette. A new vault starts with an empty habit list. Follow the tutorial to add your own rows.
 
-Use the individually attached installation ZIP, not GitHub's automatically generated Source code ZIP. No Node.js or Python is required for normal use. Android manual installation requires a vault in accessible device storage.
+GitHub's automatically generated Source code ZIP requires a developer build; use the three attached program files. No Node.js or Python is required for normal use. Android manual installation requires a vault in accessible device storage.
 
 After Community acceptance, users can instead search for **rsn habit calendar one b** by **harharhari** in Settings → Community plugins → Browse, then install and enable it. This package does not claim directory acceptance.
 
@@ -65,13 +65,13 @@ A new month appears while Obsidian is running, or on its next opening. The optio
 
 ## Compatibility and data
 
-Version 1.1.4 targets Windows 11, Ubuntu 24.04.3, current stable macOS, Android, iOS and iPadOS with the same plugin bundle. Phones and tablets show one calendar per row. Wide desktop panes show six; narrow panes show one. The month picker uses a Month dropdown and Year field on every platform.
+Version 1.1.5 targets Windows 11, Ubuntu 24.04.3, current stable macOS, Android, iOS and iPadOS with the same plugin bundle. Phones and tablets show one calendar per row. Wide desktop panes show six; narrow panes show one. The month picker uses a Month dropdown and Year field on every platform.
 
-The maintainer previously reported 1.1.1 working on Ubuntu/Android. Version 1.1.4 device acceptance is pending. Exact Apple OS, Android and Obsidian versions must be recorded during testing. The manifest minimum 1.7.2 is an API compatibility floor, not a completed minimum-device test.
+The maintainer previously reported 1.1.1 working on Ubuntu/Android. Version 1.1.5 device acceptance is pending. Exact Apple OS, Android and Obsidian versions must be recorded during testing. The manifest minimum 1.7.2 is an API compatibility floor, not a completed minimum-device test.
 
 No plugin network requests, telemetry or runtime Node/Electron imports. Sync is a separate service. Use optional Obsidian Sync across all platforms, or a separate Apple-only iCloud vault. Follow [MIGRATION-1.1.3.md](docs/MIGRATION-1.1.3.md) to preserve data.json and Habit Tracker across the ID change. Do not run old Habit Calendar 001 with the same records.
 
-See [all-platform installation](docs/INSTALL-DOWNLOAD.md), [platform testing](docs/PLATFORM-TESTING.md) and [release notes](docs/RELEASE-NOTES-1.1.4.md).
+See [all-platform installation](docs/INSTALL-DOWNLOAD.md), [platform testing](docs/PLATFORM-TESTING.md) and [release notes](docs/RELEASE-NOTES-1.1.5.md).
 
 ## Build
 
@@ -83,7 +83,7 @@ npm run check
 npm run test:helper
 ```
 
-`npm run build` is the production build command. `npm run check` runs official Obsidian ESLint checks, builds, tests, verifies metadata and creates the six release assets under `release/`. GitHub Actions runs these checks on pushes and pull requests. It does not publish a release.
+`npm run build` is the production build command. `npm run check` runs strict TypeScript checking and official Obsidian ESLint checks, builds, tests and verifies assets. `community-release/` contains the three supported files; `release/` contains an optional six-file manual kit. CI checks pushes and pull requests. The separate manually dispatched workflow attests an existing tag and creates a draft release; it does not publish automatically.
 
 Repository-root `SHA256SUMS` verifies this prepared source snapshot. The separate release `SHA256SUMS` verifies the four loose installation files and installation ZIP. These are different inventories. See [checksum instructions](docs/CHECKSUMS.md).
 
@@ -91,6 +91,12 @@ Repository-root `SHA256SUMS` verifies this prepared source snapshot. The separat
 
 Report reproducible problems through [GitHub Issues](https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/issues). Include plugin/app versions, OS, steps and error text, but remove personal vault content. [GPL-3.0-only](LICENSE). Copyright © 2026 harharhari. See [NOTICE](NOTICE).
 
-## Version 1.1.4 build repair
+## Version 1.1.5 Community review changes
 
-For the npm 404 on Ubuntu, Windows or macOS, follow [CI troubleshooting](docs/CI-TROUBLESHOOTING.md). Upload the repaired root lockfile and run the new commit. See [release notes](docs/RELEASE-NOTES-1.1.4.md) and [validation](docs/VALIDATION.md). An upgrade from 1.1.3 keeps the same plugin folder, data.json and Habit Tracker records.
+For the npm 404 on Ubuntu, Windows or macOS, follow [CI troubleshooting](docs/CI-TROUBLESHOOTING.md). Upload the repaired root lockfile and run the new commit. See [release notes](docs/RELEASE-NOTES-1.1.5.md) and [validation](docs/VALIDATION.md). An upgrade from 1.1.3 keeps the same plugin folder, data.json and Habit Tracker records.
+
+See [review responses](docs/REVIEW-RESPONSE-1.1.5.md) for typed source, runtime data validation, scoped tracker-folder discovery, and the three-asset attested release process. No new data migration or reset is required when upgrading from 1.1.4.
+
+## Updating the GitHub repository and distributing test kits
+
+Keep the existing repository/history and update source files in place. The optional manual-downloads handoff folder does not belong in this source tree or on the Community release. CI already publishes equivalent test-kit artifacts. See the [detailed deployment update guide](docs/DEPLOYMENT-UPDATE-GUIDE.md) for Git/web steps, obsolete-file cleanup, artifact downloads, optional separate permanent downloads and Obsidian upgrades. Normal users need only the three release files or the Community installer.

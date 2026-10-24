@@ -1,8 +1,10 @@
 > Upgrading from Habit Calendar 001b 1.1.1/1.1.2: follow [MIGRATION-1.1.3.md](MIGRATION-1.1.3.md) first. The ID and installation folder change. Disable the old plugin on all devices and copy wanted settings before enabling the new one.
 
+For repository cleanup, manual-kit distribution and existing-release handling, follow [the deployment update guide](DEPLOYMENT-UPDATE-GUIDE.md). Do not delete the whole repository or upload the outer handoff directories as source.
+
 # rsn habit calendar one b — first-use tutorial
 
-Version 1.1.4 · harharhari · GPL-3.0-only
+Version 1.1.5 · harharhari · GPL-3.0-only
 
 This tutorial uses two habits in a separate test vault. Installation and migration are covered in [Setup and use](SETUP-AND-USAGE.md). The test checklist is [here](TESTING-CHECKLIST.md).
 

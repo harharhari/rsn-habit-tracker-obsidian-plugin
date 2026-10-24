@@ -1,70 +1,42 @@
 > Upgrading from Habit Calendar 001b 1.1.1/1.1.2: follow [MIGRATION-1.1.3.md](MIGRATION-1.1.3.md) first. The ID and installation folder change. Disable the old plugin on all devices and copy wanted settings before enabling the new one.
 
-For complete 1.1.4 installation on Windows, Ubuntu, macOS, Android, iPhone and iPad, start with [INSTALL-DOWNLOAD.md](INSTALL-DOWNLOAD.md). The optional Linux helper below remains desktop-only.
+For repository cleanup, manual-kit distribution and existing-release handling, follow [the deployment update guide](DEPLOYMENT-UPDATE-GUIDE.md). Do not delete the whole repository or upload the outer handoff directories as source.
+
+For complete 1.1.5 installation on Windows, Ubuntu, macOS, Android, iPhone and iPad, start with [INSTALL-DOWNLOAD.md](INSTALL-DOWNLOAD.md). The optional Linux helper below remains desktop-only.
 
 # rsn habit calendar one b — installation and use
 
-Version 1.1.4. Public author: harharhari. GPL-3.0-only.
+Version 1.1.5. Public author: harharhari. GPL-3.0-only.
 
 ## 1. Download and verify
 
-Download these six **release assets** from GitHub, keeping their names unchanged in one directory:
-
-1. main.js
-2. manifest.json
-3. styles.css
-4. hex-color-list.md
-5. rsn-habit-calendar-one-b-1.1.4.zip
-6. SHA256SUMS
-
-GitHub's automatically generated Source code ZIP is not the installation ZIP.
-From the download directory on Linux:
-
-```bash
-sha256sum -c SHA256SUMS
-```
-
-Expect five OK results. On macOS use `shasum -a 256 -c SHA256SUMS`.
-On Windows PowerShell, run from the download directory:
-
-```powershell
-Get-Content .\SHA256SUMS | ForEach-Object {
-    $hash, $file = $_ -split '  ', 2
-    if ((Get-FileHash -LiteralPath $file -Algorithm SHA256).Hash.ToLower() -ne $hash) {
-        throw "Checksum mismatch: $file"
-    }
-    Write-Host "OK: $file"
-}
-```
-
-A checksum detects changed/corrupt downloads; it is not an independent signature. Regenerate checksums if any release file changes. SHA256SUMS does not hash itself.
+Download the three attached files main.js, manifest.json and styles.css. Follow INSTALL-DOWNLOAD.md for provenance verification and platform-specific installation. The optional manual kit and its SHA256SUMS are separate from the Community release; CHECKSUMS.md describes their scope. No extra color download is needed because main.js embeds it.
 
 ## 2. Local desktop installation
 
-1. Create an empty vault named `Habit Tracker 001b Test` and open it once in Obsidian 1.7.2+.
+1. Create an empty vault named `rsn-test-vault` and open it once in Obsidian 1.7.2+.
 2. Close Obsidian.
 3. Locate that vault's `.obsidian` folder. Linux: Ctrl+H shows hidden folders. macOS: Command+Shift+period. Use your configured alternative vault configuration folder instead of `.obsidian` if applicable.
 4. Create `plugins/rsn-habit-calendar-one-b` inside it.
-5. Copy `main.js`, `manifest.json`, `styles.css`, and `hex-color-list.md` into that folder.
+5. Copy `main.js`, `manifest.json`, and `styles.css` into that folder.
 6. Reopen the vault. Settings → Community plugins → allow community plugins → enable **rsn habit calendar one b**.
 7. Open the command palette (Ctrl+P, or Command+P on macOS). Run **rsn habit calendar one b: Open current month**.
 
 Correct layout:
 
 ```text
-Habit Tracker 001b Test/
+rsn-test-vault/
   .obsidian/
     plugins/
       rsn-habit-calendar-one-b/
         main.js
         manifest.json
         styles.css
-        hex-color-list.md
 ```
 
-Alternatively extract the installation ZIP and copy its enclosed `rsn-habit-calendar-one-b` folder into `plugins/`. Do not nest that folder twice. LICENSE and NOTICE in the ZIP may remain there. Do not copy the ZIP or SHA256SUMS into the plugin folder. No npm, Node.js, Python, or compilation is required to install ready-built files.
+If you have the optional manual kit, extract its installation ZIP and copy its enclosed `rsn-habit-calendar-one-b` folder into `plugins/`. Do not nest that folder twice. LICENSE and NOTICE in the ZIP may remain there. Do not copy the ZIP or SHA256SUMS into the plugin folder. No npm, Node.js, Python, or compilation is required to install ready-built files.
 
-The optional Python installer in the source repository also works:
+The optional Python installer in the source repository works after a developer runs npm ci --ignore-scripts and npm run build to populate release/:
 
 ```bash
 python3 scripts/install.py --vault "/absolute/path/to/test-vault"
