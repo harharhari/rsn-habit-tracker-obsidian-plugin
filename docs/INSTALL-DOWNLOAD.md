@@ -1,4 +1,4 @@
-# Install and upgrade 1.1.7 on all target platforms
+# Install and upgrade 1.1.8 on all target platforms
 
 For repository cleanup, manual-kit distribution and existing-release handling, follow [the deployment update guide](DEPLOYMENT-UPDATE-GUIDE.md). Do not delete the whole repository or upload the outer handoff directories as source.
 
@@ -6,7 +6,7 @@ Plugin: rsn habit calendar one b. Author: harharhari. Use rsn-test-vault for the
 
 ## 1. Download the three plugin files
 
-Open https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/releases/tag/1.1.7 after publication. Download main.js, manifest.json and styles.css from Assets. Draft/private downloads require authorized repository access. The Community release deliberately has only these three files. GitHub's automatic Source code archives require a developer build.
+Open https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/releases/tag/1.1.8 after publication. Download main.js, manifest.json and styles.css from Assets. Draft/private downloads require authorized repository access. The Community release deliberately has only these three files. GitHub's automatic Source code archives require a developer build.
 
 The optional six-file manual-downloads kit is included in the maintainer handoff and CI artifacts, not attached to the Community release. It contains an installation ZIP, color starter and SHA256SUMS as conveniences. Neither ZIP nor color download is required: main.js embeds the starter.
 
@@ -29,7 +29,7 @@ For the optional manual kit only, verify its five payloads using SHA256SUMS: Ubu
 1. Install Obsidian from its official download page. Create/open rsn-test-vault and note its actual location, for example Documents\Obsidian\rsn-test-vault.
 2. Close Obsidian. In File Explorer enable View → Show → Hidden items and File name extensions. Open the vault's .obsidian directory and create plugins if missing.
 3. Create rsn-habit-calendar-one-b inside .obsidian\plugins and copy the three downloaded files into it. The result must be .obsidian\plugins\rsn-habit-calendar-one-b\main.js, without a second nested plugin folder.
-4. Reopen the vault. Settings → Community plugins → Turn on community plugins. Enable rsn habit calendar one b and verify 1.1.7.
+4. Reopen the vault. Settings → Community plugins → Turn on community plugins. Enable rsn habit calendar one b and verify 1.1.8.
 5. Press Ctrl+P and run rsn habit calendar one b: Open current month.
 
 Do not rename main.js to main.js.txt. The runtime uses vault-relative paths; you do not enter a Windows drive path in the habit table.
@@ -39,7 +39,7 @@ Do not rename main.js to main.js.txt. The runtime uses vault-relative paths; you
 1. Open rsn-test-vault once and close Obsidian.
 2. In Files press Ctrl+H to show hidden files. Open the vault's .obsidian/plugins folder, creating plugins if needed.
 3. Create rsn-habit-calendar-one-b there and copy main.js, manifest.json and styles.css into that folder.
-4. Reopen Obsidian, enable community plugins and rsn habit calendar one b. Verify 1.1.7.
+4. Reopen Obsidian, enable community plugins and rsn habit calendar one b. Verify 1.1.8.
 5. Press Ctrl+P and run Open current month.
 
 ## 5. MacBook or other Mac
@@ -47,7 +47,7 @@ Do not rename main.js to main.js.txt. The runtime uses vault-relative paths; you
 1. Install Obsidian from its official download page. Open/create rsn-test-vault and quit Obsidian.
 2. In Finder open the vault folder and press Command+Shift+Period to reveal hidden files. Open .obsidian/plugins, creating plugins if necessary.
 3. Create rsn-habit-calendar-one-b inside plugins and copy the three downloaded files into it. Check that main.js sits directly inside that plugin folder.
-4. Reopen Obsidian, enable community plugins and rsn habit calendar one b, and verify 1.1.7.
+4. Reopen Obsidian, enable community plugins and rsn habit calendar one b, and verify 1.1.8.
 5. Press Command+P and run Open current month.
 
 For a vault intended for Obsidian Sync, choose a local folder outside iCloud/other sync roots. The separate iCloud route below uses iCloud alone for that vault.
@@ -66,11 +66,11 @@ For a vault intended for Obsidian Sync, choose a local folder outside iCloud/oth
 
 This route also works across Windows, Ubuntu, macOS and Android. It requires an Obsidian Sync subscription. The plugin itself requires no payment or account.
 
-1. On a computer, install and test 1.1.7 in rsn-test-vault as above. Enable the Sync core plugin, sign in and connect to a dedicated remote test vault.
+1. On a computer, install and test 1.1.8 in rsn-test-vault as above. Enable the Sync core plugin, sign in and connect to a dedicated remote test vault.
 2. Under Settings → Sync, enable the installed community plugin list and active community plugin list. Enable community plugin settings if you want remembered decisions to sync. Do not exclude Habit Tracker or its Records, Statistics and System subfolders.
 3. Wait for sync completion. On iPhone/iPad install Obsidian from the App Store. Use its Obsidian Sync setup flow to connect to the SAME remote test vault. The local name can be rsn-test-vault; names alone do not establish a connection.
 4. Configure the required plugin-sync preferences on the iPhone/iPad too. These preferences are device-specific. Wait for download completion, then fully close and reopen Obsidian.
-5. Enable community plugins and verify rsn habit calendar one b version 1.1.7. Open the command palette from the ribbon/menu and run Open current month.
+5. Enable community plugins and verify rsn habit calendar one b version 1.1.8. Open the command palette from the ribbon/menu and run Open current month.
 6. Test marking and restart persistence. Repeat setup separately on the iPad. Both phones and tablets use one calendar per row, including landscape and Split View.
 
 Keep this vault outside iCloud syncing. [Official Sync settings](https://help.obsidian.md/sync/settings).
@@ -83,7 +83,7 @@ This avoids a Sync subscription but requires a Mac for the straightforward hidde
 2. Let iCloud finish syncing. On the Mac, locate that same vault under iCloud Drive → Obsidian and open it in Obsidian once. Quit Obsidian on both devices before copying plugin files.
 3. On the Mac use Command+Shift+Period to reveal .obsidian. Copy the three verified release files into .obsidian/plugins/rsn-habit-calendar-one-b. Preserve any data.json during an upgrade.
 4. Allow iCloud to upload/download everything. Keep the vault downloaded using the available macOS Keep Downloaded option. Reopen the vault on the phone/tablet and enable community plugins and rsn habit calendar one b.
-5. Verify version 1.1.7, then run Open current month. Confirm the downloaded files are fully available before diagnosing a missing plugin.
+5. Verify version 1.1.8, then run Open current month. Confirm the downloaded files are fully available before diagnosing a missing plugin.
 
 Do not assume the iOS Files app exposes .obsidian or provides the same hidden-file controls as Finder. If you lack a Mac and cannot access the configuration directory, use the Sync route for prerelease testing or Community installation after acceptance. There is no need to invent a phone-only hidden-folder copying procedure.
 
@@ -113,12 +113,16 @@ Blank view: try the direct command and Reading view; record any notice/console e
 
 Different devices disagree: verify they connect to the same remote vault and wait for sync. Offline resets and late historical marks follow the documented revision/freeze rules. Preserve Statistics and System in backups.
 
-## Upgrade from 1.1.3 or 1.1.4 to 1.1.7
+## Upgrade from 1.1.3 or 1.1.4 to 1.1.8
 
-The ID and folder are unchanged. Close Obsidian, back up the vault, and replace main.js, manifest.json and styles.css inside .obsidian/plugins/rsn-habit-calendar-one-b/. Replace the optional plugin-folder hex-color-list.md starter if desired; keep the customized vault copy. Preserve data.json and the entire Habit Tracker folder. Restart and enable the plugin, verify version 1.1.7 and existing marks. MIGRATION-1.1.3.md applies only when moving from the older habit-calendar-001b folder.
+The ID and folder are unchanged. Close Obsidian, back up the vault, and replace main.js, manifest.json and styles.css inside .obsidian/plugins/rsn-habit-calendar-one-b/. Replace the optional plugin-folder hex-color-list.md starter if desired; keep the customized vault copy. Preserve data.json and the entire Habit Tracker folder. Restart and enable the plugin, verify version 1.1.8 and existing marks. MIGRATION-1.1.3.md applies only when moving from the older habit-calendar-001b folder.
 
-## Version 1.1.7 interface and upgrade
+## Version 1.1.8 interface and upgrade
 
-From 1.1.6, keep the same plugin folder and replace only main.js, manifest.json and styles.css with matching 1.1.7 files while Obsidian is closed. Preserve data.json and the complete Habit Tracker folder. Reopen, enable the plugin and run Open current month. No Welcome page is needed. Habit list now opens the editor described in TUTORIAL.md. Details opens tracker files separately. Only the five specified Habit Tracker entries are hidden in the file explorer.
+From 1.1.7, keep the same plugin folder and replace only main.js, manifest.json and styles.css with matching 1.1.8 files while Obsidian is closed. Preserve data.json and the complete Habit Tracker folder. Reopen, enable the plugin and run Open current month. No Welcome page is needed. Habit list now opens the editor described in TUTORIAL.md. Details opens tracker files separately. Only the five specified Habit Tracker entries are hidden in the file explorer.
 
 Use Add habit, enter its name, choose Y/N, and choose a color or type #RRGGBB. Save the list and answer the month-replacement confirmation. No preserves this month's marks; Yes clears all current-month marks. On mobile/tablets, editor controls stack vertically. Save before closing the editor. Correct old invalid/blank colors in the Markdown note if the editor asks for correction.
+
+## Version 1.1.8 CSS review fix
+
+The sidebar still hides the same five entries and keeps Months visible. Version 1.1.8 uses direct title and sibling-child selectors, with no :has selectors or DOM observers. Expanded hidden folders remain hidden. Disabling the plugin restores normal visibility when its CSS unloads. Keep all tracker files in sync and backups. See [the review response](REVIEW-RESPONSE-1.1.8.md).

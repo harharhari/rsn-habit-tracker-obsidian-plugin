@@ -1,24 +1,16 @@
-# Version 1.1.7 questions and final design
+# Version 1.1.8 design questions and decisions
 
-## Confirmed answers
+This release preserves the previously confirmed UI preferences. No new preference was needed to resolve the reported CSS warning.
 
-1. Hide the specified entries in Obsidian's file explorer while keeping Details access? **User: Yes, hide only those tracker entries.**
-2. Keep Search habits on the main page? **User: Yes.**
-3. Which month should Details Statistics use? **User: The displayed month.**
+1. Should the five tracker entries remain hidden? Yes; preserve the user's confirmed 1.1.7 behavior.
+2. Should :has be removed entirely? Yes, from the distributed stylesheet, with a release-time regression guard.
+3. Can the fix remain CSS-only? Yes. Match exact title paths and following folder-child containers directly.
+4. Should a DOM observer or polling loop replace :has? No; neither is needed for this design.
+5. What about expanded folders and dynamically synced entries? CSS applies automatically to inserted matching titles and children. The scoped display rule overrides inline display:block on expanded children.
+6. Should similarly named folders elsewhere be affected? No. Full vault paths and the file-explorer scope restrict matching.
+7. Should hiding alter sync, backups or file locations? No. Preserve all files and paths; use Details for maintenance.
+8. How is normal visibility restored? Disable the plugin so Obsidian unloads its stylesheet. Hiding is not a privacy feature.
+9. What if app/theme markup changes? Entries may become visible. Native acceptance must verify actual markup on each supported platform. Data remains intact.
+10. Should the toolbar, habit editor or statistics logic change? No. Keep Previous, Choose month, Next, Details and Search habits. Details retains the displayed month for Statistics; applying the list targets the current month with Yes/No approval.
 
-## Additional questions and chosen defaults
-
-4. Should hiding change data paths or sync? No. CSS hides the five exact explorer entries only. All stored paths and sync behavior remain unchanged.
-5. Should similarly named folders elsewhere be hidden? No. The selector includes the file-explorer scope and full exact vault path.
-6. What restores visibility? Disabling the plugin removes its stylesheet. Details already offers access while enabled. This is not a privacy or access-control feature.
-7. What does Apply habit list do when Details shows an older month? It applies to the actual current month only, with the existing Yes/No confirmation. The page explains that distinction.
-8. Where should Back to calendars return? The displayed month saved in Details, including after workspace restoration.
-9. Should archive verification remain on the main page? No. Previous-month Details has Verify saved snapshot; the existing archive command also remains.
-10. What happens to existing records on upgrade? No migration or deletion. Replace the three plugin files and preserve data.json plus all Habit Tracker content.
-11. What if an Obsidian/theme update changes explorer markup? Hiding may stop matching. The data stays intact. Verify the sidebar in native acceptance tests.
-
-## Final design
-
-Main page: Previous, Choose month, Next, Details, Search habits, calendar grids and existing totals/help. Date cells remain interactive as before. Details: Back to calendars, Refresh details, Habit list, Color reference, Apply habit list and Statistics, plus tracker-folder/file access and historical snapshot verification. Months remains visible in the explorer. The five requested internal paths are hidden there, while Details remains the route to maintenance.
-
-The existing habit editor, custom color support, reset approval and frozen history are unchanged. File explorer hiding uses plugin CSS with exact paths, without private Obsidian APIs, DOM observers or file mutations. Native device acceptance is still required. See navigation.drawio for the editable navigation diagram.
+The final design replaces only the sidebar CSS strategy, updates version metadata to 1.1.8, and adds checks and documentation. No runtime data migration is required. The editable navigation diagram remains navigation.drawio.

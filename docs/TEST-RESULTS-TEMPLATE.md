@@ -1,4 +1,4 @@
-# 1.1.7 acceptance record
+# 1.1.8 acceptance record
 
 Test date / tester:
 Git commit and release URL:
@@ -14,4 +14,4 @@ Release checksum verification:
 | iPad / iPadOS latest stable | Pending | Pending | Pending | Pending | Pending | Pending | |
 | Obsidian minimum 1.7.2 | Pending | 1.7.2 | Pending | Pending | Pending | Pending | |
 
-Use PASS, FAIL or NOT TESTED with details. Latest is a user target/assumption until exact version numbers are recorded. The prior user success report covers 1.1.1 on Ubuntu/Android only, not 1.1.7 acceptance. Browser-engine tests and CI builds have separate records in VALIDATION.md.
+Use PASS, FAIL or NOT TESTED with details. Latest is a user target/assumption until exact version numbers are recorded. The prior user success report covers 1.1.1 on Ubuntu/Android only, not 1.1.8 acceptance. Browser-engine tests and CI builds have separate records in VALIDATION.md.

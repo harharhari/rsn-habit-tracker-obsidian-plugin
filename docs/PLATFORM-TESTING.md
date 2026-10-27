@@ -1,6 +1,6 @@
 > Upgrading from Habit Calendar 001b 1.1.1/1.1.2: follow [MIGRATION-1.1.3.md](MIGRATION-1.1.3.md) first. The ID and installation folder change. Disable the old plugin on all devices and copy wanted settings before enabling the new one.
 
-# 1.1.7 platform acceptance and debugging
+# 1.1.8 platform acceptance and debugging
 
 Targets: Windows 11, Ubuntu 24.04.3, latest stable macOS, Android, iOS and iPadOS at testing time. Record actual version/build numbers and device models; "latest" is a target, not a reproducible result. The manifest retains an API compatibility floor of Obsidian 1.7.2, not a tested-device claim.
 
@@ -16,7 +16,7 @@ These tests use mocked Obsidian APIs. Playwright WebKit on Linux is useful engin
 
 ## Real-device checklist, each target
 
-Use a disposable rsn-test-vault, download release 1.1.7 and verify its checksums. Record exact OS version, Obsidian version, device and release hash.
+Use a disposable rsn-test-vault, download release 1.1.8 and verify its checksums. Record exact OS version, Obsidian version, device and release hash.
 
 1. Fresh install: enable, open current month, add the starter list and accept replacement in the empty month. Confirm two Y calendars and no N calendar.
 2. Layout: six columns in a wide desktop pane; one column in a narrow pane and on Android/iPhone/iPad. Check iPad landscape and Split View. Test scrolling through the 60-habit example.
@@ -39,7 +39,7 @@ For development use a dedicated vault, as advised by [Build a plugin](https://do
 
 Complete TEST-RESULTS-TEMPLATE.md. Confirm downloaded bytes, green CI jobs, no startup/data-loss errors and correct history. Verify the minimum supported app version or raise it in a new prepared build if it cannot be supported. Hosted Community review is a separate gate and may request changes. No automatic test here guarantees Community acceptance.
 
-## Required 1.1.7 native checks
+## Required 1.1.8 native checks
 
 - Main toolbar has exactly Previous, Choose month, Next, Details. Search habits still filters calendars.
 - Habit list, Color reference, Apply habit list and Statistics are present on Details and absent from the main toolbar.
@@ -48,3 +48,7 @@ Complete TEST-RESULTS-TEMPLATE.md. Confirm downloaded bytes, green CI jobs, no s
 - Confirm file bytes, locations, sync inclusion and backups are unchanged by hiding. This is not a security feature.
 - Verify editor Y/N/color validation, Save Yes/No behavior, historical immutability and real sync using the earlier checklist.
 - On Windows, Ubuntu, macOS, Android, iPhone and iPad record exact app, OS and theme versions. Explorer CSS tests use simulated markup locally; actual native behavior remains to be verified.
+
+## Version 1.1.8 sidebar regression checks
+
+Expand the three internal folders before upgrading. After enabling 1.1.8, confirm their titles and children disappear, Months stays visible, and no blank gaps remain. Add a matching entry through sync and confirm hiding applies. In a test vault, rename a matching path to an unrelated one and verify it becomes visible; restore the original path afterward. Verify similarly named folders elsewhere and Details file links remain available. Disable/re-enable the plugin to verify restoration. Record the exact Obsidian version and theme. Run npm run check to enforce the no-:has stylesheet guard.

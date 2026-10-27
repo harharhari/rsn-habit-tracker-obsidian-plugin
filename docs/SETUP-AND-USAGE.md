@@ -2,11 +2,11 @@
 
 For repository cleanup, manual-kit distribution and existing-release handling, follow [the deployment update guide](DEPLOYMENT-UPDATE-GUIDE.md). Do not delete the whole repository or upload the outer handoff directories as source.
 
-For complete 1.1.7 installation on Windows, Ubuntu, macOS, Android, iPhone and iPad, start with [INSTALL-DOWNLOAD.md](INSTALL-DOWNLOAD.md). The optional Linux helper below remains desktop-only.
+For complete 1.1.8 installation on Windows, Ubuntu, macOS, Android, iPhone and iPad, start with [INSTALL-DOWNLOAD.md](INSTALL-DOWNLOAD.md). The optional Linux helper below remains desktop-only.
 
 # rsn habit calendar one b — installation and use
 
-Version 1.1.7. Public author: harharhari. GPL-3.0-only.
+Version 1.1.8. Public author: harharhari. GPL-3.0-only.
 
 ## 1. Download and verify
 
@@ -142,8 +142,12 @@ systemctl --user list-timers rsn-habit-calendar-one-b.timer
 
 Replace the example paths and review the generated units before copying. If the old timer is installed, stop it first with `systemctl --user disable --now habit-calendar-001.timer`. To stop the new helper use `systemctl --user disable --now rsn-habit-calendar-one-b.timer`. Do not run old and new timer installations together. The computer must be running for any local timer to execute. Use `Habit Tracker/System/config.md` to set a valid IANA timeZone; keep it identical on every device. Default is `Asia/Kolkata`.
 
-## Version 1.1.7 interface and upgrade
+## Version 1.1.8 interface and upgrade
 
-From 1.1.6, keep the same plugin folder and replace only main.js, manifest.json and styles.css with matching 1.1.7 files while Obsidian is closed. Preserve data.json and the complete Habit Tracker folder. Reopen, enable the plugin and run Open current month. No Welcome page is needed. Habit list now opens the editor described in TUTORIAL.md. Details opens tracker files separately. Only the five specified Habit Tracker entries are hidden in the file explorer.
+From 1.1.7, keep the same plugin folder and replace only main.js, manifest.json and styles.css with matching 1.1.8 files while Obsidian is closed. Preserve data.json and the complete Habit Tracker folder. Reopen, enable the plugin and run Open current month. No Welcome page is needed. Habit list now opens the editor described in TUTORIAL.md. Details opens tracker files separately. Only the five specified Habit Tracker entries are hidden in the file explorer.
 
 Use Add habit, enter its name, choose Y/N, and choose a color or type #RRGGBB. Save the list and answer the month-replacement confirmation. No preserves this month's marks; Yes clears all current-month marks. On mobile/tablets, editor controls stack vertically. Save before closing the editor. Correct old invalid/blank colors in the Markdown note if the editor asks for correction.
+
+## Version 1.1.8 CSS review fix
+
+The sidebar still hides the same five entries and keeps Months visible. Version 1.1.8 uses direct title and sibling-child selectors, with no :has selectors or DOM observers. Expanded hidden folders remain hidden. Disabling the plugin restores normal visibility when its CSS unloads. Keep all tracker files in sync and backups. See [the review response](REVIEW-RESPONSE-1.1.8.md).

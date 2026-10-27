@@ -1,6 +1,6 @@
-# Exact repository upload inventory: 1.1.7
+# Exact repository upload inventory: 1.1.8
 
-Upload these 74 files to the source root, preserving subdirectories and hidden .github files. Upload repository/ CONTENTS, not the wrapper folder.
+Upload these 76 files to the source root, preserving subdirectories and hidden .github files. Upload repository/ CONTENTS, not the wrapper folder.
 
 Keep Git history, earlier tags/releases and unrelated files. Delete obsolete src/core.js and src/plugin-source.js if present. Do not commit generated main.js, node_modules, release-assets or manual-downloads as source folders.
 
@@ -35,7 +35,9 @@ docs/RELEASE-NOTES-1.1.4.md
 docs/RELEASE-NOTES-1.1.5.md
 docs/RELEASE-NOTES-1.1.6.md
 docs/RELEASE-NOTES-1.1.7.md
+docs/RELEASE-NOTES-1.1.8.md
 docs/REVIEW-RESPONSE-1.1.5.md
+docs/REVIEW-RESPONSE-1.1.8.md
 docs/SETUP-AND-USAGE.md
 docs/TEST-RESULTS-TEMPLATE.md
 docs/TESTING-CHECKLIST.md

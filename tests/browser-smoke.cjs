@@ -465,17 +465,31 @@ const root = path.resolve(__dirname, "..");
           title.dataset.path = path;
           title.textContent = path;
           row.append(title);
+          if (!file) {
+            const children = document.createElement("div");
+            children.className = "nav-folder-children";
+            children.style.display = "block";
+            children.textContent = "Expanded nested record";
+            row.append(children);
+          }
           fixture.append(row);
           return row;
         });
         const result = rows.map(
-          (row) => getComputedStyle(row).display === "none",
+          (row) => [...row.children].every(child => getComputedStyle(child).display === "none"),
         );
         // The same data-path outside the explorer must remain visible.
         const outside = rows[0].cloneNode(true);
         document.body.append(outside);
-        result.push(getComputedStyle(outside).display === "none");
+        result.push(getComputedStyle(outside.firstElementChild).display === "none");
         outside.remove();
+        // Insertions and path changes are handled by CSS without observers.
+        const added = rows[0].cloneNode(true); fixture.append(added);
+        if (![...added.children].every(child => getComputedStyle(child).display === "none")) throw Error("Inserted row stayed visible");
+        added.firstElementChild.dataset.path = "Habit Tracker/Records visible";
+        if ([...added.children].some(child => getComputedStyle(child).display === "none")) throw Error("Renamed row stayed hidden");
+        added.remove();
+        if (rows.slice(0,5).some(row => row.getBoundingClientRect().height !== 0)) throw Error("Hidden entry left visible space");
         // Removing the plugin CSS must reveal every entry without changing files.
         const styles = [...document.querySelectorAll("style")];
         const text = styles.map((style) => style.textContent);
@@ -483,7 +497,7 @@ const root = path.resolve(__dirname, "..");
           style.textContent = "";
         });
         result.push(
-          rows.some((row) => getComputedStyle(row).display === "none"),
+          rows.some((row) => [...row.children].some(child => getComputedStyle(child).display === "none")),
         );
         styles.forEach((style, i) => {
           style.textContent = text[i];

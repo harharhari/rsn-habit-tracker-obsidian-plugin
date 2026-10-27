@@ -53,14 +53,16 @@
 .hc-editor.hc-mobile .hc-editor-row { grid-template-columns:1fr; }
 @container (max-width:900px) { .hc-editor-row { grid-template-columns:1fr; } }
 
-/* 1.1.7: presentation only, scoped to exact paths in Obsidian's file explorer.
-   Files remain accessible through Details, links, search and the filesystem.
-   Obsidian removes this stylesheet when the plugin is disabled. */
-.workspace-leaf-content[data-type="file-explorer"] .nav-folder:has(> .nav-folder-title[data-path="Habit Tracker/Records"]),
-.workspace-leaf-content[data-type="file-explorer"] .nav-folder:has(> .nav-folder-title[data-path="Habit Tracker/Statistics"]),
-.workspace-leaf-content[data-type="file-explorer"] .nav-folder:has(> .nav-folder-title[data-path="Habit Tracker/System"]),
-.workspace-leaf-content[data-type="file-explorer"] .nav-file:has(> .nav-file-title[data-path="Habit Tracker/habit-tracker-list.md"]),
-.workspace-leaf-content[data-type="file-explorer"] .nav-file:has(> .nav-file-title[data-path="Habit Tracker/hex-color-list.md"]) {
-  display: none;
+/* 1.1.8: exact title and following child-list rules avoid ancestor matching.
+   Files remain in place. Disabling the plugin unloads these display rules. */
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Habit Tracker/Records"],
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Habit Tracker/Records"] ~ .nav-folder-children,
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Habit Tracker/Statistics"],
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Habit Tracker/Statistics"] ~ .nav-folder-children,
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Habit Tracker/System"],
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title[data-path="Habit Tracker/System"] ~ .nav-folder-children,
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title[data-path="Habit Tracker/habit-tracker-list.md"],
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title[data-path="Habit Tracker/hex-color-list.md"] {
+  display: none !important;
 }
 .hc-root.hc-mobile > button, .hc-root.hc-mobile li button { min-height:44px; font-size:16px; }

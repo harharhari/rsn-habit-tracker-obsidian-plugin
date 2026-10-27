@@ -89,3 +89,6 @@ for (const name of ["src/core.ts", "src/plugin.ts"]) {
     "Authored source must use ESM imports",
   );
 }
+
+// Prevent regression of the Community CSS review finding.
+assert.ok(!/:has\s*\(/i.test((await read("styles.css")).toString()), "Forbidden CSS relational selector returned");

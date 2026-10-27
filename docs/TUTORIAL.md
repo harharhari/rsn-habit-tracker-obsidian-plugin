@@ -4,7 +4,7 @@ For repository cleanup, manual-kit distribution and existing-release handling, f
 
 # rsn habit calendar one b — first-use tutorial
 
-Version 1.1.7 · harharhari · GPL-3.0-only
+Version 1.1.8 · harharhari · GPL-3.0-only
 
 This tutorial uses two habits in a separate test vault. Installation and migration are covered in [Setup and use](SETUP-AND-USAGE.md). The test checklist is [here](TESTING-CHECKLIST.md).
 
@@ -109,7 +109,7 @@ These screenshots come from the Chromium test harness with mocked Obsidian APIs.
 
 The editable navigation diagram is navigation.drawio.
 
-## Version 1.1.7 navigation exercise
+## Version 1.1.8 navigation exercise
 
 1. Run Open current month. Confirm only Previous, Choose month, Next and Details appear in the main toolbar, with Search habits still available.
 2. Open an existing previous month and click Details. Its heading must show that month.
@@ -119,3 +119,7 @@ The editable navigation diagram is navigation.drawio.
 6. Disable the plugin briefly in a test vault. The five explorer entries should reappear. Re-enable and run Open current month. Do not delete hidden folders to simplify the interface.
 
 ![Details page with management controls](images/details-desktop.png)
+
+## Version 1.1.8 CSS review fix
+
+The sidebar still hides the same five entries and keeps Months visible. Version 1.1.8 uses direct title and sibling-child selectors, with no :has selectors or DOM observers. Expanded hidden folders remain hidden. Disabling the plugin restores normal visibility when its CSS unloads. Keep all tracker files in sync and backups. See [the review response](REVIEW-RESPONSE-1.1.8.md).
