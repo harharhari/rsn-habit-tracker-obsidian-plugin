@@ -1,6 +1,6 @@
 {
   "name": "rsn-habit-tracker-obsidian-plugin",
-  "version": "1.1.9",
+  "version": "1.1.10",
   "private": true,
   "description": "Track habits with monthly calendars, manual completion marks, custom header colors, and retained monthly statistics.",
   "author": "harharhari",
@@ -15,7 +15,7 @@
   "scripts": {
     "build": "tsc --noEmit && node scripts/build.mjs",
     "lint": "eslint src package.json --max-warnings 0 && node scripts/lint-metadata.mjs",
-    "test": "node tests/core.test.js && node tests/plugin.test.js && node --test tests/build-metadata.test.mjs && node --test tests/manifest-alignment.test.mjs",
+    "test": "node tests/core.test.js && node tests/plugin.test.js && node --test tests/build-metadata.test.mjs && node --test tests/manifest-alignment.test.mjs && node --test tests/release-tools.test.mjs",
     "test:helper": "python -m unittest discover -s tests -p \"test_*.py\" -v",
     "check": "npm run preflight && npm run lint && npm run build && npm test && node scripts/check-release.mjs && node scripts/package-release.mjs",
     "format": "prettier --write src tests scripts/*.mjs eslint.config.mjs",

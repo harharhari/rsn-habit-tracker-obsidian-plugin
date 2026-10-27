@@ -4,7 +4,7 @@ For repository cleanup, manual-kit distribution and existing-release handling, f
 
 # rsn habit calendar one b — first-use tutorial
 
-Version 1.1.9 · harharhari · GPL-3.0-only
+Version 1.1.10 · harharhari · GPL-3.0-only
 
 This tutorial uses two habits in a separate test vault. Installation and migration are covered in [Setup and use](SETUP-AND-USAGE.md). The test checklist is [here](TESTING-CHECKLIST.md).
 
@@ -109,7 +109,7 @@ These screenshots come from the Chromium test harness with mocked Obsidian APIs.
 
 The editable navigation diagram is navigation.drawio.
 
-## Version 1.1.9 navigation exercise
+## Version 1.1.10 navigation exercise
 
 1. Run Open current month. Confirm only Previous, Choose month, Next and Details appear in the main toolbar, with Search habits still available.
 2. Open an existing previous month and click Details. Its heading must show that month.
@@ -121,8 +121,7 @@ The editable navigation diagram is navigation.drawio.
 ![Details page with management controls](images/details-desktop.png)
 
 
-## Version 1.1.9 review fixes
 
-Version 1.1.9 removes both :has selectors and !important declarations from the distributed stylesheet. Exact-path title and following-child selectors use display:none plus visibility:hidden, max-height:0, overflow:hidden and zero spacing. The extra collapse properties handle expanded child containers with inline display:block without overriding that inline declaration. No observer, polling, file moves or data migration are introduced. Native app/theme acceptance remains required.
+## Version 1.1.10 release recovery
 
-Follow [manifest alignment and deployment steps](MANIFEST-ALIGNMENT.md) before requesting Community review. The new audit downloads the actual GitHub release manifest. See [review response](REVIEW-RESPONSE-1.1.9.md). Upgrade all three runtime files together and preserve user data.
+The 1.1.9 failure came from an attached manifest declaring 1.1.7. Keep the guard. The new workflow checks all three downloaded assets against the tagged build and safely resumes matching drafts. It refuses stale/conflicting assets and published releases. Follow [the detailed recovery and deployment guide](RELEASE-RECOVERY.md) and [review evidence](REVIEW-RESPONSE-1.1.10.md). Native acceptance and hosted 1.1.10 checks remain pending.

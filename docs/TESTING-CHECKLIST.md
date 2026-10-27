@@ -1,6 +1,6 @@
 > Upgrading from Habit Calendar 001b 1.1.1/1.1.2: follow [MIGRATION-1.1.3.md](MIGRATION-1.1.3.md) first. The ID and installation folder change. Disable the old plugin on all devices and copy wanted settings before enabling the new one.
 
-# User acceptance checklist — 001b 1.1.9
+# User acceptance checklist — 001b 1.1.10
 
 Use downloaded GitHub release assets in a separate test vault. Record Obsidian version, OS, device, plugin version, and pass/fail evidence. Automated tests do not replace these real-device checks.
 
@@ -84,7 +84,7 @@ node scripts/test-vault.mjs late --test-vault "/absolute/path/to/empty-test-vaul
 - [ ] Complete Sync/iCloud transfer and repeat checks on each mobile device.
 - [ ] Install from the Community browser after approval and confirm the new display name and version.
 
-## Required 1.1.9 interface checks on every target platform
+## Required 1.1.10 interface checks on every target platform
 
 - Open current month without a Welcome page. Confirm the four main toolbar buttons and Search habits. Use Details for management buttons.
 - Open Details. Expand Months, Records, Statistics and System; open both reference notes. Confirm the five exact tracker entries are hidden in the explorer, with Months and unrelated entries visible.
@@ -96,7 +96,7 @@ node scripts/test-vault.mjs late --test-vault "/absolute/path/to/empty-test-vaul
 - Check keyboard Tab/Enter, touch controls, scrolling and no horizontal overflow. Save, restart and verify persistence.
 - Upgrade a populated 1.1.5 vault. Preserve data.json and all tracker files. Record exact OS/Obsidian versions rather than assuming latest.
 
-## Required 1.1.9 native checks
+## Required 1.1.10 native checks
 
 - Main toolbar has exactly Previous, Choose month, Next, Details. Search habits still filters calendars.
 - Habit list, Color reference, Apply habit list and Statistics are present on Details and absent from the main toolbar.
@@ -107,8 +107,7 @@ node scripts/test-vault.mjs late --test-vault "/absolute/path/to/empty-test-vaul
 - On Windows, Ubuntu, macOS, Android, iPhone and iPad record exact app, OS and theme versions. Explorer CSS tests use simulated markup locally; actual native behavior remains to be verified.
 
 
-## Version 1.1.9 review fixes
 
-Version 1.1.9 removes both :has selectors and !important declarations from the distributed stylesheet. Exact-path title and following-child selectors use display:none plus visibility:hidden, max-height:0, overflow:hidden and zero spacing. The extra collapse properties handle expanded child containers with inline display:block without overriding that inline declaration. No observer, polling, file moves or data migration are introduced. Native app/theme acceptance remains required.
+## Version 1.1.10 release recovery
 
-Follow [manifest alignment and deployment steps](MANIFEST-ALIGNMENT.md) before requesting Community review. The new audit downloads the actual GitHub release manifest. See [review response](REVIEW-RESPONSE-1.1.9.md). Upgrade all three runtime files together and preserve user data.
+The 1.1.9 failure came from an attached manifest declaring 1.1.7. Keep the guard. The new workflow checks all three downloaded assets against the tagged build and safely resumes matching drafts. It refuses stale/conflicting assets and published releases. Follow [the detailed recovery and deployment guide](RELEASE-RECOVERY.md) and [review evidence](REVIEW-RESPONSE-1.1.10.md). Native acceptance and hosted 1.1.10 checks remain pending.

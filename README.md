@@ -1,6 +1,6 @@
 # rsn habit calendar one b
 
-Monthly habit calendars for Obsidian by **harharhari**. Version **1.1.9**, licensed under **GPL-3.0-only**.
+Monthly habit calendars for Obsidian by **harharhari**. Version **1.1.10**, licensed under **GPL-3.0-only**.
 
 Track daily activities with a named calendar for each habit. Wide desktop views show six calendars per row; phones and tablets show one. Click or tap a date to cycle **unmarked → green → pink → unmarked**. Weeks start Monday. The monthly title follows `2026-10 October 2026`.
 
@@ -14,7 +14,7 @@ These browser-rendered examples use generic habits and mocked Obsidian APIs; the
 
 ## Download and install
 
-Download the assets from [GitHub Releases](https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/releases/tag/1.1.9). This link becomes available when the maintainer publishes the release and grants access. The repository may remain private during testing.
+Download the assets from [GitHub Releases](https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/releases/tag/1.1.10). This link becomes available when the maintainer publishes the release and grants access. The repository may remain private during testing.
 
 1. Back up your vault. Use `rsn-test-vault` for the first trial.
 2. Download main.js, manifest.json and styles.css and verify their provenance/checksums using the [platform-specific instructions](docs/INSTALL-DOWNLOAD.md).
@@ -66,13 +66,13 @@ A new month appears while Obsidian is running, or on its next opening. The optio
 
 ## Compatibility and data
 
-Version 1.1.9 targets Windows 11, Ubuntu 24.04.3, current stable macOS, Android, iOS and iPadOS with the same plugin bundle. Phones and tablets show one calendar per row. Wide desktop panes show six; narrow panes show one. The month picker uses a Month dropdown and Year field on every platform.
+Version 1.1.10 targets Windows 11, Ubuntu 24.04.3, current stable macOS, Android, iOS and iPadOS with the same plugin bundle. Phones and tablets show one calendar per row. Wide desktop panes show six; narrow panes show one. The month picker uses a Month dropdown and Year field on every platform.
 
-The maintainer previously reported 1.1.1 working on Ubuntu/Android. Version 1.1.9 device acceptance is pending. Exact Apple OS, Android and Obsidian versions must be recorded during testing. The manifest minimum 1.7.2 is an API compatibility floor, not a completed minimum-device test.
+The maintainer previously reported 1.1.1 working on Ubuntu/Android. Version 1.1.10 device acceptance is pending. Exact Apple OS, Android and Obsidian versions must be recorded during testing. The manifest minimum 1.7.2 is an API compatibility floor, not a completed minimum-device test.
 
 No plugin network requests, telemetry or runtime Node/Electron imports. Sync is a separate service. Use optional Obsidian Sync across all platforms, or a separate Apple-only iCloud vault. Follow [MIGRATION-1.1.3.md](docs/MIGRATION-1.1.3.md) to preserve data.json and Habit Tracker across the ID change. Do not run old Habit Calendar 001 with the same records.
 
-See [all-platform installation](docs/INSTALL-DOWNLOAD.md), [platform testing](docs/PLATFORM-TESTING.md) and [release notes](docs/RELEASE-NOTES-1.1.9.md).
+See [all-platform installation](docs/INSTALL-DOWNLOAD.md), [platform testing](docs/PLATFORM-TESTING.md) and [release notes](docs/RELEASE-NOTES-1.1.10.md).
 
 ## Build
 
@@ -92,9 +92,9 @@ Repository-root `SHA256SUMS` verifies this prepared source snapshot. The separat
 
 Report reproducible problems through [GitHub Issues](https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/issues). Include plugin/app versions, OS, steps and error text, but remove personal vault content. [GPL-3.0-only](LICENSE). Copyright © 2026 harharhari. See [NOTICE](NOTICE).
 
-## Version 1.1.9 Community review changes
+## Version 1.1.10 Community review changes
 
-For the npm 404 on Ubuntu, Windows or macOS, follow [CI troubleshooting](docs/CI-TROUBLESHOOTING.md). Upload the repaired root lockfile and run the new commit. See [release notes](docs/RELEASE-NOTES-1.1.9.md) and [validation](docs/VALIDATION.md). An upgrade from 1.1.3 keeps the same plugin folder, data.json and Habit Tracker records.
+For the npm 404 on Ubuntu, Windows or macOS, follow [CI troubleshooting](docs/CI-TROUBLESHOOTING.md). Upload the repaired root lockfile and run the new commit. See [release notes](docs/RELEASE-NOTES-1.1.10.md) and [validation](docs/VALIDATION.md). An upgrade from 1.1.3 keeps the same plugin folder, data.json and Habit Tracker records.
 
 See [review responses](docs/REVIEW-RESPONSE-1.1.5.md) for typed source, runtime data validation, scoped tracker-folder discovery, and the three-asset attested release process. No new data migration or reset is required when upgrading from 1.1.4.
 
@@ -102,17 +102,16 @@ See [review responses](docs/REVIEW-RESPONSE-1.1.5.md) for typed source, runtime 
 
 Keep the existing repository/history and update source files in place. The optional manual-downloads handoff folder does not belong in this source tree or on the Community release. CI already publishes equivalent test-kit artifacts. See the [detailed deployment update guide](docs/DEPLOYMENT-UPDATE-GUIDE.md) for Git/web steps, obsolete-file cleanup, artifact downloads, optional separate permanent downloads and Obsidian upgrades. Normal users need only the three release files or the Community installer.
 
-## Calendar workspace in 1.1.9
+## Calendar workspace in 1.1.10
 
 Open current month from the calendar ribbon or command palette. The main toolbar contains only Previous, Choose month, Next and Details, plus the Search habits field. Details contains Habit list, Color reference, Apply habit list and Statistics. There is no Welcome page.
 
 Habit list opens a dedicated editor: add/remove habits, select Y/N, choose a reference color by name/hex/swatch or enter a custom #RRGGBB value. Save immediately offers the existing Yes/No month-reset confirmation for meaningful changes. Yes clears ALL current-month marks. No preserves the displayed month and keeps the list saved. Previous months remain frozen.
 
-Details opens the tracker folders and reference notes on a separate plugin page. Only the five specified tracker entries are hidden in the file explorer. See [the tutorial](docs/TUTORIAL.md) and [1.1.9 design decisions](docs/DESIGN-DECISIONS.md).
+Details opens the tracker folders and reference notes on a separate plugin page. Only the five specified tracker entries are hidden in the file explorer. See [the tutorial](docs/TUTORIAL.md) and [1.1.10 design decisions](docs/DESIGN-DECISIONS.md).
 
 
-## Version 1.1.9 review fixes
 
-Version 1.1.9 removes both :has selectors and !important declarations from the distributed stylesheet. Exact-path title and following-child selectors use display:none plus visibility:hidden, max-height:0, overflow:hidden and zero spacing. The extra collapse properties handle expanded child containers with inline display:block without overriding that inline declaration. No observer, polling, file moves or data migration are introduced. Native app/theme acceptance remains required.
+## Version 1.1.10 release recovery
 
-Follow [manifest alignment and deployment steps](docs/MANIFEST-ALIGNMENT.md) before requesting Community review. The new audit downloads the actual GitHub release manifest. See [review response](docs/REVIEW-RESPONSE-1.1.9.md). Upgrade all three runtime files together and preserve user data.
+The 1.1.9 failure came from an attached manifest declaring 1.1.7. Keep the guard. The new workflow checks all three downloaded assets against the tagged build and safely resumes matching drafts. It refuses stale/conflicting assets and published releases. Follow [the detailed recovery and deployment guide](docs/RELEASE-RECOVERY.md) and [review evidence](docs/REVIEW-RESPONSE-1.1.10.md). Native acceptance and hosted 1.1.10 checks remain pending.

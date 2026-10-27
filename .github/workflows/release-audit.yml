@@ -24,9 +24,11 @@ jobs:
         with:
           node-version: '22'
           package-manager-cache: false
-      - name: Download the actual GitHub manifests and compare
-        run: |
-          node scripts/check-release-tag.mjs
-          gh api "repos/$GITHUB_REPOSITORY/contents/manifest.json" -H "Accept: application/vnd.github.raw+json" > "$RUNNER_TEMP/default-manifest.json"
-          gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --pattern manifest.json --dir "$RUNNER_TEMP/downloaded-release"
-          node scripts/check-manifest-alignment.mjs "$RUNNER_TEMP/default-manifest.json" "$RUNNER_TEMP/downloaded-release/manifest.json" "$RELEASE_TAG"
+      - name: Verify requested version
+        run: node scripts/check-release-tag.mjs
+      - name: Install dependencies from the tagged lockfile
+        run: npm ci --ignore-scripts --registry=https://registry.npmjs.org
+      - name: Build and check the tagged source
+        run: npm run check
+      - name: Audit published manifest and all three downloaded assets
+        run: node scripts/remote-release.mjs audit

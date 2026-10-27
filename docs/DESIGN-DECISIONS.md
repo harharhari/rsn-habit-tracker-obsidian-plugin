@@ -1,16 +1,16 @@
-# 1.1.9 design questions and combined decisions
+# 1.1.10 questions, answers and final design
 
-No new preference is required for these review fixes. The following answers use the user's previously confirmed behavior and conservative implementation defaults.
+The error details supplied by the user establish a stale release attachment, so no UI redesign is needed. The following implementation answers preserve previously confirmed preferences.
 
-1. Keep exactly the five tracker entries hidden? Yes; Months and unrelated folders remain visible.
-2. Remove !important completely? Yes, and enforce a release-time guard alongside the existing no-:has guard.
-3. How should expanded folders be handled? Collapse and conceal the exact child container even if its inline display is block. Test fixed inline height as well.
-4. Add a DOM observer or polling? No; retain CSS-only matching. Native DOM/theme changes still require acceptance testing.
-5. Change toolbar, editor or statistics? No. Four main buttons and Search remain. Management stays in Details, with displayed-month statistics and current-month overwrite confirmation.
-6. Which manifest is authoritative for publication? The tagged source and current default branch must agree with the actual release attachment; all fields must match.
-7. Should checks silently overwrite a mismatch? No. Fail with a diagnosis so an unintended version cannot be published silently.
-8. When should remote consistency be checked? Before attestation, after draft upload, and again after publication. Later repository changes require another audit.
-9. Preserve existing released tags and user data? Yes. Use new tag 1.1.9, preserve old releases, data.json and the entire Habit Tracker folder.
-10. Are automated browser tests sufficient for all devices? No. Record native Obsidian, OS and theme versions on Windows, Ubuntu, macOS, Android, iPhone and iPad; tests remain pending until performed.
+1. Should the manifest guard be removed to make the workflow green? No; it correctly rejected 1.1.7 content under tag 1.1.9.
+2. Is checking only manifest.version enough? No; verify all manifest fields and SHA-256 of all three downloaded assets against the tagged build.
+3. Should a retry delete/recreate an existing release? No. Resume only matching drafts, upload only missing assets, and never clobber or auto-publish.
+4. Should published releases be repaired silently? No. Preserve history and use new version/tag 1.1.10 for this correction.
+5. What should happen if a draft contains stale files? Stop before mutation with the file/version/hash diagnosis. The maintainer decides how to handle the conflicting draft.
+6. Should an API authorization/network error mean no release exists? No. Propagate the error; release listing must succeed before absence is inferred.
+7. Which branch should users upload to? The repository's real default branch, currently master. Create the version tag on the tested commit.
+8. Should preparation publish automatically? No; keep a draft so downloaded files can be tested first.
+9. Should calendars, toolbar, Details, hiding or data change? No. Preserve all confirmed 1.1.9 behavior, identity and user data; retain no-:has/no-!important CSS checks.
+10. Are native devices and hosted workflows already verified? No. Local tests include mocked release operations and browser APIs. Run hosted 1.1.10 workflows and record exact native platform versions.
 
-Final design: a CSS-only sidebar correction plus explicit release alignment checks, version 1.1.9 metadata, unchanged plugin identity/data format, and updated installation and publication documentation. No additional features or migration are needed. Navigation remains documented in navigation.drawio.
+Combined design: strengthen release staging, lifecycle handling, diagnostics and download verification while retaining the working portable runtime. One tested tag produces one matching three-file release; generic examples remain public and private habit lists stay excluded. Existing draw.io navigation remains applicable.

@@ -1,4 +1,6 @@
-# GitHub testing, attestations and Community publication — 1.1.9
+# GitHub testing, attestations and Community publication — 1.1.10
+
+For recovery from the reported stale 1.1.9 attachments, start with [RELEASE-RECOVERY.md](RELEASE-RECOVERY.md).
 
 For repository cleanup, manual-kit distribution and existing-release handling, follow [the deployment update guide](DEPLOYMENT-UPDATE-GUIDE.md). Do not delete the whole repository or upload the outer handoff directories as source.
 
@@ -6,11 +8,11 @@ Author harharhari; GPL-3.0-only; repository harharhari/rsn-habit-tracker-obsidia
 
 ## 1. Upload the complete source
 
-Extract upload-to-github-009.zip. Copy the CONTENTS of repository/ to your repository root, preserving hidden .github, .gitignore and .gitattributes. README.md, LICENSE and manifest.json must be at the root. FILES-TO-PUSH.md lists every file. Do not upload the outer ZIP as a substitute for source.
+Extract upload-to-github-010.zip. Copy the CONTENTS of repository/ to your repository root, preserving hidden .github, .gitignore and .gitattributes. README.md, LICENSE and manifest.json must be at the root. FILES-TO-PUSH.md lists every file. Do not upload the outer ZIP as a substitute for source.
 
 IMPORTANT when updating the old GitHub tree: DELETE obsolete src/core.js and src/plugin-source.js. Their replacements are src/core.ts and src/plugin.ts. Otherwise the scanner can still review the old unsafe JavaScript. Do not delete Habit Tracker, data.json or unrelated repository work. Do not commit node_modules, build/, main.js, release/ or community-release/ generated outputs.
 
-With Git, copy the source into a clone, review git status and the diff, stage the supplied changes and the two explicit obsolete-file removals, then commit and push. In the GitHub web UI use Add file → Upload files, preserve directories and include hidden files; separately delete those two obsolete files. Check that package.json, package-lock.json and manifest.json all say 1.1.9 and that .github/workflows/release.yml is present.
+With Git, copy the source into a clone, review git status and the diff, stage the supplied changes and the two explicit obsolete-file removals, then commit and push. In the GitHub web UI use Add file → Upload files, preserve directories and include hidden files; separately delete those two obsolete files. Check that package.json, package-lock.json and manifest.json all say 1.1.10 and that .github/workflows/release.yml is present.
 
 ## 2. Local build and review checks
 
@@ -50,14 +52,14 @@ In GitHub Settings → Actions → General, ensure actions are allowed by reposi
 
 Wait for Build and review on your new commit to pass on all three OSs. Do not rerun the old commit containing the old source/lockfile. Review the source and test it before signing a release.
 
-Create tag 1.1.9 on that reviewed commit. Do NOT create a release manually yet; the workflow creates its draft. For Git:
+Create tag 1.1.10 on that reviewed commit. Do NOT create a release manually yet; the workflow creates its draft. For Git:
 
 ```text
-git tag 1.1.9 <reviewed-commit-sha>
-git push origin 1.1.9
+git tag 1.1.10 <reviewed-commit-sha>
+git push origin 1.1.10
 ```
 
-Replace the placeholder with the actual reviewed commit. If the tag already exists, verify it points to that commit. Do not move or overwrite published tags. An existing release with the same tag makes the workflow refuse to create another; it never clobbers attachments. Use a new version if previously published bytes must change.
+Replace the placeholder with the actual reviewed commit. If the tag already exists, verify it points to that commit. Do not move or overwrite published tags. A matching existing draft can be resumed: the workflow uploads only missing files. Conflicting drafts and already published releases are rejected; it never clobbers attachments. Use a new version if previously published bytes must change.
 
 ## 5. Generate real attestations and the draft release
 
@@ -65,11 +67,11 @@ GitHub Free/Pro/Team support attestations for PUBLIC repositories. Private/inter
 
 1. Ensure the workflow files are committed on the default branch.
 2. Open Actions → Prepare attested release → Run workflow.
-3. Use the reviewed default-branch workflow and enter tag 1.1.9.
+3. Use the reviewed default-branch workflow and enter tag 1.1.10.
 4. The workflow reruns the Ubuntu/Windows/macOS checks for that ref. Its release job then checks out the tag, verifies tag/manifest equality, rebuilds it and attests main.js, manifest.json and styles.css.
-5. Only after successful attestation does it create a DRAFT release with those exact three files. It does not publish automatically. Check the run log and repository attestations.
+5. Preflight checks the default branch, exact staging files and existing release. After successful attestation it creates or resumes a matching DRAFT, uploads only missing files, then downloads all three by asset ID and verifies SHA-256 against the tagged build. It does not publish automatically. Check the job summary and repository attestations.
 6. Download the three attachments from the draft into a fresh folder. Authorized repository users can access drafts. Verify provenance, then perform installation/upgrade acceptance on those actual downloaded files.
-7. Edit the draft description if necessary; leave the verified files unchanged. Publish the normal release when tests pass. If code changes are needed, prepare another version/tag rather than replacing attested published binaries.
+7. Edit the draft description if necessary; leave the verified files unchanged. Publish the normal release when tests pass. Run Audit published manifest with tag 1.1.10 and require success; it rebuilds that tag and checks all published attachments and the default branch. If code changes are needed, prepare another version/tag rather than replacing attested published binaries.
 
 Optional verification on a computer with GitHub CLI and repository access:
 
@@ -106,35 +108,5 @@ Official instructions checked 27 October 2026:
 
 For an existing draft/submission, return to that entry, check for the new release/request review as available, and examine Manifest, Releases, Source code and Build verification results. Do not create a duplicate listing. If already accepted, publish the new matching GitHub release and monitor the update review. If this is still an initial submission, sign in at community.obsidian.md, link GitHub, use the existing submission or Plugins → New plugin as appropriate, resolve errors and publish the listing.
 
-After acceptance, install through Settings → Community plugins → Browse in a fresh vault on desktop and mobile. Confirm the real three-file installer creates the color reference and the plugin starts correctly. Local lint, a workflow pass or a recommendation fix alone does not certify acceptance. REVIEW-RESPONSE-1.1.5.md maps each reported finding to the change and evidence.
+After acceptance, install through Settings → Community plugins → Browse in a fresh vault on desktop and mobile. Confirm the real three-file installer creates the color reference and the plugin starts correctly. Local lint, a workflow pass or a recommendation fix alone does not certify acceptance. REVIEW-RESPONSE-1.1.10.md records the stale-asset evidence and changes; REVIEW-RESPONSE-1.1.5.md preserves earlier review history.
 
-## Official submission check for 1.1.9
-
-Official documentation checked on 27 October 2026:
-- https://docs.obsidian.md/plugins/releasing/submit-plugin
-- https://docs.obsidian.md/Reference/Manifest
-
-1. Commit the complete source tree, README, GPL license and manifest to the existing public repository. Keep the ID rsn-habit-calendar-one-b and name rsn habit calendar one b. Version is 1.1.9.
-2. Run npm ci --ignore-scripts, npm run check and npm run test:helper. Review the three GitHub CI jobs on Ubuntu, Windows and macOS. Run the native acceptance checklist on your actual devices.
-3. Tag the passing commit exactly 1.1.9. Use Prepare attested release with that tag, allowing it to create the draft rather than manually creating a conflicting release first.
-4. Download and test the draft's main.js, manifest.json and styles.css. Verify checksums/provenance following CHECKSUMS.md. Publish after testing.
-5. Ensure the default-branch manifest version matches the public release tag. The directory reads that manifest and downloads the matching release assets.
-6. Return to the existing entry at community.obsidian.md. For a first submission only, sign in, link the GitHub owner account and add the repository. Do not duplicate an existing entry.
-7. Address automated review findings with a corrected commit and incremented release. Local lint passes do not guarantee hosted review acceptance. Publish the directory entry when ready; installation becomes available after review errors are resolved.
-
-Keep previous tags and releases. Upload repository/ contents at the source root. Do not commit manual-downloads or release-assets wrappers. Optional test kits remain Actions artifacts. See DEPLOYMENT-UPDATE-GUIDE.md for exact click-by-click paths and separate optional kit hosting.
-
-## 1.1.9 release checklist
-
-The official submission and manifest documentation were rechecked on 27 October 2026: https://docs.obsidian.md/plugins/releasing/submit-plugin and https://docs.obsidian.md/Reference/Manifest.
-
-Upload repository/ contents at the existing source root, including .github. Keep earlier tags/releases. Run npm ci --ignore-scripts, npm run check and npm run test:helper, then wait for the Ubuntu, Windows and macOS CI jobs on the same commit. Test the actual file-explorer hiding with your Obsidian app/theme; browser simulation alone does not prove that integration.
-
-Create tag 1.1.9 on the passing commit. Run Prepare attested release with that tag, let it create the draft, test downloaded attachments, and publish. Keep the three individual attachments main.js, manifest.json and styles.css. Update the default-branch manifest and return to the existing Obsidian Community entry for review. Do not submit a duplicate plugin. Optional kits remain Actions artifacts, separate from Community release assets. Follow DEPLOYMENT-UPDATE-GUIDE.md for detailed clicks and command examples.
-
-
-## Version 1.1.9 review fixes
-
-Version 1.1.9 removes both :has selectors and !important declarations from the distributed stylesheet. Exact-path title and following-child selectors use display:none plus visibility:hidden, max-height:0, overflow:hidden and zero spacing. The extra collapse properties handle expanded child containers with inline display:block without overriding that inline declaration. No observer, polling, file moves or data migration are introduced. Native app/theme acceptance remains required.
-
-Follow [manifest alignment and deployment steps](MANIFEST-ALIGNMENT.md) before requesting Community review. The new audit downloads the actual GitHub release manifest. See [review response](REVIEW-RESPONSE-1.1.9.md). Upgrade all three runtime files together and preserve user data.

@@ -94,3 +94,9 @@ for (const name of ["src/core.ts", "src/plugin.ts"]) {
 assert.ok(!/:has\s*\(/i.test((await read("styles.css")).toString()), "Forbidden CSS relational selector returned");
 
 assert.ok(!/!\s*important\b/i.test((await read("styles.css")).toString()), "Forbidden CSS priority override returned");
+
+// Validate the exact directory uploaded and attested by the release workflow.
+assert.deepEqual((await readdir(new URL("community-release/", root))).sort(), ["main.js", "manifest.json", "styles.css"].sort(), "Community staging must contain exactly three assets");
+for (const name of ["main.js", "manifest.json", "styles.css"]) {
+  assert.deepEqual(await read("community-release/" + name), await read(name), `Community staging ${name} differs from source/build output`);
+}

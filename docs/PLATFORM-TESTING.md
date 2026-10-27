@@ -1,12 +1,12 @@
 > Upgrading from Habit Calendar 001b 1.1.1/1.1.2: follow [MIGRATION-1.1.3.md](MIGRATION-1.1.3.md) first. The ID and installation folder change. Disable the old plugin on all devices and copy wanted settings before enabling the new one.
 
-# 1.1.9 platform acceptance and debugging
+# 1.1.10 platform acceptance and debugging
 
 Targets: Windows 11, Ubuntu 24.04.3, latest stable macOS, Android, iOS and iPadOS at testing time. Record actual version/build numbers and device models; "latest" is a target, not a reproducible result. The manifest retains an API compatibility floor of Obsidian 1.7.2, not a tested-device claim.
 
 ## Automated checks on a development computer
 
-Install Node.js 22+ with npm. From the repository run npm ci --ignore-scripts, then npm run check. This runs official Obsidian lint and metadata checks, builds the runtime, runs 57 JavaScript tests, checks portable imports and generates the release/checksums. With Python installed, run npm run test:helper for 11 helper/installer tests.
+Install Node.js 22+ with npm. From the repository run npm ci --ignore-scripts, then npm run check. This runs official Obsidian lint and metadata checks, builds the runtime, runs 73 JavaScript tests, checks portable imports and generates the release/checksums. With Python installed, run npm run test:helper for 11 helper/installer tests.
 
 GitHub Actions now defines ubuntu-latest, windows-latest and macos-latest jobs for npm run check. Their uploaded artifacts are named by OS. These jobs are pending until you upload and run them; they do not launch Obsidian or test iOS. All three jobs also run the Python helper tests; Windows installs tzdata for timezone support. Compare the release asset checksums across all three jobs before choosing attachments. .gitattributes keeps text line endings reproducible.
 
@@ -16,7 +16,7 @@ These tests use mocked Obsidian APIs. Playwright WebKit on Linux is useful engin
 
 ## Real-device checklist, each target
 
-Use a disposable rsn-test-vault, download release 1.1.9 and verify its checksums. Record exact OS version, Obsidian version, device and release hash.
+Use a disposable rsn-test-vault, download release 1.1.10 and verify its checksums. Record exact OS version, Obsidian version, device and release hash.
 
 1. Fresh install: enable, open current month, add the starter list and accept replacement in the empty month. Confirm two Y calendars and no N calendar.
 2. Layout: six columns in a wide desktop pane; one column in a narrow pane and on Android/iPhone/iPad. Check iPad landscape and Split View. Test scrolling through the 60-habit example.
@@ -39,7 +39,7 @@ For development use a dedicated vault, as advised by [Build a plugin](https://do
 
 Complete TEST-RESULTS-TEMPLATE.md. Confirm downloaded bytes, green CI jobs, no startup/data-loss errors and correct history. Verify the minimum supported app version or raise it in a new prepared build if it cannot be supported. Hosted Community review is a separate gate and may request changes. No automatic test here guarantees Community acceptance.
 
-## Required 1.1.9 native checks
+## Required 1.1.10 native checks
 
 - Main toolbar has exactly Previous, Choose month, Next, Details. Search habits still filters calendars.
 - Habit list, Color reference, Apply habit list and Statistics are present on Details and absent from the main toolbar.
@@ -50,8 +50,7 @@ Complete TEST-RESULTS-TEMPLATE.md. Confirm downloaded bytes, green CI jobs, no s
 - On Windows, Ubuntu, macOS, Android, iPhone and iPad record exact app, OS and theme versions. Explorer CSS tests use simulated markup locally; actual native behavior remains to be verified.
 
 
-## Version 1.1.9 review fixes
 
-Version 1.1.9 removes both :has selectors and !important declarations from the distributed stylesheet. Exact-path title and following-child selectors use display:none plus visibility:hidden, max-height:0, overflow:hidden and zero spacing. The extra collapse properties handle expanded child containers with inline display:block without overriding that inline declaration. No observer, polling, file moves or data migration are introduced. Native app/theme acceptance remains required.
+## Version 1.1.10 release recovery
 
-Follow [manifest alignment and deployment steps](MANIFEST-ALIGNMENT.md) before requesting Community review. The new audit downloads the actual GitHub release manifest. See [review response](REVIEW-RESPONSE-1.1.9.md). Upgrade all three runtime files together and preserve user data.
+The 1.1.9 failure came from an attached manifest declaring 1.1.7. Keep the guard. The new workflow checks all three downloaded assets against the tagged build and safely resumes matching drafts. It refuses stale/conflicting assets and published releases. Follow [the detailed recovery and deployment guide](RELEASE-RECOVERY.md) and [review evidence](REVIEW-RESPONSE-1.1.10.md). Native acceptance and hosted 1.1.10 checks remain pending.
