@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: Existing version tag (for example 1.1.7)
+        description: Existing version tag (for example 1.1.9)
         required: true
         type: string
 permissions:
@@ -38,6 +38,12 @@ jobs:
       - run: node scripts/check-lockfile.mjs
       - run: npm ci --ignore-scripts --registry=https://registry.npmjs.org
       - run: npm run check
+      - name: Verify current default-branch manifest before attestation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/contents/manifest.json" -H "Accept: application/vnd.github.raw+json" > "$RUNNER_TEMP/default-manifest.json"
+          node scripts/check-manifest-alignment.mjs "$RUNNER_TEMP/default-manifest.json" community-release/manifest.json "$RELEASE_TAG"
       - name: Attest the exact Obsidian assets
         uses: actions/attest@v4
         with:
@@ -50,3 +56,10 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$RELEASE_TAG" community-release/main.js community-release/manifest.json community-release/styles.css --verify-tag --draft --title "rsn habit calendar one b $RELEASE_TAG" --notes-file "docs/RELEASE-NOTES-$RELEASE_TAG.md"
+      - name: Verify manifest downloaded from the draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --pattern manifest.json --dir "$RUNNER_TEMP/downloaded-release"
+          gh api "repos/$GITHUB_REPOSITORY/contents/manifest.json" -H "Accept: application/vnd.github.raw+json" > "$RUNNER_TEMP/default-manifest.json"
+          node scripts/check-manifest-alignment.mjs "$RUNNER_TEMP/default-manifest.json" "$RUNNER_TEMP/downloaded-release/manifest.json" "$RELEASE_TAG"

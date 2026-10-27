@@ -92,3 +92,5 @@ for (const name of ["src/core.ts", "src/plugin.ts"]) {
 
 // Prevent regression of the Community CSS review finding.
 assert.ok(!/:has\s*\(/i.test((await read("styles.css")).toString()), "Forbidden CSS relational selector returned");
+
+assert.ok(!/!\s*important\b/i.test((await read("styles.css")).toString()), "Forbidden CSS priority override returned");

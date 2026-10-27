@@ -1,0 +1,32 @@
+name: Audit published manifest
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Published release tag to compare with the current default branch
+        required: true
+        type: string
+  release:
+    types: [published]
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.release.tag_name || inputs.tag }}
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - name: Download the actual GitHub manifests and compare
+        run: |
+          node scripts/check-release-tag.mjs
+          gh api "repos/$GITHUB_REPOSITORY/contents/manifest.json" -H "Accept: application/vnd.github.raw+json" > "$RUNNER_TEMP/default-manifest.json"
+          gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --pattern manifest.json --dir "$RUNNER_TEMP/downloaded-release"
+          node scripts/check-manifest-alignment.mjs "$RUNNER_TEMP/default-manifest.json" "$RUNNER_TEMP/downloaded-release/manifest.json" "$RELEASE_TAG"

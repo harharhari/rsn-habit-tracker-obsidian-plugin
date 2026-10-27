@@ -1,16 +1,16 @@
-# Version 1.1.8 design questions and decisions
+# 1.1.9 design questions and combined decisions
 
-This release preserves the previously confirmed UI preferences. No new preference was needed to resolve the reported CSS warning.
+No new preference is required for these review fixes. The following answers use the user's previously confirmed behavior and conservative implementation defaults.
 
-1. Should the five tracker entries remain hidden? Yes; preserve the user's confirmed 1.1.7 behavior.
-2. Should :has be removed entirely? Yes, from the distributed stylesheet, with a release-time regression guard.
-3. Can the fix remain CSS-only? Yes. Match exact title paths and following folder-child containers directly.
-4. Should a DOM observer or polling loop replace :has? No; neither is needed for this design.
-5. What about expanded folders and dynamically synced entries? CSS applies automatically to inserted matching titles and children. The scoped display rule overrides inline display:block on expanded children.
-6. Should similarly named folders elsewhere be affected? No. Full vault paths and the file-explorer scope restrict matching.
-7. Should hiding alter sync, backups or file locations? No. Preserve all files and paths; use Details for maintenance.
-8. How is normal visibility restored? Disable the plugin so Obsidian unloads its stylesheet. Hiding is not a privacy feature.
-9. What if app/theme markup changes? Entries may become visible. Native acceptance must verify actual markup on each supported platform. Data remains intact.
-10. Should the toolbar, habit editor or statistics logic change? No. Keep Previous, Choose month, Next, Details and Search habits. Details retains the displayed month for Statistics; applying the list targets the current month with Yes/No approval.
+1. Keep exactly the five tracker entries hidden? Yes; Months and unrelated folders remain visible.
+2. Remove !important completely? Yes, and enforce a release-time guard alongside the existing no-:has guard.
+3. How should expanded folders be handled? Collapse and conceal the exact child container even if its inline display is block. Test fixed inline height as well.
+4. Add a DOM observer or polling? No; retain CSS-only matching. Native DOM/theme changes still require acceptance testing.
+5. Change toolbar, editor or statistics? No. Four main buttons and Search remain. Management stays in Details, with displayed-month statistics and current-month overwrite confirmation.
+6. Which manifest is authoritative for publication? The tagged source and current default branch must agree with the actual release attachment; all fields must match.
+7. Should checks silently overwrite a mismatch? No. Fail with a diagnosis so an unintended version cannot be published silently.
+8. When should remote consistency be checked? Before attestation, after draft upload, and again after publication. Later repository changes require another audit.
+9. Preserve existing released tags and user data? Yes. Use new tag 1.1.9, preserve old releases, data.json and the entire Habit Tracker folder.
+10. Are automated browser tests sufficient for all devices? No. Record native Obsidian, OS and theme versions on Windows, Ubuntu, macOS, Android, iPhone and iPad; tests remain pending until performed.
 
-The final design replaces only the sidebar CSS strategy, updates version metadata to 1.1.8, and adds checks and documentation. No runtime data migration is required. The editable navigation diagram remains navigation.drawio.
+Final design: a CSS-only sidebar correction plus explicit release alignment checks, version 1.1.9 metadata, unchanged plugin identity/data format, and updated installation and publication documentation. No additional features or migration are needed. Navigation remains documented in navigation.drawio.

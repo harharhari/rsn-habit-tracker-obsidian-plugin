@@ -469,6 +469,7 @@ const root = path.resolve(__dirname, "..");
             const children = document.createElement("div");
             children.className = "nav-folder-children";
             children.style.display = "block";
+            children.style.height = "200px";
             children.textContent = "Expanded nested record";
             row.append(children);
           }
@@ -476,7 +477,7 @@ const root = path.resolve(__dirname, "..");
           return row;
         });
         const result = rows.map(
-          (row) => [...row.children].every(child => getComputedStyle(child).display === "none"),
+          (row) => [...row.children].every(child => getComputedStyle(child).visibility === "hidden"),
         );
         // The same data-path outside the explorer must remain visible.
         const outside = rows[0].cloneNode(true);
@@ -485,9 +486,9 @@ const root = path.resolve(__dirname, "..");
         outside.remove();
         // Insertions and path changes are handled by CSS without observers.
         const added = rows[0].cloneNode(true); fixture.append(added);
-        if (![...added.children].every(child => getComputedStyle(child).display === "none")) throw Error("Inserted row stayed visible");
+        if (![...added.children].every(child => getComputedStyle(child).visibility === "hidden")) throw Error("Inserted row stayed visible");
         added.firstElementChild.dataset.path = "Habit Tracker/Records visible";
-        if ([...added.children].some(child => getComputedStyle(child).display === "none")) throw Error("Renamed row stayed hidden");
+        if ([...added.children].some(child => getComputedStyle(child).visibility === "hidden")) throw Error("Renamed row stayed hidden");
         added.remove();
         if (rows.slice(0,5).some(row => row.getBoundingClientRect().height !== 0)) throw Error("Hidden entry left visible space");
         // Removing the plugin CSS must reveal every entry without changing files.
@@ -497,7 +498,7 @@ const root = path.resolve(__dirname, "..");
           style.textContent = "";
         });
         result.push(
-          rows.some((row) => [...row.children].some(child => getComputedStyle(child).display === "none")),
+          rows.some((row) => [...row.children].some(child => getComputedStyle(child).visibility === "hidden")),
         );
         styles.forEach((style, i) => {
           style.textContent = text[i];

@@ -1,12 +1,13 @@
-# Exact repository upload inventory: 1.1.8
+# Exact repository upload inventory: 1.1.9
 
-Upload these 76 files to the source root, preserving subdirectories and hidden .github files. Upload repository/ CONTENTS, not the wrapper folder.
+Upload these 82 files to the source root, preserving subdirectories and hidden .github files. Upload repository/ CONTENTS, not the wrapper folder.
 
 Keep Git history, earlier tags/releases and unrelated files. Delete obsolete src/core.js and src/plugin-source.js if present. Do not commit generated main.js, node_modules, release-assets or manual-downloads as source folders.
 
 ```text
 .gitattributes
 .github/workflows/ci.yml
+.github/workflows/release-audit.yml
 .github/workflows/release.yml
 .gitignore
 LICENSE
@@ -23,6 +24,7 @@ docs/DESIGN-DECISIONS.md
 docs/FILES-TO-PUSH.md
 docs/GITHUB-AND-COMMUNITY-RELEASE.md
 docs/INSTALL-DOWNLOAD.md
+docs/MANIFEST-ALIGNMENT.md
 docs/MIGRATION-1.1.3.md
 docs/PLATFORM-TESTING.md
 docs/RELEASE-ASSET-SHA256SUMS
@@ -36,8 +38,10 @@ docs/RELEASE-NOTES-1.1.5.md
 docs/RELEASE-NOTES-1.1.6.md
 docs/RELEASE-NOTES-1.1.7.md
 docs/RELEASE-NOTES-1.1.8.md
+docs/RELEASE-NOTES-1.1.9.md
 docs/REVIEW-RESPONSE-1.1.5.md
 docs/REVIEW-RESPONSE-1.1.8.md
+docs/REVIEW-RESPONSE-1.1.9.md
 docs/SETUP-AND-USAGE.md
 docs/TEST-RESULTS-TEMPLATE.md
 docs/TESTING-CHECKLIST.md
@@ -61,6 +65,7 @@ package-lock.json
 package.json
 scripts/build.mjs
 scripts/check-lockfile.mjs
+scripts/check-manifest-alignment.mjs
 scripts/check-release-tag.mjs
 scripts/check-release.mjs
 scripts/install.py
@@ -76,6 +81,7 @@ styles.css
 tests/browser-smoke.cjs
 tests/build-metadata.test.mjs
 tests/core.test.js
+tests/manifest-alignment.test.mjs
 tests/plugin.test.js
 tests/test_helper.py
 tests/test_install.py

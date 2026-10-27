@@ -4,7 +4,7 @@ For repository cleanup, manual-kit distribution and existing-release handling, f
 
 # rsn habit calendar one b — first-use tutorial
 
-Version 1.1.8 · harharhari · GPL-3.0-only
+Version 1.1.9 · harharhari · GPL-3.0-only
 
 This tutorial uses two habits in a separate test vault. Installation and migration are covered in [Setup and use](SETUP-AND-USAGE.md). The test checklist is [here](TESTING-CHECKLIST.md).
 
@@ -109,7 +109,7 @@ These screenshots come from the Chromium test harness with mocked Obsidian APIs.
 
 The editable navigation diagram is navigation.drawio.
 
-## Version 1.1.8 navigation exercise
+## Version 1.1.9 navigation exercise
 
 1. Run Open current month. Confirm only Previous, Choose month, Next and Details appear in the main toolbar, with Search habits still available.
 2. Open an existing previous month and click Details. Its heading must show that month.
@@ -120,6 +120,9 @@ The editable navigation diagram is navigation.drawio.
 
 ![Details page with management controls](images/details-desktop.png)
 
-## Version 1.1.8 CSS review fix
 
-The sidebar still hides the same five entries and keeps Months visible. Version 1.1.8 uses direct title and sibling-child selectors, with no :has selectors or DOM observers. Expanded hidden folders remain hidden. Disabling the plugin restores normal visibility when its CSS unloads. Keep all tracker files in sync and backups. See [the review response](REVIEW-RESPONSE-1.1.8.md).
+## Version 1.1.9 review fixes
+
+Version 1.1.9 removes both :has selectors and !important declarations from the distributed stylesheet. Exact-path title and following-child selectors use display:none plus visibility:hidden, max-height:0, overflow:hidden and zero spacing. The extra collapse properties handle expanded child containers with inline display:block without overriding that inline declaration. No observer, polling, file moves or data migration are introduced. Native app/theme acceptance remains required.
+
+Follow [manifest alignment and deployment steps](MANIFEST-ALIGNMENT.md) before requesting Community review. The new audit downloads the actual GitHub release manifest. See [review response](REVIEW-RESPONSE-1.1.9.md). Upgrade all three runtime files together and preserve user data.
