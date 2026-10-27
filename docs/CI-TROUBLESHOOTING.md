@@ -1,11 +1,11 @@
-# Repair the GitHub Build and review failure — 1.1.6
+# Repair the GitHub Build and review failure — 1.1.7
 
 All three reported jobs stop while downloading the same unavailable which-typed-array 1.1.34 archive. The root package-lock.json is the shared cause. Windows EPERM messages occur during cleanup after installation failure; the supplied log does not establish a separate runtime permission problem. The ESLint deprecation is a warning, not the failing exit condition. This release keeps the compatible lint major; a separate major upgrade needs its own review.
 
 ## Upload and verify the fix
 
-1. Extract upload-to-github-006.zip. Copy the CONTENTS of repository/ to the GitHub repository root, preserving hidden .github and directory structure. Do not upload the outer ZIP as the only source file.
-2. In GitHub Code, open the ROOT package-lock.json. Search node_modules/which-typed-array. Its version must be 1.1.24 and resolved URL must end which-typed-array-1.1.24.tgz. The lockfile root, package.json and manifest.json must say 1.1.6. The preflight script deliberately retains the string 1.1.34 as a rejected value; that is expected.
+1. Extract upload-to-github-007.zip. Copy the CONTENTS of repository/ to the GitHub repository root, preserving hidden .github and directory structure. Do not upload the outer ZIP as the only source file.
+2. In GitHub Code, open the ROOT package-lock.json. Search node_modules/which-typed-array. Its version must be 1.1.24 and resolved URL must end which-typed-array-1.1.24.tgz. The lockfile root, package.json and manifest.json must say 1.1.7. The preflight script deliberately retains the string 1.1.34 as a rejected value; that is expected.
 3. Commit all supplied source changes together. The new workflow also needs scripts/check-lockfile.mjs and tests/build-metadata.test.mjs. For Git commands see GITHUB-AND-COMMUNITY-RELEASE.md.
 4. Open Actions → Build and review → the run for the NEW commit. Rerunning an old failed run tests its old commit, not your repaired source. Alternatively Run workflow on the updated branch.
 5. Open each Ubuntu, Windows and macOS job. The preflight prints commit, platform, Node version, lockfile SHA-256 and dependency URL before npm ci. Confirm the commit matches your upload.
@@ -35,6 +35,6 @@ The local validation record is VALIDATION.md. Native Windows/macOS runners must 
 
 The workflow uses the current v7 examples from the official [checkout](https://github.com/actions/checkout), [setup-node](https://github.com/actions/setup-node), [setup-python](https://github.com/actions/setup-python) and [upload-artifact](https://github.com/actions/upload-artifact) documentation, checked 24 October 2026. Hosted runner execution is still required. Automatic npm caching is disabled for these diagnostic runs.
 
-## 1.1.6 source review
+## 1.1.7 source review
 
 Remove obsolete src/core.js and src/plugin-source.js when uploading the TypeScript replacements. Run npm run typecheck and npm run lint; all reported unsafe rules are now errors. See REVIEW-RESPONSE-1.1.5.md and GITHUB-AND-COMMUNITY-RELEASE.md for the three-asset, attested draft workflow. The optional six-file kit is not a Community release.

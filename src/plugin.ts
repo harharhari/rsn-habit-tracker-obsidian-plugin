@@ -197,11 +197,13 @@ class ArchiveModal extends Modal {
   }
 }
 class DetailsView extends ItemView {
+  month: string;
   constructor(
     leaf: WorkspaceLeaf,
     private plugin: HabitCalendarPlugin,
   ) {
     super(leaf);
+    this.month = plugin.currentMonth();
   }
   getViewType() {
     return DETAILS_VIEW;
@@ -212,23 +214,50 @@ class DetailsView extends ItemView {
   getIcon() {
     return "folder-tree";
   }
+  getState() {
+    return { month: this.month };
+  }
+  async setState(state: unknown, result: ViewStateResult) {
+    const saved = C.isObject(state) ? state : {};
+    this.month = C.validMonth(saved.month)
+      ? saved.month
+      : this.plugin.currentMonth();
+    await this.onOpen();
+    await super.setState(saved, result);
+  }
   async onOpen() {
     this.contentEl.replaceChildren();
     this.contentEl.classList.add("hc-root");
-    el(this.contentEl, "h1", "Details");
+    if (Platform.isMobile) this.contentEl.classList.add("hc-mobile");
+    el(this.contentEl, "h1", `Details: ${C.title(this.month)}`);
     const bar = el(this.contentEl, "div", undefined, "hc-toolbar");
     button(bar, "Back to calendars", () =>
-      this.plugin.safe(() => this.plugin.openMonth(this.plugin.currentMonth())),
+      this.plugin.safe(() => this.plugin.openMonth(this.month)),
     );
     button(bar, "Refresh details", () => this.plugin.safe(() => this.onOpen()));
     button(bar, "Habit list", () =>
       this.plugin.safe(() => this.plugin.openAux(EDITOR_VIEW)),
     );
+    button(bar, "Color reference", () =>
+      this.plugin.safe(() => this.plugin.openFile(COLORS)),
+    );
+    button(bar, "Apply habit list", () =>
+      this.plugin.safe(() =>
+        this.plugin.serial(() => this.plugin.reconcile(false, true)),
+      ),
+    );
+    button(bar, "Statistics", () =>
+      this.plugin.safe(() => this.plugin.openStats(this.month)),
+    );
     el(
       this.contentEl,
       "p",
-      "Tracker files stay in your vault. Open a folder below to inspect its files. System and Records contain saved tracker data.",
+      "Statistics and back navigation use the month shown above. Applying the habit list always affects the current month and asks for confirmation. Tracker files stay in your vault.",
     );
+    if (this.month < this.plugin.currentMonth())
+      button(this.contentEl, "Verify saved snapshot", () =>
+        new ArchiveModal(this.plugin, this.month).open(),
+      );
     for (const name of ["Months", "Records", "Statistics", "System"]) {
       const group = el(this.contentEl, "details");
       el(group, "summary", name);
@@ -582,33 +611,19 @@ class Panel {
       this.host.replaceChildren();
       if (this.heading) el(this.host, "h1", C.title(this.month));
       const bar = el(this.host, "div", undefined, "hc-toolbar");
-      button(bar, "← Previous", () =>
+      button(bar, "Previous", () =>
         this.plugin.safe(() =>
           this.plugin.openMonth(C.shiftMonth(this.month, -1)),
         ),
       );
-      button(bar, "Choose month", () => this.plugin.chooseMonth());
-      button(bar, "Next →", () =>
+      button(bar, "Choose month", () => this.plugin.chooseMonth(this.month));
+      button(bar, "Next", () =>
         this.plugin.safe(() =>
           this.plugin.openMonth(C.shiftMonth(this.month, 1)),
         ),
       );
-      button(bar, "Habit list", () =>
-        this.plugin.safe(() => this.plugin.openAux(EDITOR_VIEW)),
-      );
-      button(bar, "Color reference", () =>
-        this.plugin.safe(() => this.plugin.openFile(COLORS)),
-      );
-      button(bar, "Apply habit list", () =>
-        this.plugin.safe(() =>
-          this.plugin.serial(() => this.plugin.reconcile(false, true)),
-        ),
-      );
-      button(bar, "Statistics", () =>
-        this.plugin.safe(() => this.plugin.openStats(this.month)),
-      );
       button(bar, "Details", () =>
-        this.plugin.safe(() => this.plugin.openAux(DETAILS_VIEW)),
+        this.plugin.safe(() => this.plugin.openAux(DETAILS_VIEW, this.month)),
       );
       const search = el(bar, "input", undefined, "hc-search");
       search.type = "search";
@@ -748,17 +763,9 @@ class Panel {
         el(
           this.host,
           "p",
-          "No enabled habits yet. Edit the habit list and set Generate calendar to Y.",
+          "No enabled habits yet. Open details, edit the habit list and set Generate calendar to Y.",
         );
       for (const [parent, top] of scrolls) parent.scrollTop = top;
-      if (
-        !model.archived &&
-        !model.incomplete &&
-        this.month < this.plugin.currentMonth()
-      )
-        button(this.host, "Prepare month for archive", () =>
-          new ArchiveModal(this.plugin, this.month).open(),
-        );
     } catch (e) {
       if (this.alive && seq === this.sequence) {
         this.host.replaceChildren();
@@ -1450,9 +1457,9 @@ export default class HabitCalendarPlugin extends Plugin {
   renderAll() {
     for (const panel of this.panels) void panel.render();
   }
-  chooseMonth() {
+  chooseMonth(current = this.currentMonth()) {
     new MonthModal(this.app, {
-      current: this.currentMonth(),
+      current,
       open: (m) => {
         void this.safe(() => this.openMonth(m));
       },
@@ -1466,11 +1473,11 @@ export default class HabitCalendarPlugin extends Plugin {
     await leaf.setViewState({ type: VIEW, active: true, state: { month: m } });
     await this.app.workspace.revealLeaf(leaf);
   }
-  async openAux(type: string) {
+  async openAux(type: string, month = this.currentMonth()) {
     const leaf =
       this.app.workspace.getLeavesOfType(type)[0] ||
       this.app.workspace.getLeaf("tab");
-    await leaf.setViewState({ type, active: true });
+    await leaf.setViewState({ type, active: true, state: { month } });
     await this.app.workspace.revealLeaf(leaf);
   }
   async saveHabitEditor(original: string, updated: string) {

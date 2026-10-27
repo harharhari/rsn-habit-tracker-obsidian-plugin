@@ -1,8 +1,8 @@
-# Exact repository upload inventory: 1.1.6
+# Exact repository upload inventory: 1.1.7
 
-Upload these 71 files to the repository root, preserving relative paths and hidden files. Upload repository/ CONTENTS, not the enclosing folder.
+Upload these 74 files to the source root, preserving subdirectories and hidden .github files. Upload repository/ CONTENTS, not the wrapper folder.
 
-Keep Git history, old tags/releases and unrelated files. Delete obsolete src/core.js and src/plugin-source.js if still present. Do not upload generated main.js, node_modules, release-assets or manual-downloads as source folders.
+Keep Git history, earlier tags/releases and unrelated files. Delete obsolete src/core.js and src/plugin-source.js if present. Do not commit generated main.js, node_modules, release-assets or manual-downloads as source folders.
 
 ```text
 .gitattributes
@@ -34,6 +34,7 @@ docs/RELEASE-NOTES-1.1.3.md
 docs/RELEASE-NOTES-1.1.4.md
 docs/RELEASE-NOTES-1.1.5.md
 docs/RELEASE-NOTES-1.1.6.md
+docs/RELEASE-NOTES-1.1.7.md
 docs/REVIEW-RESPONSE-1.1.5.md
 docs/SETUP-AND-USAGE.md
 docs/TEST-RESULTS-TEMPLATE.md
@@ -43,6 +44,8 @@ docs/VALIDATION.md
 docs/architecture.drawio
 docs/images/browser-desktop.png
 docs/images/browser-mobile.png
+docs/images/details-desktop.png
+docs/images/details-mobile.png
 docs/images/editor-desktop.png
 docs/images/editor-mobile.png
 docs/navigation.drawio
@@ -78,4 +81,4 @@ tsconfig.json
 versions.json
 ```
 
-For release 1.1.6, use the provided attestation workflow to attach only main.js, manifest.json and styles.css. The local release-assets directory contains matching preview files. The optional manual kit stays separate. See DEPLOYMENT-UPDATE-GUIDE.md.
+The Community release has only main.js, manifest.json and styles.css. Use the release workflow to generate attested attachments. The local release-assets folder contains preview copies. The optional six-file kit stays separate. See DEPLOYMENT-UPDATE-GUIDE.md and START-HERE.md in the outer package.

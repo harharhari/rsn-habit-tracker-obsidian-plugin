@@ -1,6 +1,6 @@
 # rsn habit calendar one b
 
-Monthly habit calendars for Obsidian by **harharhari**. Version **1.1.6**, licensed under **GPL-3.0-only**.
+Monthly habit calendars for Obsidian by **harharhari**. Version **1.1.7**, licensed under **GPL-3.0-only**.
 
 Track daily activities with a named calendar for each habit. Wide desktop views show six calendars per row; phones and tablets show one. Click or tap a date to cycle **unmarked → green → pink → unmarked**. Weeks start Monday. The monthly title follows `2026-10 October 2026`.
 
@@ -14,7 +14,7 @@ These browser-rendered examples use generic habits and mocked Obsidian APIs; the
 
 ## Download and install
 
-Download the assets from [GitHub Releases](https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/releases/tag/1.1.6). This link becomes available when the maintainer publishes the release and grants access. The repository may remain private during testing.
+Download the assets from [GitHub Releases](https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/releases/tag/1.1.7). This link becomes available when the maintainer publishes the release and grants access. The repository may remain private during testing.
 
 1. Back up your vault. Use `rsn-test-vault` for the first trial.
 2. Download main.js, manifest.json and styles.css and verify their provenance/checksums using the [platform-specific instructions](docs/INSTALL-DOWNLOAD.md).
@@ -31,7 +31,7 @@ After Community acceptance, users can instead search for **rsn habit calendar on
 
 ## Habit list and colors
 
-Click **Habit list** to open the editor. Use **Add habit**, enter a name, select Y/N and choose a color or type #RRGGBB. Click **Save habit list** to save and receive the current-month confirmation. The underlying Markdown remains editable through **Open Markdown file**:
+Click **Details → Habit list** to open the editor. Use **Add habit**, enter a name, select Y/N and choose a color or type #RRGGBB. Click **Save habit list** to save and receive the current-month confirmation. The underlying Markdown remains editable through **Open Markdown file**:
 
 
 ```markdown
@@ -44,7 +44,7 @@ Click **Habit list** to open the editor. Use **Add habit**, enter a name, select
 
 Y displays a calendar, N excludes it when you apply the list. Keep the hidden habit-ID comments that the plugin adds. Choose a color by name, hex code and swatch in the editor, or enter a custom six-digit code. `Habit Tracker/hex-color-list.md` supplies 147 CSS3 colors and supports custom rows. View the color note in Reading view to see its swatches.
 
-**Applying a habit-list change with Yes clears every current-month mark**, including marks for unchanged habits. No keeps the displayed month and marks unchanged, while leaving your edited list in place. Use Apply habit list to reconsider a declined change. Previous months stay read-only and keep their saved statistics and calendar snapshot. Late synced entries do not alter frozen history.
+**Applying a habit-list change with Yes clears every current-month mark**, including marks for unchanged habits. No keeps the displayed month and marks unchanged, while leaving your edited list in place. Use Details → Apply habit list to reconsider a declined change. Previous months stay read-only and keep their saved statistics and calendar snapshot. Late synced entries do not alter frozen history.
 
 ## Monthly behaviour
 
@@ -66,13 +66,13 @@ A new month appears while Obsidian is running, or on its next opening. The optio
 
 ## Compatibility and data
 
-Version 1.1.6 targets Windows 11, Ubuntu 24.04.3, current stable macOS, Android, iOS and iPadOS with the same plugin bundle. Phones and tablets show one calendar per row. Wide desktop panes show six; narrow panes show one. The month picker uses a Month dropdown and Year field on every platform.
+Version 1.1.7 targets Windows 11, Ubuntu 24.04.3, current stable macOS, Android, iOS and iPadOS with the same plugin bundle. Phones and tablets show one calendar per row. Wide desktop panes show six; narrow panes show one. The month picker uses a Month dropdown and Year field on every platform.
 
-The maintainer previously reported 1.1.1 working on Ubuntu/Android. Version 1.1.6 device acceptance is pending. Exact Apple OS, Android and Obsidian versions must be recorded during testing. The manifest minimum 1.7.2 is an API compatibility floor, not a completed minimum-device test.
+The maintainer previously reported 1.1.1 working on Ubuntu/Android. Version 1.1.7 device acceptance is pending. Exact Apple OS, Android and Obsidian versions must be recorded during testing. The manifest minimum 1.7.2 is an API compatibility floor, not a completed minimum-device test.
 
 No plugin network requests, telemetry or runtime Node/Electron imports. Sync is a separate service. Use optional Obsidian Sync across all platforms, or a separate Apple-only iCloud vault. Follow [MIGRATION-1.1.3.md](docs/MIGRATION-1.1.3.md) to preserve data.json and Habit Tracker across the ID change. Do not run old Habit Calendar 001 with the same records.
 
-See [all-platform installation](docs/INSTALL-DOWNLOAD.md), [platform testing](docs/PLATFORM-TESTING.md) and [release notes](docs/RELEASE-NOTES-1.1.6.md).
+See [all-platform installation](docs/INSTALL-DOWNLOAD.md), [platform testing](docs/PLATFORM-TESTING.md) and [release notes](docs/RELEASE-NOTES-1.1.7.md).
 
 ## Build
 
@@ -92,9 +92,9 @@ Repository-root `SHA256SUMS` verifies this prepared source snapshot. The separat
 
 Report reproducible problems through [GitHub Issues](https://github.com/harharhari/rsn-habit-tracker-obsidian-plugin/issues). Include plugin/app versions, OS, steps and error text, but remove personal vault content. [GPL-3.0-only](LICENSE). Copyright © 2026 harharhari. See [NOTICE](NOTICE).
 
-## Version 1.1.6 Community review changes
+## Version 1.1.7 Community review changes
 
-For the npm 404 on Ubuntu, Windows or macOS, follow [CI troubleshooting](docs/CI-TROUBLESHOOTING.md). Upload the repaired root lockfile and run the new commit. See [release notes](docs/RELEASE-NOTES-1.1.6.md) and [validation](docs/VALIDATION.md). An upgrade from 1.1.3 keeps the same plugin folder, data.json and Habit Tracker records.
+For the npm 404 on Ubuntu, Windows or macOS, follow [CI troubleshooting](docs/CI-TROUBLESHOOTING.md). Upload the repaired root lockfile and run the new commit. See [release notes](docs/RELEASE-NOTES-1.1.7.md) and [validation](docs/VALIDATION.md). An upgrade from 1.1.3 keeps the same plugin folder, data.json and Habit Tracker records.
 
 See [review responses](docs/REVIEW-RESPONSE-1.1.5.md) for typed source, runtime data validation, scoped tracker-folder discovery, and the three-asset attested release process. No new data migration or reset is required when upgrading from 1.1.4.
 
@@ -102,10 +102,10 @@ See [review responses](docs/REVIEW-RESPONSE-1.1.5.md) for typed source, runtime 
 
 Keep the existing repository/history and update source files in place. The optional manual-downloads handoff folder does not belong in this source tree or on the Community release. CI already publishes equivalent test-kit artifacts. See the [detailed deployment update guide](docs/DEPLOYMENT-UPDATE-GUIDE.md) for Git/web steps, obsolete-file cleanup, artifact downloads, optional separate permanent downloads and Obsidian upgrades. Normal users need only the three release files or the Community installer.
 
-## Calendar workspace in 1.1.6
+## Calendar workspace in 1.1.7
 
-Open current month from the calendar ribbon or command palette. The main toolbar includes month navigation, Habit list, Color reference, Apply habit list, Statistics and Details, followed by Search habits. There is no Welcome page.
+Open current month from the calendar ribbon or command palette. The main toolbar contains only Previous, Choose month, Next and Details, plus the Search habits field. Details contains Habit list, Color reference, Apply habit list and Statistics. There is no Welcome page.
 
 Habit list opens a dedicated editor: add/remove habits, select Y/N, choose a reference color by name/hex/swatch or enter a custom #RRGGBB value. Save immediately offers the existing Yes/No month-reset confirmation for meaningful changes. Yes clears ALL current-month marks. No preserves the displayed month and keeps the list saved. Previous months remain frozen.
 
-Details opens the tracker folders and reference notes on a separate plugin page. Obsidian's global file explorer remains unchanged. See [the tutorial](docs/TUTORIAL.md) and [1.1.6 design decisions](docs/DESIGN-DECISIONS.md).
+Details opens the tracker folders and reference notes on a separate plugin page. Only the five specified tracker entries are hidden in the file explorer. See [the tutorial](docs/TUTORIAL.md) and [1.1.7 design decisions](docs/DESIGN-DECISIONS.md).

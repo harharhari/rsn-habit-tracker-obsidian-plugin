@@ -4,7 +4,7 @@ For repository cleanup, manual-kit distribution and existing-release handling, f
 
 # rsn habit calendar one b — first-use tutorial
 
-Version 1.1.6 · harharhari · GPL-3.0-only
+Version 1.1.7 · harharhari · GPL-3.0-only
 
 This tutorial uses two habits in a separate test vault. Installation and migration are covered in [Setup and use](SETUP-AND-USAGE.md). The test checklist is [here](TESTING-CHECKLIST.md).
 
@@ -14,7 +14,7 @@ Enable rsn habit calendar one b. Press Ctrl+P on Linux/Windows or Command+P on m
 
 ## 2. Open the habit editor
 
-Click **Habit list** on the calendar toolbar. This opens the plugin editor. Click **Add habit** three times and enter these examples:
+Click **Details** on the calendar toolbar, then **Habit list**. This opens the plugin editor. Click **Add habit** three times and enter these examples:
 
 | Habit | Generate calendar | Header color |
 |---|---|---|
@@ -38,13 +38,13 @@ For this new empty month choose **Yes**. Two calendars appear: Walking and Readi
 
 Click today's date in Walking once: green. Click it again: pink. Click a third time: unmarked. You can populate earlier dates in the current month. Future dates and previous months cannot be edited.
 
-Mark a few dates, open **Statistics**, then restart Obsidian and verify the entries persisted. Completion is green days divided by elapsed calendar days, without schedules. Blank/pink days break streaks.
+Mark a few dates, open **Details → Statistics**, then restart Obsidian and verify the entries persisted. Completion is green days divided by elapsed calendar days, without schedules. Blank/pink days break streaks.
 
 ## 5. Practise No before Yes
 
 Edit Walking's header code to #FFDAB9, keeping its habit-ID comment. Save. Choose **No** in the warning.
 
-The current calendar retains its old header and marks. Your edited habit-list file remains edited; No does not undo the text edit. The same declined edit is not prompted every minute. Click **Apply habit list** to reconsider it.
+The current calendar retains its old header and marks. Your edited habit-list file remains edited; No does not undo the text edit. The same declined edit is not prompted every minute. Click **Details → Apply habit list** to reconsider it.
 
 Now choose **Yes**. Both current calendars are rebuilt and ALL current-month marks disappear, including Reading's marks even though you changed only Walking. The current statistics restart accordingly. A pre-reset recovery snapshot is retained under `Habit Tracker/System/Backups/`; there is no one-click undo.
 
@@ -93,7 +93,7 @@ Installation for all platforms is in INSTALL-DOWNLOAD.md. Desktop commands use C
 
 ## Details and direct calendar access
 
-Click **Details** to open the separate tracker page. Expand Months, Records, Statistics or System, then click a filename to open it. The habit-tracker-list.md and hex-color-list.md buttons open their raw notes. Back to calendars opens the current month. This page does not move files and does not hide Obsidian's global explorer. There is no plugin Welcome page.
+Click **Details** to open the separate tracker page. Expand Months, Records, Statistics or System, then click a filename to open it. The habit-tracker-list.md and hex-color-list.md buttons open their raw notes. Back to calendars returns to the month shown on Details. Statistics uses that same month. Apply habit list always targets the current month. This page does not move files. The file explorer hides Records, Statistics, System, habit-tracker-list.md and hex-color-list.md only under Habit Tracker. Months remains visible. There is no plugin Welcome page.
 
 ## Save conflicts and invalid older lists
 
@@ -108,3 +108,14 @@ These screenshots come from the Chromium test harness with mocked Obsidian APIs.
 ![Phone habit editor](images/editor-mobile.png)
 
 The editable navigation diagram is navigation.drawio.
+
+## Version 1.1.7 navigation exercise
+
+1. Run Open current month. Confirm only Previous, Choose month, Next and Details appear in the main toolbar, with Search habits still available.
+2. Open an existing previous month and click Details. Its heading must show that month.
+3. Click Statistics to open that month's retained report. Return to Details and use Back to calendars to reopen the same month.
+4. On Details, use Habit list for the editor, Color reference for the color note, or Apply habit list to reconsider a saved change. Apply always targets the current month, even when Details displays history. No preserves current marks; Yes clears all current-month marks.
+5. In the file explorer expand Habit Tracker. Months remains visible; Records, Statistics, System and the two reference notes are hidden. They remain accessible through Details and stay included in sync and backup.
+6. Disable the plugin briefly in a test vault. The five explorer entries should reappear. Re-enable and run Open current month. Do not delete hidden folders to simplify the interface.
+
+![Details page with management controls](images/details-desktop.png)

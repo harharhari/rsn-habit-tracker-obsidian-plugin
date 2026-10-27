@@ -74,6 +74,7 @@ const root = path.resolve(__dirname, "..");
           TFolder: window.MockFolder,
           Plugin: class {},
           ItemView: class {
+            async setState() {}
             constructor(leaf) {
               this.app = leaf.app;
               this.contentEl = leaf.host;
@@ -191,6 +192,28 @@ const root = path.resolve(__dirname, "..");
         await panel.render();
       });
       assert.equal(await page.locator(".hc-card").count(), 60);
+      assert.deepEqual(
+        await page.locator(".hc-toolbar button").allTextContents(),
+        ["Previous", "Choose month", "Next", "Details"],
+      );
+      assert.equal(
+        await page.getByLabel("Search habits", { exact: true }).count(),
+        1,
+      );
+      await page.evaluate(() => {
+        plugin.openAux = async (type, month) => {
+          window.auxRequest = { type, month };
+        };
+      });
+      await page.getByRole("button", { name: "Details", exact: true }).click();
+      assert.deepEqual(
+        await page.evaluate(() => auxRequest),
+        await page.evaluate(() => ({
+          type: "rsn-habit-details",
+          month: panel.month,
+        })),
+      );
+
       const layout = await page.evaluate(() => ({
         columns: getComputedStyle(
           document.querySelector(".hc-grid"),
@@ -351,7 +374,8 @@ const root = path.resolve(__dirname, "..");
           { app: plugin.app, host: document.querySelector("#host") },
           plugin,
         );
-        await d.onOpen();
+        window.detailsView = d;
+        await d.setState({ month: "2026-09" }, {});
       });
       assert.deepEqual(await page.locator("summary").allTextContents(), [
         "Months",
@@ -365,8 +389,123 @@ const root = path.resolve(__dirname, "..");
           .count(),
         1,
       );
+      assert.ok(
+        (await page.locator("h1").textContent()).includes(
+          "2026-09 September 2026",
+        ),
+      );
+      assert.deepEqual(
+        await page.locator(".hc-toolbar button").allTextContents(),
+        [
+          "Back to calendars",
+          "Refresh details",
+          "Habit list",
+          "Color reference",
+          "Apply habit list",
+          "Statistics",
+        ],
+      );
+      await page.evaluate(() => {
+        plugin.openStats = async (month) => {
+          window.statsMonth = month;
+        };
+        plugin.openFile = async (file) => {
+          window.openedFile = file;
+        };
+      });
+      await page
+        .getByRole("button", { name: "Statistics", exact: true })
+        .click();
+      await page.waitForFunction(() => window.statsMonth === "2026-09");
+      await page
+        .getByRole("button", { name: "Back to calendars", exact: true })
+        .click();
+      await page.waitForFunction(() => window.openedMonth === "2026-09");
+      await page
+        .getByRole("button", { name: "Color reference", exact: true })
+        .click();
+      await page.waitForFunction(
+        () => window.openedFile === "Habit Tracker/hex-color-list.md",
+      );
+      await page
+        .getByRole("button", { name: "Habit list", exact: true })
+        .click();
+      await page.waitForFunction(
+        () => window.auxRequest.type === "rsn-habit-editor",
+      );
+      if (screenshot)
+        await page.screenshot({
+          path: path.join(
+            screenshot,
+            engine + "-" + scenario.name + "-details.png",
+          ),
+        });
+      const hidden = await page.evaluate(() => {
+        const fixture = document.createElement("div");
+        fixture.className = "workspace-leaf-content";
+        fixture.dataset.type = "file-explorer";
+        document.body.append(fixture);
+        const entries = [
+          "Habit Tracker/Records",
+          "Habit Tracker/Statistics",
+          "Habit Tracker/System",
+          "Habit Tracker/habit-tracker-list.md",
+          "Habit Tracker/hex-color-list.md",
+          "Habit Tracker/Months",
+          "Other/Records",
+          "Other/habit-tracker-list.md",
+          "Habit Tracker/Records backup",
+        ];
+        const rows = entries.map((path) => {
+          const row = document.createElement("div");
+          const file = path.endsWith(".md");
+          row.className = file ? "nav-file" : "nav-folder";
+          const title = document.createElement("div");
+          title.className = file ? "nav-file-title" : "nav-folder-title";
+          title.dataset.path = path;
+          title.textContent = path;
+          row.append(title);
+          fixture.append(row);
+          return row;
+        });
+        const result = rows.map(
+          (row) => getComputedStyle(row).display === "none",
+        );
+        // The same data-path outside the explorer must remain visible.
+        const outside = rows[0].cloneNode(true);
+        document.body.append(outside);
+        result.push(getComputedStyle(outside).display === "none");
+        outside.remove();
+        // Removing the plugin CSS must reveal every entry without changing files.
+        const styles = [...document.querySelectorAll("style")];
+        const text = styles.map((style) => style.textContent);
+        styles.forEach((style) => {
+          style.textContent = "";
+        });
+        result.push(
+          rows.some((row) => getComputedStyle(row).display === "none"),
+        );
+        styles.forEach((style, i) => {
+          style.textContent = text[i];
+        });
+        fixture.remove();
+        return result;
+      });
+      assert.deepEqual(hidden, [
+        true,
+        true,
+        true,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+      ]);
       console.log(
-        `PASS ${engine} ${scenario.name} browser: 60 calendars, grid, no horizontal overflow, mark cycle, search, rerender persistence, portable month picker; randomUUID absent`,
+        `PASS ${engine} ${scenario.name} browser: 60 calendars, grid, no horizontal overflow, mark cycle, search, rerender persistence, portable month picker, four-button toolbar, Details month context, management actions and scoped reversible sidebar hiding; randomUUID absent`,
       );
       await context.close();
     }

@@ -851,3 +851,25 @@ test("editor saves valid hex and flags but rejects invalid colors without writes
     "#F8CBAD",
   );
 });
+
+test("Details receives the displayed month when its leaf is opened", async () => {
+  const p = plugin();
+  let received;
+  let revealed;
+  const leaf = {
+    setViewState: async (value) => {
+      received = value;
+    },
+  };
+  p.app.workspace = {
+    getLeavesOfType: () => [],
+    getLeaf: () => leaf,
+    revealLeaf: async (value) => {
+      revealed = value;
+    },
+  };
+  await p.openAux("rsn-habit-details", "2026-09");
+  assert.equal(received.type, "rsn-habit-details");
+  assert.equal(received.state.month, "2026-09");
+  assert.equal(revealed, leaf);
+});

@@ -2,7 +2,7 @@
 
 # Android setup — rsn-test-vault
 
-For rsn habit calendar one b 1.1.6. No Python, Node.js or terminal is needed on the phone.
+For rsn habit calendar one b 1.1.7. No Python, Node.js or terminal is needed on the phone.
 
 ## Recommended: existing Linux vault through Obsidian Sync
 
@@ -71,6 +71,6 @@ No Android background scheduler is included. Monthly creation occurs while Obsid
 - Plugin sync settings: https://help.obsidian.md/sync/settings
 - Android emulator acceleration: https://developer.android.com/studio/run/emulator-acceleration#vm-linux
 
-## Upgrade an existing installation to 1.1.6
+## Upgrade an existing installation to 1.1.7
 
 Follow [MIGRATION-1.1.3.md](MIGRATION-1.1.3.md). The old plugin folder is habit-calendar-001b and the new one is rsn-habit-calendar-one-b. Disable the old plugin first, force-stop Obsidian, install matching files in the new folder and copy wanted data.json before activation. Preserve Habit Tracker. Restart and verify the new name/version. Do not run both identities.

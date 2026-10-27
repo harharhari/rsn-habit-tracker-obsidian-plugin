@@ -1,22 +1,24 @@
-# Version 1.1.6 validation
+# Version 1.1.7 validation
 
-Prepared 24 October 2026. No GitHub upload, workflow dispatch, attestation or Community submission was performed.
+Prepared 26 October 2026. No remote upload, GitHub workflow dispatch, attestation or Community submission was performed.
 
 ## Executed locally
 
-- Production build and strict TypeScript checking passed on Linux with Node 24.22.1. Obsidian ESLint checks passed with zero warnings, including enabled unsafe-code checks.
-- 51 JavaScript tests passed: 15 core, 33 mocked-vault integration and three build-preflight tests.
-- 11 Python helper/installer tests passed. Total: 62 automated tests.
-- Four Chromium browser scenarios passed: wide desktop, narrow desktop pane, phone and tablet. Each checked 60 calendars, responsive layout, marking, search, persistence and month selection, plus Y/N choices, named-color selection, custom hex input, rejection of invalid colors, saving and the Details folder list. Obsidian APIs were mocked.
-- Existing history tests verify that previous calendars and statistics stay frozen. New tests verify stale editor saves cannot overwrite synced changes and malformed colors cannot be saved.
-- The 46-slide editable tutorial was exported, rendered and checked. Native PowerPoint and native mobile Obsidian execution were not performed.
+- Strict TypeScript checking, Obsidian ESLint checks with zero warnings, production build, metadata/license validation and release packaging passed on Linux.
+- 52 JavaScript tests passed: 15 core, 34 mocked-vault integration and three preflight tests. 11 Python helper/installer tests passed. Total: 63 automated tests.
+- Four Chromium scenarios passed: wide desktop, narrow pane, phone and tablet. Each checked 60 calendars, layout, mark cycle, search, rerender persistence, month picker, habit editor and Details. New assertions check the exact four main buttons, moved management buttons, displayed-month routing for Statistics and Back to calendars, exact-path explorer hiding, unrelated-path visibility and visibility restoration when CSS is removed.
+- The sidebar tests use representative Obsidian explorer markup and mocked APIs. They are not native Obsidian or device tests. The CSS depends on current file-explorer DOM; a changed theme/app structure may leave entries visible without altering data.
+- A fresh public-registry npm ci --ignore-scripts installation succeeded using the final lockfile. Dependency entries match 1.1.6; only the plugin root version changed. The ESLint 9 deprecation warning remains nonfatal. npm reported no known vulnerabilities at installation time; that is not a security certification.
+- The 47-slide editable tutorial was rendered and structurally validated. Native PowerPoint execution was not performed.
 
-## Limits and pending checks
+Checks used Linux, Node 24.22.1 and Python 3.12. GitHub uses Node 22/Python 3.12 on its Ubuntu, Windows and macOS runners.
 
-GitHub Ubuntu/Windows/macOS jobs, the attestation workflow, hosted Obsidian Community review, native Obsidian acceptance on all six target platforms, real device sync and minimum-version 1.7.2 testing remain pending. Record exact OS and Obsidian versions in TEST-RESULTS-TEMPLATE.md. Chromium viewport emulation is not native Android/iOS testing. No WebKit/Safari result is claimed for this version.
+## Pending acceptance
 
-See TESTING-CHECKLIST.md and GITHUB-AND-COMMUNITY-RELEASE.md for the remaining tests and release steps. Previous user-reported Ubuntu/Android results are historical and are not certification of 1.1.6.
+Run native Obsidian tests on Windows 11, Ubuntu, macOS, Android, iPhone and iPad, including the actual file explorer/theme, workspace restoration, real sync and plugin disable/re-enable. Record exact OS/app/theme versions in TEST-RESULTS-TEMPLATE.md. Minimum Obsidian 1.7.2 acceptance, WebKit/Safari, GitHub three-OS CI, the attestation workflow and hosted Community review remain pending.
 
-## Clean installation and reproducibility
+See TESTING-CHECKLIST.md, PLATFORM-TESTING.md and GITHUB-AND-COMMUNITY-RELEASE.md. Historical success reports for older versions do not certify 1.1.7. Hiding is visual only; preserve the complete Habit Tracker folder in backups and sync.
 
-A fresh npm ci --ignore-scripts installation from the public registry succeeded with the final lockfile (309 packages). The same source then passed npm run check with its own installed dependencies. All three Community files and all six optional kit files rebuilt byte-for-byte. The ESLint 9 deprecation warning remains nonfatal. npm reported no known vulnerabilities at installation time; this is not a security certification.
+## Reproducibility and handoff
+
+The independently installed clean source passed npm run check with exit status zero. All three Community assets and all six optional kit files rebuilt byte-for-byte. Source, release preview, manual kit and full ZIP checksums were regenerated and verified. The ZIP contains the upload tree without node_modules or generated source-root bundles.
